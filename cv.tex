@@ -1,0 +1,147 @@
+% My CV's .tex file. Inspired by this one:
+% http://www.danielmathews.info/about-me
+%
+% A pdf version (probably with outdated information, but with the same style) 
+% can be found here:
+% http://dl.dropbox.com/u/12579210/cv.pdf
+%
+% WARNING: as it uses custom fonts, this file is supposed to be compiled with 
+% XeTeX
+%
+\documentclass{article}
+
+\usepackage[top=2.5cm,left=3cm,right=3cm,bottom=2.5cm]{geometry}
+%\usepackage[portuguese]{babel}     % i18n
+\usepackage{xltxtra,xunicode}        
+
+% --- to add other fonts to document --- 
+\usepackage{fontspec}								% only needed if using custom fonts
+\defaultfontfeatures{Mapping=tex-text}
+
+% %%%
+% and now load the fonts proper
+% *** font packages needed in ArchLinux ***
+% yaourt -S ttf-adobe-fonts
+% yaourt -S monaco-linux-font
+% %%%
+\setromanfont [Ligatures={Common}, BoldFont={Minion Pro Bold}, ItalicFont={Minion Pro Italic}]{Minion Pro}
+\setmonofont  [Scale=0.8]{Monaco}
+% --- end code for other fonts ---
+
+\usepackage{url}
+
+\renewcommand\labelitemi{\fontfamily{cmr}\selectfont\textbullet}
+
+\newenvironment{topic}[1]
+   %{{\noindent\large\bfseries#1\vskip 1ex\hrule}%
+   {{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{#1}\hrule}%
+    \begin{list}{}{%
+       \setlength{\leftmargin}{.25cm}}%
+    \item[]}
+   {\end{list}\medskip}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Óscar Francisco Godinho Pereira} 
+\smallskip\par
+{\selectfont\large Curriculum Vit\ae}
+\end{center}
+\bigskip
+
+\begin{topic}{Personal Information}
+%\begin{topic}{Professional Exerience}
+\begin{tabular}{ll}
+Address: & 
+\parbox[t]{.7\linewidth}{\raggedright
+Not shown in online version.
+\smallskip } \\
+
+Phone: & Idem. \\
+Online: & \small\texttt{oscar@erroneousthoughts.org} \verb+   +|\verb+   + \small\url{http://www.erroneousthoughts.org} \\
+
+\end{tabular}
+\end{topic}
+
+\begin{topic}{Professional Experience}
+%\begin{topic}{Personal Information}
+\begin{itemize}
+\item {\bfseries AnubisNetworks}, Lisbon, Portugal.\\
+  Software Engineer, multi-class, 2007--present.
+	\begin{itemize}
+		\item{\bfseries Current responsibilities}: Maintenance, new feature's
+specification and development for the Mail Protection System\textsuperscript{\texttrademark} (MPS)
+appliance---Anubis' flagship product. Developer (and current maintainer) of several
+software modules that provide secure and transparent system administration capabilities---email
+infrastructure, et al.---to ``upper'' layers (business logic). Develops more distributed and asynchronous alternatives to current architectural scenarios. Occasionally shifts to other projects, mainly through R\&D engineering tasks.
+		\item{\bfseries Past work}: Initially designed and implemented MPS' Reports
+module, including its web GUI. Performed improvements to the underlying
+database, prompted by this module's development. Maintained the whole web GUI
+during a brief period of time. Worked on the initial version of an abstraction
+layer aimed at better separating business logic from the underlying system
+operations.
+		\item{\bfseries Programming languages / technologies}:\hfill Perl, C, C++,
+Postfix,
+LDAP, Ubuntu GNU/Linux.
+\end{itemize}
+\end{itemize}
+\end{topic}
+
+\begin{topic}{Formal Education}
+
+\begin{itemize}
+\item {\bfseries Technical University of Lisbon -- IST}, Lisbon, Portugal.\\
+  B.Sc. Applied Mathematics, 2010--present.
+\item {\bfseries University of Coimbra}, Coimbra, Portugal.\\
+  B.Sc. Informatics Engineering (pre-Bologna -- 5 years), 2001--2007.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{Technical Skills}
+	{\itshape Programming Languages}  
+	\begin{itemize}
+		\item{\bfseries Imperative}: C, Perl (proficient); C++, Python, Java;
+elementary skills in Javascript.
+		\item{\bfseries Functional}: Common Lisp (novice).
+		\item{\bfseries Markup}: HTML, CSS, \LaTeX (proficient); UML.
+\end{itemize}
+	{\itshape Operating Systems} 
+  \begin{itemize}
+		\item{\bfseries GNU/Linux}: Proficient ArchLinux user; familiar with Ubuntu.
+		\item{\bfseries Ms Windows}: Familiar with Windows XP; seldom work with
+posterior versions.
+	\end{itemize}
+{\itshape Software}
+  \begin{itemize}
+\item{\bfseries Text Editors}: Vim (proficient), Emacs (novice), Kate.
+\item{\bfseries IDE's}: KDevelop.
+\item{\bfseries Mathematics}: Mathematica, Matplotlib, SageMath (experienced).
+\item{\bfseries Network}: GnuPG, SSH et al., iptables (experienced).
+  \end{itemize}
+\end{topic}
+
+\begin{topic}{Other Skills}
+	{\itshape Spoken Languages} 
+	\begin{itemize}
+		\item {\bfseries Portuguese}: native speaker.
+		\item {\bfseries English}: fluent domain, both written and spoken.
+		\item {\bfseries Spanish}: fluent speaker, basic reading and writing skills.
+	\end{itemize}
+\end{topic}
+
+\begin{topic}{Additional Information}
+\begin{itemize}
+\item{Outdoor sports enthusiast---currently surf, football, and trying
+snowboard.}
+\item{Enjoys recreational---and often not-so-recreational---mathematics,
+as well as physics (and chess).}
+\item{Participated in the 2003 and 2004 editions of \emph{Minho Campus
+Party} (LAN party).}
+\item{Full Portuguese driving license---Category B, passenger light
+vehicles.}
+\end{itemize}
+\end{topic}
+
+\end{document}
