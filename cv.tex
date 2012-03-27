@@ -39,49 +39,30 @@
     \item[]}
    {\end{list}\medskip}
 
+\newenvironment{header}[1]
+   {\centering{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{\LARGE\bfseries #1}\hrule}%
+    \begin{center}}
+   {\end{center}\medskip}
+
 \pagestyle{empty}
 
 \begin{document}
 
-\begin{center}
-{\LARGE\bfseries Óscar Francisco Godinho Pereira} 
-\smallskip\par
-{\selectfont\large Curriculum Vit\ae}
-\end{center}
-\bigskip
-
-\begin{topic}{Personal Information}
-\begin{tabular}{ll}
-Address: & 
-\parbox[t]{.7\linewidth}{\raggedright
-Not shown in online version.
-\smallskip } \\
-
-Phone: & Idem. \\
-Online: & \small\texttt{oscar@erroneousthoughts.org} \verb+   +|\verb+   + \small\url{http://www.erroneousthoughts.org} \\
-
-\end{tabular}
-\end{topic}
+\begin{header}
+{Óscar Francisco Godinho Pereira} 
+{\emph{The address and phone number are omitted in this version, due to privacy concerns}}\smallskip\\
+\texttt{+000 000000000} \verb+   +|\verb+   + \texttt{oscar@erroneousthoughts.org} \verb+   +|\verb+   + \url{http://www.erroneousthoughts.org} 
+\end{header}
 
 \begin{topic}{Professional Experience}
 \begin{itemize}
-\item {\bfseries AnubisNetworks}, Lisbon, Portugal.\\
-  Software Engineer, multi-class, 2007--present.
+\item {\bfseries AnubisNetworks}---Lisbon, Portugal.\\
+  Software Engineer (multi-class), 2007--present.
 	\begin{itemize}
-		\item{\bfseries Current responsibilities}: Maintenance, new feature's
-specification and development for the Mail Protection System\textsuperscript{\texttrademark} (MPS)
-appliance---Anubis' flagship product. Developer (and current maintainer) of several
-software modules that provide secure and transparent system administration capabilities---email
-infrastructure, et al.---to ``upper'' layers (business logic). Develops more distributed and asynchronous alternatives to current architectural scenarios. Occasionally shifts to other projects, mainly through R\&D engineering tasks.
-		\item{\bfseries Past work}: Initially designed and implemented MPS' Reports
-module, including its web GUI. Performed improvements to the underlying
-database, prompted by this module's development. Maintained the whole web GUI
-during a brief period of time. Worked on the initial version of an abstraction
-layer aimed at better separating business logic from the underlying system
-operations.
-		\item{\bfseries Programming languages / technologies}:\hfill Perl, C, C++,
-Postfix,
-LDAP, Ubuntu GNU/Linux.
+		\item Development of the Mail Protection System\textsuperscript{\texttrademark} (MPS)
+appliance---Anubis' flagship product. Main focus is on modules that provide secure and transparent system administration capabilities---email
+infrastructure, et al.---to ``upper'' layers (business logic). Also developed distributed alternatives to current architectural scenarios.
+		\item Designed and implemented MPS' Reports module. Improved the underlying MySQL database, to support the required developments. Briefly maintained the web interface. Worked on the initial version of an abstraction layer aimed at better separating business logic from the underlying system operations.
 \end{itemize}
 \end{itemize}
 \end{topic}
@@ -89,9 +70,9 @@ LDAP, Ubuntu GNU/Linux.
 \begin{topic}{Formal Education}
 
 \begin{itemize}
-\item {\bfseries Technical University of Lisbon -- IST}, Lisbon, Portugal.\\
+\item {\bfseries Technical University of Lisbon -- IST}---Lisbon, Portugal.\\
   B.Sc. Applied Mathematics, 2010--present.
-\item {\bfseries University of Coimbra}, Coimbra, Portugal.\\
+\item {\bfseries University of Coimbra}---Coimbra, Portugal.\\
   B.Sc. Informatics Engineering (pre-Bologna -- 5 years), 2001--2007.
 \end{itemize}
 \end{topic}
@@ -106,16 +87,14 @@ elementary skills in Javascript.
 \end{itemize}
 	{\itshape Operating Systems} 
   \begin{itemize}
-		\item{\bfseries GNU/Linux}: Proficient ArchLinux user; familiar with Ubuntu.
-		\item{\bfseries Ms Windows}: Familiar with Windows XP; seldom work with
-posterior versions.
+		\item{\bfseries GNU/Linux}: Proficient \textbf{ArchLinux} user; experienced with \textbf{Ubuntu}.
 	\end{itemize}
 {\itshape Software}
   \begin{itemize}
 \item{\bfseries Text Editors}: Vim (proficient), Emacs (novice), Kate.
 \item{\bfseries IDE's}: KDevelop.
-\item{\bfseries Mathematics}: Mathematica, Matplotlib, SageMath (experienced).
-\item{\bfseries Network}: GnuPG, SSH et al., iptables (experienced).
+\item{\bfseries Mathematics}: Mathematica, Matplotlib, SageMath.
+\item{\bfseries Network}: GnuPG, SSH et al., iptables.
   \end{itemize}
 \end{topic}
 
