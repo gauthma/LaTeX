@@ -1,0 +1,90 @@
+\documentclass[a4paper,10pt]{letter}
+
+%\usepackage[portuguese]{babel} % i18n: uncomment for letters in Portuguese
+\usepackage[xetex]{graphicx} % this borks if included after next line, comment if unneeded
+\usepackage{xltxtra,xunicode}
+\usepackage{url}
+
+% --- to add other fonts to document ---
+\usepackage{fontspec} % only needed if using custom fonts
+\defaultfontfeatures{Mapping=tex-text} % needed otherwise ligatures and quotes get beserk
+
+% %%%
+% and now load the fonts proper
+% *** font packages needed in ArchLinux ***
+% yaourt -S ttf-adobe-fonts
+% yaourt -S monaco-linux-font
+% %%%
+\setromanfont [Ligatures={Common}, BoldFont={Minion Pro Bold}, ItalicFont={Minion Pro Italic}]{Minion Pro}
+\setmonofont [Scale=0.8]{Monaco}
+% --- end code for other fonts ---
+
+% --- additional packages here ---
+%\input{mathpackages}
+
+% --- END additional packages ---
+
+% the hyperref package if used, MUST BE THE LAST ONE included
+\usepackage[pagebackref=true,bookmarks=true,colorlinks=true,linkcolor=blue,citecolor=cyan,linktocpage=true]{hyperref}
+% --- END Page layout ---
+
+% --- Commands (new or redefine) ---
+% --- END commands ---
+
+% --- END PREAMBLE ---
+
+\address{
+  22nd Baking Street\\
+  2099--101 Acme City\\
+  LooneyTuneLand
+}
+\signature{Yours Truly's Name}
+
+\begin{document}
+\begin{letter}{
+    R. Madillo\\
+    European Parliament\\
+    Rue Wiertz\\
+    Altiero Spinelli 07F343\\
+    B-1047 Bruxelles 
+  }
+  %\opening{Ex.\textsuperscript{o} Doutor Paulo R.,} % -- Portuguese introduction style
+  \opening{Dear Dr. R. MaDillo,}
+
+  \begin{center}
+    \textbf{On the \textsc{Subject of your letter here}}
+  \end{center}
+
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec bibendum 
+  suscipit odio, id dapibus ipsum placerat vitae. Quisque vitae magna vel ante 
+  semper dapibus sit amet eu elit. Fusce cursus sodales eros, non porta urna 
+  bibendum et. Ut mauris risus, malesuada sit amet semper ac, molestie in 
+  tellus. Nam imperdiet metus sed massa faucibus sed vulputate risus laoreet. 
+  Aenean tincidunt, purus ac euismod lobortis, tortor lacus iaculis eros, non 
+  egestas orci massa in ligula. Cras bibendum suscipit lacus nec mollis. Nullam 
+  neque erat, molestie ac bibendum eget, molestie non nunc. Morbi quis orci 
+  augue. Pellentesque facilisis, erat sed pellentesque rutrum, orci turpis 
+  dictum mi, sit amet rutrum nibh quam in velit. Vestibulum semper, est eget 
+  blandit pellentesque, nisi elit venenatis diam, id vestibulum velit leo quis 
+  orci. 
+  
+  Vivamus dictum pretium iaculis. Suspendisse eros ligula, laoreet 
+  elementum lobortis vel, blandit tincidunt enim. Aenean eget augue dolor. Sed 
+  ut magna nec nulla euismod pharetra. Proin diam turpis, tincidunt et fermentum 
+  id, porta ut nulla. Quisque ac ipsum tortor, in feugiat ante. Proin congue, 
+  magna in lacinia fringilla, velit diam malesuada nulla, ac scelerisque risus 
+  nulla ut eros. Nunc bibendum aliquam felis semper fermentum. Aliquam erat 
+  volutpat. Cras eget mi ligula. Nulla quis augue urna, cursus cursus est. Nulla 
+  nulla mi, eleifend eu molestie a, volutpat id massa. 
+  
+  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac 
+  turpis egestas.
+
+  \closing{Yours sincerely,}
+
+  \ps{P.S.: Some more latin should go here.}
+  \encl{A vacation postcard!}
+\end{letter}
+\end{document}
+
+
