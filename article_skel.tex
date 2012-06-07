@@ -38,8 +38,7 @@
 % --- END Page layout ---
 
 % --- Commands (new or redefine) ---
-% shortcut for \textsection
-\newcommand{\ts}{\textsection}
+\input{custom_commands}
 % --- END commands ---
 
 % --- Title page ---
@@ -82,34 +81,10 @@ inside the folder you just created. Then run \verb+$ texhash .+ (don’t forget 
 dot!) from the ``appropriate location" folder you used. And you're done!
 
 \section{Math Stuff}
-The black QED square can be done by defining this in the preamble:
-\begin{verbatim}
-\newcommand{\qed}{\hfill \mbox{\raggedright \rule{.07in}{.07in}}}
-\end{verbatim}
-Some other environments that can be useful are the following:
-\begin{verbatim}
-\newtheorem{theorem}{Theorem}[section]
+The commands I use for mathematics are included in the file 
+\texttt{custom\_commands.tex}.
 
-\newtheorem{lemma}[theorem]{Lemma}
-
-\newtheorem{proposition}[theorem]{Proposition}
-
-\newtheorem{corollary}[theorem]{Corollary}
-
-\newenvironment{proof}[1][Proof]{\begin{trivlist}
-\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-
-\newenvironment{definition}[1][Definition]{\begin{trivlist}
-\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-
-\newenvironment{example}[1][Example]{\begin{trivlist}
-\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-
-\newenvironment{remark}[1][Remark]{\begin{trivlist}
-\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-\end{verbatim}
-
-Finally, spacing: In a ``math'' environment, LaTeX ignores the spaces you type 
+For spacing: In a ``math'' environment, LaTeX ignores the spaces you type 
 and puts in the spacing that it thinks is best. LaTeX formats mathematics the
 way it’s done in mathematics texts. If you want different spacing, LaTeX 
 provides the following four commands for use in math mode:
