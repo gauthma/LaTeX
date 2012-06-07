@@ -6,15 +6,19 @@
 \newcommand{\pvec}[1]{\overrightarrow{#1}}
 \newcommand{\npvec}[1]{\norm{\pvec{#1}}}
 
-\providecommand{\abs}[1]{\lvert#1\rvert}
-\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\abs}[1]{\left \lvert #1 \right \rvert}
+\providecommand{\norm}[1]{\left \lVert #1 \right \rVert}
+
+\providecommand{\pth}[1]{\left ( #1 \right ) }
+\providecommand{\spth}[1]{\left [ #1 \right ] }
+\providecommand{\cpth}[1]{\left { #1 \right } }
 
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{cor}[thm]{Corollary}
 \newtheorem{lem}[thm]{Lemma}
 
 \theoremstyle{remark}
-\newtheorem{rem}[thm]{Remark}
+\newtheorem{remark}[thm]{Remark}
 
 \theoremstyle{definition}
 \newtheorem{definition}[thm]{Definition} % 'def' cannot be used as environ name
