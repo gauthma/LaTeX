@@ -1,6 +1,13 @@
 % general purpose
 \newcommand{\ts}{\textsection}
 
+%% prevent figures that end up on the last empty 
+%% page of a document from being forcibly centred 
+%% on the middle of the page.
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+
 % math stuff
 \newcommand{\eqv}{\Leftrightarrow}
 \newcommand{\pvec}[1]{\overrightarrow{#1}}
@@ -14,8 +21,8 @@
 \providecommand{\cpth}[1]{\left { #1 \right } }
 
 \newtheorem{thm}{Theorem}[section]
-\newtheorem{cor}[thm]{Corollary}
-\newtheorem{lem}[thm]{Lemma}
+\newtheorem{corollary}[thm]{Corollary}
+\newtheorem{lemma}[thm]{Lemma}
 
 \theoremstyle{remark}
 \newtheorem{remark}[thm]{Remark}
@@ -24,3 +31,4 @@
 \newtheorem{definition}[thm]{Definition} % 'def' cannot be used as environ name
 
 \renewcommand\qedsymbol{$\blacksquare$}  % for proofs to end with a black *filled* square (requires amssymb)
+
