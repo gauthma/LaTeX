@@ -24,6 +24,14 @@
 
 % --- END additional packages ---
 
+% --- Page layout ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
+\pdfpagewidth 210mm
+\pdfpageheight 297mm
+
+% avoid having the closing too ``centered''
+\longindentation=230pt
+
 % the hyperref package if used, MUST BE THE LAST ONE included
 \usepackage[pagebackref=true,bookmarks=true,colorlinks=true,linkcolor=blue,citecolor=cyan,linktocpage=true]{hyperref}
 % --- END Page layout ---
@@ -41,7 +49,7 @@
   2099--101 Acme City\\
   LooneyTuneLand
 }
-\signature{Yours Truly's Name}
+\signature{Your Truly's Name}
 
 % --- END PREAMBLE ---
 
@@ -55,11 +63,11 @@
   }
   %\opening{Ex.\textsuperscript{o} Doutor R. Madillo,} % -- Portuguese introduction style
   \opening{Dear Dr. R. MaDillo,}
-
+%
   \begin{center}
     \textbf{\textsc{Subject of your letter here}}
   \end{center}
-
+%
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec bibendum 
   suscipit odio, id dapibus ipsum placerat vitae. Quisque vitae magna vel ante 
   semper dapibus sit amet eu elit. Fusce cursus sodales eros, non porta urna 
@@ -85,11 +93,42 @@
   Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac 
   turpis egestas.
 
-  \closing{Yours sincerely,}
+  In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis 
+  quis tortor malesuada pretium. Pellentesque auctor neque nec urna. Proin 
+  sapien ipsum, porta a, auctor quis, euismod ut, mi. Aenean viverra rhoncus 
+  pede. Pellentesque habitant morbi tristique senectus et netus et malesuada 
+  fames ac turpis egestas. Ut non enim eleifend felis pretium feugiat. Vivamus 
+  quis mi. Phasellus a est. Phasellus magna.
 
+  In hac habitasse platea dictumst. Curabitur at lacus ac velit ornare lobortis. 
+  Curabitur a felis in nunc fringilla tristique. Morbi mattis ullamcorper velit. 
+  Phasellus gravida semper nisi. Nullam vel sem. Pellentesque libero tortor, 
+  tincidunt et, tincidunt eget, semper nec, quam. Sed hendrerit. Morbi ac felis. 
+  Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at 
+  malesuada velit leo quis pede. Donec interdum, metus et hendrerit aliquet, 
+  dolor diam sagittis ligula, eget egestas libero turpis vel mi. Nunc nulla. 
+  Fusce risus nisl, viverra et, tempor et, pretium in, sapien. Donec venenatis 
+  vulputate lorem.
+
+  Morbi nec metus. Phasellus blandit leo ut odio. Maecenas ullamcorper, dui et 
+  placerat feugiat, eros pede varius nisi, condimentum viverra felis nunc et 
+  lorem. Sed magna purus, fermentum eu, tincidunt eu, varius ut, felis. In 
+  auctor lobortis lacus.  
+%
+  \closing{Your's sincerely,}
+%
   \ps{P.S.: Some more latin should go here.}
   \encl{A vacation postcard!}
 \end{letter}
 \end{document}
 
-
+% ALTERNATIVE CLOSING: if you want to send a letter that will not be 
+% printed, you can add an image with your signature replacing the \closing 
+% with this:
+%
+%  \closing{Yours sincerely,\\
+%    \fromsig{\includegraphics[scale=0.5]{signature.png}}\\
+%    \fromname{Your Truly's Name}
+%  }
+%
+% NOTE: If you use this, you have to remove the \signature, in the preamble.
