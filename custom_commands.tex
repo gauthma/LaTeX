@@ -8,27 +8,3 @@
 \setlength{\@fptop}{0pt}
 \makeatother
 
-% math stuff
-\newcommand{\eqv}{\Leftrightarrow}
-\newcommand{\pvec}[1]{\overrightarrow{#1}}
-\newcommand{\npvec}[1]{\norm{\pvec{#1}}}
-
-\providecommand{\abs}[1]{\left \lvert #1 \right \rvert}
-\providecommand{\norm}[1]{\left \lVert #1 \right \rVert}
-
-\providecommand{\pth}[1]{\left ( #1 \right ) }
-\providecommand{\spth}[1]{\left [ #1 \right ] }
-\providecommand{\cpth}[1]{\left { #1 \right } }
-
-\newtheorem{thm}{Theorem}[section]
-\newtheorem{corollary}[thm]{Corollary}
-\newtheorem{lemma}[thm]{Lemma}
-
-\theoremstyle{remark}
-\newtheorem{remark}[thm]{Remark}
-
-\theoremstyle{definition}
-\newtheorem{definition}[thm]{Definition} % 'def' cannot be used as environ name
-
-\renewcommand\qedsymbol{$\blacksquare$}  % for proofs to end with a black *filled* square (requires amssymb)
-
