@@ -1,32 +1,20 @@
 % My CV's .tex file. Inspired by this one:
 % http://www.danielmathews.info/about-me
 %
-% A pdf version (probably with outdated information, but with the same style) 
+% A pdf version (probably with outdated information, but with the same style)
 % can be found here:
-% http://dl.dropbox.com/u/12579210/cv.pdf
+% https://blog.erroneousthoughts.org/wp-content/uploads/2012/11/OscarPereiraCV.pdf
 %
-% WARNING: as it uses custom fonts, this file is supposed to be compiled with 
-% XeTeX
+% WARNING: as it uses custom fonts, this file is supposed to be compiled with
+% LuaTeX
 %
-\documentclass{article}
+\documentclass[a4paper,9pt]{extarticle}
 
 \usepackage[top=2.5cm,left=3cm,right=3cm,bottom=2.5cm]{geometry}
+\usepackage[bitstream-charter]{mathdesign}
 %\usepackage[portuguese]{babel}     % i18n
-\usepackage{xltxtra,xunicode}        
 
-% --- to add other fonts to document --- 
-\usepackage{fontspec}								% only needed if using custom fonts
-\defaultfontfeatures{Mapping=tex-text}
-
-% %%%
-% and now load the fonts proper
-% *** font packages needed in ArchLinux ***
-% yaourt -S ttf-adobe-fonts
-% yaourt -S monaco-linux-font
-% %%%
-\setromanfont [Ligatures={Common}, BoldFont={Minion Pro Bold}, ItalicFont={Minion Pro Italic}]{Minion Pro}
-\setmonofont  [Scale=0.8]{Monaco}
-% --- end code for other fonts ---
+%%%%%%%%%%%%%
 
 \usepackage{url}
 
@@ -46,78 +34,113 @@
 
 \pagestyle{empty}
 
+\hyphenation{in-fra-struc-ture}
+
 \begin{document}
 
 \begin{header}
 {Óscar Francisco Godinho Pereira} 
 {\emph{The address and phone number are omitted in this version, due to privacy concerns}}\smallskip\\
-\texttt{+000 000000000} \verb+   +|\verb+   + \texttt{oscar@erroneousthoughts.org} \verb+   +|\verb+   + \url{http://www.erroneousthoughts.org} 
+\texttt{\url{https://erroneousthoughts.org}} \verb+   +|\verb+   + \texttt{\url{oscar@erroneousthoughts.org}}
 \end{header}
 
 \begin{topic}{Professional Experience}
-\begin{itemize}
-\item {\bfseries AnubisNetworks}---Lisbon, Portugal.\\
-  Software Engineer (multi-class), 2007--present.
-	\begin{itemize}
-		\item Development of the Mail Protection System\textsuperscript{\texttrademark} (MPS)
-appliance---Anubis' flagship product. Main focus is on modules that provide secure and transparent system administration capabilities---email
-infrastructure, et al.---to ``upper'' layers (business logic). Also developed distributed alternatives to current architectural scenarios.
-		\item Designed and implemented MPS' Reports module. Improved the underlying MySQL database, to support the required developments. Briefly maintained the web interface. Worked on the initial version of an abstraction layer aimed at better separating business logic from the underlying system operations.
-\end{itemize}
-\end{itemize}
-\end{topic}
-
-\begin{topic}{Formal Education}
-
-\begin{itemize}
-\item {\bfseries Technical University of Lisbon -- IST}---Lisbon, Portugal.\\
-  B.Sc. Applied Mathematics, 2010--present.
-\item {\bfseries University of Coimbra}---Coimbra, Portugal.\\
-  B.Sc. Informatics Engineering (pre-Bologna -- 5 years), 2001--2007.
-\end{itemize}
-\end{topic}
-
-\begin{topic}{Technical Skills}
-	{\itshape Programming Languages}  
-	\begin{itemize}
-		\item{\bfseries Imperative}: C, Perl (proficient); C++, Python, Java;
-elementary skills in Javascript.
-		\item{\bfseries Functional}: Common Lisp (novice).
-		\item{\bfseries Markup}: HTML, CSS, \LaTeX (proficient); UML.
-\end{itemize}
-	{\itshape Operating Systems} 
   \begin{itemize}
-		\item{\bfseries GNU/Linux}: Proficient \textbf{ArchLinux} user; experienced with \textbf{Ubuntu}.
-	\end{itemize}
-{\itshape Software}
-  \begin{itemize}
-\item{\bfseries Text Editors}: Vim (proficient), Emacs (novice), Kate.
-\item{\bfseries IDE's}: KDevelop.
-\item{\bfseries Mathematics}: Mathematica, Matplotlib, SageMath.
-\item{\bfseries Network}: GnuPG, SSH et al., iptables.
+    \item {\bfseries AnubisNetworks}---Lisbon, Portugal.\\
+      Software Engineer (i.e. multi-class hacker), 2007--present.
+      \begin{itemize}
+	\item Moved from product development to the Operations team. Currently 
+	  handling SpamAssassin management and performance tunning. Development 
+	  of software to ease (or automate) some of the management tasks, as 
+	  well spam statistics collection and analysis.\\
+	  \emph{Requirements}: SpamAssassin, Perl, Apache, RRDTool
+	\item Development of \emph{myFamily} and \emph{Web Protection Service} 
+	  web content filtering services. Focus on user interface and 
+	  authentication modules.\\
+	  \emph{Requirements}: C++, HTML, CSS, HTTP, tcpflow
+	\item Development of MPS' modules that provide secure and transparent 
+	  system administration capabilities---email infrastructure, et al.---to 
+	  ``upper'' layers (business logic). Also developed distributed 
+	  alternatives to existing centralised architectural scenarios.\\
+	  \emph{Requirements}: Perl, Postfix, LDAP
+	\item Designed and implemented the Reports module of the \emph{Mail 
+	  Protection System}\textsuperscript{\texttrademark} appliance 
+	  (MPS)---Anubis' flagship product. Improved the underlying database 
+	  scheme to support the required developments. Maintained the web 
+	  interface and worked on the initial version of an abstraction layer 
+	  aimed at better separating business logic from the underlying system 
+	  operations.\\
+	  \emph{Requirements}: Perl, Apache, MySQL
+      \end{itemize}
   \end{itemize}
 \end{topic}
 
-\begin{topic}{Other Skills}
-	{\itshape Spoken Languages} 
-	\begin{itemize}
-		\item {\bfseries Portuguese}: native speaker.
-		\item {\bfseries English}: fluent domain, both written and spoken.
-		\item {\bfseries Spanish}: fluent speaker, basic reading and writing skills.
-	\end{itemize}
+\begin{topic}{Formal Education}
+  \begin{itemize}
+    \item {\bfseries Technical University of Lisbon -- IST}, Lisbon, Portugal.\\
+      B.Sc. Applied Mathematics, 2010--present.
+    \item {\bfseries University of Coimbra}, Coimbra, Portugal.\\
+      B.Sc. Informatics Engineering (pre-Bologna -- 5 years), 2001--2007.
+  \end{itemize}
 \end{topic}
 
+\begin{topic}{Technical Skills}
+  {\itshape Programming Languages}  
+  \begin{itemize}
+    \item{\bfseries Imperative}: \emph{proficient}: C, Perl; \emph{experienced}: C++, Python;
+      \emph{basic skills}: Java, Javascript/JQuery.
+    \item{\bfseries Functional}: \emph{basic skills}: Common Lisp.
+    \item{\bfseries Markup}: \emph{proficient}: HTML, CSS, \LaTeX; \emph{basic skills}: UML.
+  \end{itemize}
+  {\itshape Operating Systems} 
+  \begin{itemize}
+    \item{\bfseries GNU/Linux}: Proficient \textbf{ArchLinux} user; experienced with \textbf{UbuntuServer}.
+    \item{\bfseries Microsoft Windows}: Last version regularly used was XP (SP3).
+  \end{itemize}
+  {\itshape Software}
+  \begin{itemize}
+    \item{\bfseries Text Editors}: Vim (proficient), Emacs (novice), Kate, KDevelop (IDE).
+    \item{\bfseries Mathematics}: Mathematica, Matplotlib, SageMath.
+    \item{\bfseries Network}: OpenSSH, tcpflow, iptables, Apache, nginx, RRDTool, GnuPG, 
+      Mutt.
+    \item{\bfseries Databases}: MySQL, SQLite, PostgreSQL.
+  \end{itemize}
+\end{topic}
+
+\begin{topic}{Languages}
+  \begin{itemize}
+    \item {\bfseries Portuguese}: native speaker.
+    \item {\bfseries English}: fluent domain, both written and spoken.
+    \item {\bfseries Spanish}: fluent speaker, elementary reading and writing skills.
+  \end{itemize}
+\end{topic}
+
+\newpage
 \begin{topic}{Additional Information}
-\begin{itemize}
-\item{Outdoor sports enthusiast---currently surf, football, and trying
-snowboard.}
-\item{Enjoys recreational---and often not-so-recreational---mathematics,
-as well as physics (and chess).}
-\item{Participated in the 2003 and 2004 editions of \emph{Minho Campus
-Party} (LAN party).}
-\item{Full Portuguese driving license---Category B, passenger light
-vehicles.}
-\end{itemize}
+  {\itshape Informal Education / Professional Development}\\ 
+  {\slshape \small \mbox{\ \ \ \ \ \ \ \ \ \ } Note: only courses completed with certification are listed.}
+  \begin{itemize}
+    \item {\bfseries Coursera Online Platform}, Stanford University.\\
+      Crypto I -- http://www.crypto-class.org -- 2012
+  \end{itemize}
+  {\itshape Miscellanea}  
+  \begin{itemize}
+    \item{Outdoor sports enthusiast---currently surf, football, and trying
+      snowboard.}
+    \item{Enjoys recreational---and often not-so-recreational---mathematics,
+      as well as physics (and chess).}
+    \item{Participated in the 2003 and 2004 editions of \emph{Minho Campus
+      Party} (Portugal's first large scale LAN party!).}
+    \item Writes at \url{https://blog.erroneousthoughts.org} (Portuguese and 
+      English). Paraphrasing the Nobel prize winning physicist Richard Feynman: 
+      \emph{to explain, one must first understand}. Writing being mostly about 
+      the former, it provides a strong incentive to put in the effort needed to 
+      achieve the latter.
+    \item Chronically tends to accumulate more (dead-tree version) books than 
+      what he is able to read (despite being a fairly fast reader!).
+    \item{Full Portuguese driving license---Category B, passenger light
+      vehicles.}
+  \end{itemize}
 \end{topic}
 
 \end{document}

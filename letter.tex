@@ -1,23 +1,12 @@
 \documentclass[a4paper,10pt]{letter}
 
 %\usepackage[portuguese]{babel} % i18n: uncomment for letters in Portuguese
-\usepackage[xetex]{graphicx} % this borks if included after next line, comment if unneeded
-\usepackage{xltxtra,xunicode}
-\usepackage{url}
 
-% --- to add other fonts to document ---
-\usepackage{fontspec} % only needed if using custom fonts
-\defaultfontfeatures{Mapping=tex-text} % needed otherwise ligatures and quotes get beserk
-
-% %%%
-% and now load the fonts proper
-% *** font packages needed in ArchLinux ***
-% yaourt -S ttf-adobe-fonts
-% yaourt -S monaco-linux-font
-% %%%
-\setromanfont [Ligatures={Common}, BoldFont={Minion Pro Bold}, ItalicFont={Minion Pro Italic}]{Minion Pro}
-\setmonofont [Scale=0.8]{Monaco}
-% --- end code for other fonts ---
+% --- set up fonts to use ---
+\usepackage[bitstream-charter]{mathdesign}
+\DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
+\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
+% --- end code for fonts ---
 
 % --- additional packages here ---
 % --- END additional packages ---
@@ -29,9 +18,6 @@
 
 % avoid having the closing too ``centered''
 \longindentation=230pt
-
-% the hyperref package if used, MUST BE THE LAST ONE included
-\usepackage[pagebackref=true,bookmarks=true,colorlinks=true,linkcolor=blue,citecolor=cyan,linktocpage=true]{hyperref}
 % --- END Page layout ---
 
 % --- Commands (new or redefine) ---
@@ -113,10 +99,6 @@
   Fusce risus nisl, viverra et, tempor et, pretium in, sapien. Donec venenatis 
   vulputate lorem.
 
-  Morbi nec metus. Phasellus blandit leo ut odio. Maecenas ullamcorper, dui et 
-  placerat feugiat, eros pede varius nisi, condimentum viverra felis nunc et 
-  lorem. Sed magna purus, fermentum eu, tincidunt eu, varius ut, felis. In 
-  auctor lobortis lacus.  
 %
   \closing{Yours sincerely,}
 %

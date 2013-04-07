@@ -1,0 +1,10 @@
+TODO - detail the ArchLinux packages that contain required modules et al.
+
+\usepackage[bitstream-charter]{mathdesign}
+\DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
+\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
+
+The last two lines are to use the default mathcal font, instead of the one with 
+bitstream-charter, which is harder to read [1].
+
+[1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989

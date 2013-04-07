@@ -1,23 +1,12 @@
 \documentclass[a4paper,10pt,twocolumn]{article}
 
 %\usepackage[portuguese]{babel}     % i18n
-\usepackage[xetex]{graphicx}        % this borks if included after next line, comment if unneeded
-\usepackage{xltxtra,xunicode}        
+%\usepackage{graphicx}              % comment if unneeded
 \usepackage{url}
 
-% --- to add other fonts to document --- 
-\usepackage{fontspec}                    % only needed if using custom fonts
-\defaultfontfeatures{Mapping=tex-text}	 % needed otherwise ligatures and quotes get beserk
-
-% %%%
-% and now load the fonts proper
-% *** font packages needed in ArchLinux ***
-% yaourt -S ttf-adobe-fonts
-% yaourt -S monaco-linux-font
-% %%%
-\setromanfont [Ligatures={Common}, BoldFont={Minion Pro Bold}, ItalicFont={Minion Pro Italic}]{Minion Pro}
-\setmonofont  [Scale=0.8]{Monaco}
-% --- end code for other fonts ---
+\usepackage[bitstream-charter]{mathdesign}
+\DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
+\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
 
 % --- additional packages here ---
 % --- END additional packages ---
@@ -32,12 +21,12 @@
 % avoid having footnote text too small
 \renewcommand{\footnotesize}{\small}
 
+% --- Commands (new or redefine) ---
+% --- END commands ---
+
 % the hyperref package if used, MUST BE THE LAST ONE included
 \usepackage[pagebackref=true,bookmarks=true,colorlinks=true,linkcolor=blue,citecolor=cyan,linktocpage=true]{hyperref}
 % --- END Page layout ---
-
-% --- Commands (new or redefine) ---
-% --- END commands ---
 
 % --- Includes ---
 \input{custom_commands}
