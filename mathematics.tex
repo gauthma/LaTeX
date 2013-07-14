@@ -18,15 +18,22 @@
 \providecommand{\spth}[1]{\left [ #1 \right ] }
 \providecommand{\cpth}[1]{\left { #1 \right } }
 
+% make the optional theorem name bold
+\makeatletter
+\def\th@plain{%
+  \thm@notefont{}% same as heading font
+  \itshape % body font
+}
+\makeatother
+
+% math theorem environments
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{corollary}[thm]{Corollary}
 \newtheorem{lemma}[thm]{Lemma}
+\newtheorem{definition}[thm]{Definition} % 'def' cannot be used as environ name
 
 \theoremstyle{remark}
 \newtheorem{remark}[thm]{Remark}
-
-\theoremstyle{definition}
-\newtheorem{definition}[thm]{Definition} % 'def' cannot be used as environ name
 
 \renewcommand\qedsymbol{$\blacksquare$}  % for proofs to end with a black *filled* square (requires amssymb)
 
