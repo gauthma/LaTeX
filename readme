@@ -1,3 +1,10 @@
+The example TeX files are processed using LuaTeX. 
+
+The example article file include code for using images. Bear in mind that PDF
+is a vector format [2], so including raster images might lead to poor results.
+You can ameliorate the problem by trial and error, tweaking scale factors,
+image width, etc. 
+
 TODO - detail the ArchLinux packages that contain required modules et al.
 
 \usepackage[bitstream-charter]{mathdesign}
@@ -8,3 +15,4 @@ The last two lines are to use the default mathcal font, instead of the one with
 bitstream-charter, which is harder to read [1].
 
 [1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989
+[2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/

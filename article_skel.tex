@@ -1,7 +1,7 @@
 \documentclass[a4paper,10pt,twocolumn]{article}
 
 %\usepackage[portuguese]{babel}     % i18n
-%\usepackage{graphicx}              % comment if unneeded
+\usepackage{graphicx}
 \usepackage{url}
 
 \usepackage[bitstream-charter]{mathdesign}
@@ -13,9 +13,6 @@
 
 % --- Page layout ---
 \usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
-\pdfpagewidth 210mm
-\pdfpageheight 297mm
-
 \setlength{\columnsep}{20pt}
 
 % avoid having footnote text too small
@@ -52,14 +49,14 @@ template for article writing}
 \end{abstract}
 
 \section{Styles, et al.}
-Here I’ll describe a way of installing \LaTeX\ styles, BiBTeX styles, and a couple 
+Here I'll describe a way of installing \LaTeX\ styles, BiBTeX styles, and a couple 
 of other things in a straightforward way. I think this should work with most 
 *nix systems.
 
 The first thing to do, is discover where whatever you want to install should be 
 installed. And the ideal way to do this is using a tool named kpsewhich, which 
 should get installed when you install LaTeX. It can be used to do a lot of 
-things\\(\verb+$ kpsewhich --help+), but the one we’re interested in here, 
+things (\verb+$ kpsewhich --help+), but the one we’re interested in here, 
 location of styles, uses the \verb+--show-path NAME+ option. The list of allowed names 
 is part of the output of the \verb+--help+ option. So for instance, to discover where to place 
 BiBTeX style files (*.bst), run:
@@ -70,7 +67,7 @@ This will output a list of locations where BiBTeX style files are searched for.
 So if you have a file called mystyle.bst, create a folder named ``mystyle" in the 
 appropriate location (I use \verb+/home/user/texmf/bibtex/bst/+), and put mystyle.bst 
 inside the folder you just created. Then run \verb+$ texhash .+ (don’t forget the 
-dot!) from the ``appropriate location" folder you used. And you're done!
+dot!) from the ``appropriate location'' folder you used. And you're done!
 
 \section{Math Stuff}
 The commands I use for mathematics are included in the file 
@@ -90,6 +87,18 @@ provides the following four commands for use in math mode:
 
 \! – a negative thin space 
 \end{verbatim}
+
+\section{Graphics}
+% image source: 
+% http://tumblring.net/wp-content/uploads/2011/01/tumblr-tumbeasts.png
+\begin{figure}[ht!]
+  \centering
+  %\includegraphics{tumbeasts.jpg}
+  %\includegraphics[width=0.5\columnwidth]{tumbeasts.png}
+  \includegraphics[scale=0.42]{tumbeasts.png}
+  \caption{A simple caption}
+  \label{overflow}
+\end{figure}
 \bibliographystyle{is-abbrv}
 % \bibliography{bib_file}     % for BiBTeX file
 \end{document}
