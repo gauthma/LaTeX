@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{letter}
+\documentclass[a4paper,12pt]{letter}
 
 %\usepackage[portuguese]{babel} % i18n: uncomment for letters in Portuguese
 
@@ -9,12 +9,16 @@
 % --- end code for fonts ---
 
 % --- additional packages here ---
+\usepackage{endnotes}   % comment if not needed
 % --- END additional packages ---
 
 % --- Page layout ---
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
 \pdfpagewidth 210mm
 \pdfpageheight 297mm
+
+% no line numbering
+\pagestyle{empty}
 
 % avoid having the closing too ``centered''
 \longindentation=230pt
@@ -31,7 +35,7 @@
 % --- letter specific info ---
 
 % for letters, I prefer to set the date explicitly
-\date{February 31, 2012} 
+\date{February 31, 2013} 
 
 \address{
   22nd Baking Street\\
@@ -70,17 +74,17 @@
   blandit pellentesque, nisi elit venenatis diam, id vestibulum velit leo quis 
   orci. 
   
-  Vivamus dictum pretium iaculis. Suspendisse eros ligula, laoreet 
-  elementum lobortis vel, blandit tincidunt enim. Aenean eget augue dolor. Sed 
-  ut magna nec nulla euismod pharetra. Proin diam turpis, tincidunt et fermentum 
-  id, porta ut nulla. Quisque ac ipsum tortor, in feugiat ante. Proin congue, 
-  magna in lacinia fringilla, velit diam malesuada nulla, ac scelerisque risus 
-  nulla ut eros. Nunc bibendum aliquam felis semper fermentum. Aliquam erat 
-  volutpat. Cras eget mi ligula. Nulla quis augue urna, cursus cursus est. Nulla 
-  nulla mi, eleifend eu molestie a, volutpat id massa. 
+  Vivamus dictum pretium iaculis. Suspendisse eros ligula, laoreet elementum 
+  lobortis vel, blandit tincidunt enim. Aenean eget augue dolor. Sed ut magna 
+  nec nulla euismod pharetra. Proin diam turpis, tincidunt et fermentum id, 
+  porta ut nulla. Quisque ac ipsum tortor, in feugiat ante. Proin congue, magna 
+  in lacinia fringilla, velit diam malesuada nulla, ac scelerisque risus nulla 
+  ut eros. Nunc bibendum aliquam felis semper fermentum. Aliquam erat volutpat. 
+  Cras eget mi ligula. Nulla quis augue urna, cursus cursus est. Nulla nulla mi, 
+  eleifend eu molestie a, volutpat id massa. 
   
   Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac 
-  turpis egestas.
+  turpis egestas~\endnote{Some more latin about the previously written latin.}.
 
   In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis 
   quis tortor malesuada pretium. Pellentesque auctor neque nec urna. Proin 
@@ -99,11 +103,21 @@
   Fusce risus nisl, viverra et, tempor et, pretium in, sapien. Donec venenatis 
   vulputate lorem.
 
-%
   \closing{Yours sincerely,}
 %
-  \ps{P.S.: Some more latin should go here.}
+  \ps{P.\ S.: Some more latin should go here.}
   \encl{A vacation postcard!}
+
+  % --- show endnotes ---
+  % comment if not using the endnotes package
+  \vspace{1cm}
+  \begingroup
+  %\addcontentsline{toc}{section}{Notes}
+  \def\enotesize{\small}
+  \def\enoteheading{\Large \textsc{Notes}}
+  \theendnotes
+  \endgroup
+  % --- end endnotes ---
 \end{letter}
 \end{document}
 

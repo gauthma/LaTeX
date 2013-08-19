@@ -1,6 +1,8 @@
+% XXX Of the next two lines: use first for 1column, second for 2column
+%\documentclass[a4paper,12pt]{article}
 \documentclass[a4paper,10pt,twocolumn]{article}
 
-%\usepackage[portuguese]{babel}     % i18n
+%\usepackage[portuguese]{babel}      % i18n
 \usepackage{graphicx}
 \usepackage{url}
 
@@ -9,9 +11,13 @@
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
 
 % --- additional packages here ---
+%\usepackage{indentfirst}            % needed when writing in Portuguese
+\usepackage{endnotes}
 % --- END additional packages ---
 
 % --- Page layout ---
+% XXX Of the next two lines: use first for 1column, second for 2column
+%\usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
 \usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
 \setlength{\columnsep}{20pt}
 
@@ -23,6 +29,7 @@
 
 % the hyperref package if used, MUST BE THE LAST ONE included
 \usepackage[pagebackref=true,bookmarks=true,colorlinks=true,linkcolor=blue,citecolor=cyan,linktocpage=true]{hyperref}
+\renewcommand*{\backref}[1]{\emph{Cited in page(s)} #1.}
 % --- END Page layout ---
 
 % --- Includes ---
@@ -45,38 +52,39 @@ template for article writing}
 %\tableofcontents        % if needed
 
 \begin{abstract}
-	Some tips for \LaTeX\ template.
+  Some tips for a \LaTeX\ template.
 \end{abstract}
 
 \section{Styles, et al.}
-Here I'll describe a way of installing \LaTeX\ styles, BiBTeX styles, and a couple 
-of other things in a straightforward way. I think this should work with most 
-*nix systems.
+  Here I'll describe a way of installing \LaTeX\ styles, BiBTeX styles, and a couple 
+  of other things in a straightforward way. I think this should work with most 
+  *nix systems.
 
-The first thing to do, is discover where whatever you want to install should be 
-installed. And the ideal way to do this is using a tool named kpsewhich, which 
-should get installed when you install LaTeX. It can be used to do a lot of 
-things (\verb+$ kpsewhich --help+), but the one we’re interested in here, 
-location of styles, uses the \verb+--show-path NAME+ option. The list of allowed names 
-is part of the output of the \verb+--help+ option. So for instance, to discover where to place 
-BiBTeX style files (*.bst), run:
+  The first thing to do, is discover where whatever you want to install should 
+  be installed. And the ideal way to do this is using a tool named kpsewhich, 
+  which should get installed when you install LaTeX. It can be used to do a lot 
+  of things (\verb+$ kpsewhich --help+), but the one we’re interested in here, 
+  location of styles, uses the \verb+--show-path NAME+ option. The list of 
+  allowed names is part of the output of the \verb+--help+ option. So for 
+  instance, to discover where to place BiBTeX style files (*.bst), run:
 \begin{verbatim}
 kpsewhich --show-path bst
 \end{verbatim}
-This will output a list of locations where BiBTeX style files are searched for. 
-So if you have a file called mystyle.bst, create a folder named ``mystyle" in the 
-appropriate location (I use \verb+/home/user/texmf/bibtex/bst/+), and put mystyle.bst 
-inside the folder you just created. Then run \verb+$ texhash .+ (don’t forget the 
-dot!) from the ``appropriate location'' folder you used. And you're done!
+  This will output a list of locations where BiBTeX style files are searched 
+  for. So if you have a file called mystyle.bst, create a folder named 
+  ``mystyle" in the appropriate location (I use 
+  \verb+/home/user/texmf/bibtex/bst/+), and put mystyle.bst inside the folder 
+  you just created. Then run \verb+$ texhash .+ (don’t forget the dot!) from the 
+  ``appropriate location'' folder you used. And you're done!
 
 \section{Math Stuff}
-The commands I use for mathematics are included in the file 
-\texttt{custom\_commands.tex}.
+  The commands I use for mathematics are included in the file 
+  \texttt{custom\_commands.tex}.
 
-For spacing: In a ``math'' environment, LaTeX ignores the spaces you type 
-and puts in the spacing that it thinks is best. LaTeX formats mathematics the
-way it’s done in mathematics texts. If you want different spacing, LaTeX 
-provides the following four commands for use in math mode:
+  For spacing: In a ``math'' environment, LaTeX ignores the spaces you type and 
+  puts in the spacing that it thinks is best. LaTeX formats mathematics the
+  way it’s done in mathematics texts. If you want different spacing, LaTeX 
+  provides the following four commands for use in math mode: 
 
 \begin{verbatim}
 \; - a thick space
@@ -89,17 +97,29 @@ provides the following four commands for use in math mode:
 \end{verbatim}
 
 \section{Graphics}
-% image source: 
-% http://tumblring.net/wp-content/uploads/2011/01/tumblr-tumbeasts.png
-\begin{figure}[ht!]
-  \centering
-  %\includegraphics{tumbeasts.jpg}
-  %\includegraphics[width=0.5\columnwidth]{tumbeasts.png}
-  \includegraphics[scale=0.42]{tumbeasts.png}
-  \caption{A simple caption}
-  \label{overflow}
-\end{figure}
-\bibliographystyle{is-abbrv}
-% \bibliography{bib_file}     % for BiBTeX file
-\end{document}
+  % image source: 
+  % http://tumblring.net/wp-content/uploads/2011/01/tumblr-tumbeasts.png
+  \begin{figure}[ht!]
+    \centering
+    %\includegraphics{tumbeasts.jpg}
+    %\includegraphics[width=0.5\columnwidth]{tumbeasts.png}
+    \includegraphics[scale=0.42]{tumbeasts.png}
+    \caption{A simple caption}
+    \label{overflow}
+  \end{figure}
 
+  \bibliographystyle{is-abbrv}
+  % \bibliography{bib_file}     % for BiBTeX file
+%
+  And this is an example of an endnote~\endnote{Continuing the example of an 
+  endnote.}.
+
+  % --- show endnotes ---
+  % comment if not needed
+  \begingroup
+  \addcontentsline{toc}{section}{Notes}
+  \renewcommand{\enotesize}{\small}
+  \theendnotes
+  \endgroup
+  % --- end endnotes ---
+\end{document}
