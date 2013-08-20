@@ -8,6 +8,18 @@ is a vector format [2], so including raster images might lead to poor results.
 You can ameliorate the problem by trial and error, tweaking scale factors,
 image width, etc. 
 
+Usage 
+---
+
+```bash
+$ mkdir article_dir
+$ cd article_dir
+$ git clone https://github.com/gauthma/LaTeX.git .
+$ rm -rf .git()
+```
+
+Do work with LaTeX skeletons provided, and enjoy profit!!
+
 Article: one vs. two columns 
 ---
 
