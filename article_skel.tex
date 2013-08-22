@@ -6,13 +6,19 @@
 \usepackage{graphicx}
 \usepackage{url}
 
+\usepackage{luaotfload}
 \usepackage[bitstream-charter]{mathdesign}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
+\usepackage{fontspec}
+\setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
+\defaultfontfeatures[Charis SIL]{Script=latn}
 
 % --- additional packages here ---
 %\usepackage{indentfirst}            % needed when writing in Portuguese
-\usepackage{endnotes}
+\usepackage{endnotes}               % for notes too long for a page footer
+\usepackage{epigraph}               % for inspirational quotes...
+\setlength{\epigraphwidth}{0.8\columnwidth} % ... with the right length...
 % --- END additional packages ---
 
 % --- Page layout ---
@@ -38,8 +44,8 @@
 % --- END Includes ---
 
 % --- Title page ---
-\title{\large\textbf{\huge Skel for \LaTeX}\\A first sketch for a general 
-template for article writing}
+\title{\large\textbf{\huge Skel for \LaTeX}\\
+A first sketch for a general template for article writing}
 \author{My Name\\\texttt{my.email@provider.tld}}
 \date{}
 % --- END title page ---
@@ -57,7 +63,7 @@ template for article writing}
 
 \section{Styles, et al.}
   Here I'll describe a way of installing \LaTeX\ styles, BiBTeX styles, and a couple 
-  of other things in a straightforward way. I think this should work with most 
+  of other things in a straightforward way---I think this should work with most 
   *nix systems.
 
   The first thing to do, is discover where whatever you want to install should 
@@ -67,9 +73,10 @@ template for article writing}
   location of styles, uses the \verb+--show-path NAME+ option. The list of 
   allowed names is part of the output of the \verb+--help+ option. So for 
   instance, to discover where to place BiBTeX style files (*.bst), run:
-\begin{verbatim}
+  \begin{verbatim}
 kpsewhich --show-path bst
-\end{verbatim}
+  \end{verbatim}
+
   This will output a list of locations where BiBTeX style files are searched 
   for. So if you have a file called mystyle.bst, create a folder named 
   ``mystyle" in the appropriate location (I use 
@@ -78,6 +85,7 @@ kpsewhich --show-path bst
   ``appropriate location'' folder you used. And you're done!
 
 \section{Math Stuff}
+  \epigraph{\emph{Ah, the beauty of math!}}{Yours Truly}
   The commands I use for mathematics are included in the file 
   \texttt{custom\_commands.tex}.
 
@@ -86,7 +94,7 @@ kpsewhich --show-path bst
   way it’s done in mathematics texts. If you want different spacing, LaTeX 
   provides the following four commands for use in math mode: 
 
-\begin{verbatim}
+  \begin{verbatim}
 \; - a thick space
 
 \: – a medium space
@@ -94,7 +102,7 @@ kpsewhich --show-path bst
 \, – a thin space
 
 \! – a negative thin space 
-\end{verbatim}
+  \end{verbatim}
 
 \section{Graphics}
   % image source: 
@@ -108,9 +116,20 @@ kpsewhich --show-path bst
     \label{overflow}
   \end{figure}
 
+  % for ``articles'' for which you need a custom signature
+  % must be used in one-column mode only!
+  %\begin{minipage}[c]{\textwidth}
+  %  \vspace{1cm}
+  %  \flushright\parbox{7.5cm}{\emph{Yours sincerely}\\
+  %  \\[1.0cm]
+  %  Yours Truly's Full Name}
+  %  \flushright\parbox{7.5cm}{}
+  %  \vspace{1cm}
+  %\end{minipage}
+
   \bibliographystyle{is-abbrv}
   % \bibliography{bib_file}     % for BiBTeX file
-%
+
   And this is an example of an endnote~\endnote{Continuing the example of an 
   endnote.}.
 
@@ -119,6 +138,7 @@ kpsewhich --show-path bst
   \begingroup
   \addcontentsline{toc}{section}{Notes}
   \renewcommand{\enotesize}{\small}
+  %\def\enoteheading{\section*{Notas}}   % if you need to change the Note's %section title
   \theendnotes
   \endgroup
   % --- end endnotes ---

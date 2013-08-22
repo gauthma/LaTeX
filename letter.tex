@@ -3,9 +3,13 @@
 %\usepackage[portuguese]{babel} % i18n: uncomment for letters in Portuguese
 
 % --- set up fonts to use ---
+\usepackage{luaotfload}
 \usepackage[bitstream-charter]{mathdesign}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
+\usepackage{fontspec}
+\setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
+\defaultfontfeatures[Charis SIL]{Script=latn}
 % --- end code for fonts ---
 
 % --- additional packages here ---

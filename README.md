@@ -37,7 +37,18 @@ ArchLinux (AL) packages
 ---
 
 The __endnotes__ package can be found in the AL package:
-*texlive-latexextra*.
+*texlive-latexextra*. The Charis SIL font can be found in an AUR
+package, but seems not be working. So for now the best approach
+seems to be to get the font's sources from
+[here](http://scripts.sil.org/cms/scripts/page.php?item_id=CharisSIL_download#b3a62bff)
+and install them like this:
+
+1. $ kpsewhich --show-path .ttf 
+2. Choose one of the locations (in my case
+	 ~/.texlive/texmf-var/fonts/truetype/ and put the *.ttf files in
+	 there.
+3. cd to that location and run $ texhash . -- the dot is part of the
+	 command!
 
 LaTeX Hacks 
 ---
