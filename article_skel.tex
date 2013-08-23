@@ -27,10 +27,12 @@
 \usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
 \setlength{\columnsep}{20pt}
 
+% --- Commands (new or redefine) ---
 % avoid having footnote text too small
 \renewcommand{\footnotesize}{\small}
 
-% --- Commands (new or redefine) ---
+% if you use endnotes, make footnotes uses symbols (instead of numbers) to avoid confusion
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 % --- END commands ---
 
 % the hyperref package if used, MUST BE THE LAST ONE included
