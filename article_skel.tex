@@ -2,7 +2,7 @@
 %\documentclass[a4paper,12pt]{article}
 \documentclass[a4paper,10pt,twocolumn]{article}
 
-%\usepackage[portuguese]{babel}      % i18n
+%\usepackage[portuguese]{babel}                             % i18n
 \usepackage{graphicx}
 \usepackage{url}
 
@@ -15,10 +15,13 @@
 \defaultfontfeatures[Charis SIL]{Script=latn}
 
 % --- additional packages here ---
-%\usepackage{indentfirst}            % needed when writing in Portuguese
-\usepackage{endnotes}               % for notes too long for a page footer
-\usepackage{epigraph}               % for inspirational quotes...
-\setlength{\epigraphwidth}{0.8\columnwidth} % ... with the right length...
+%\usepackage{indentfirst}                                   % needed when writing in Portuguese
+\usepackage{endnotes}                                      % for notes too long for a page footer
+
+\usepackage{epigraph}                                      % for inspirational quotes...
+\setlength{\epigraphwidth}{0.8\columnwidth}                % ... with the right length...
+
+\usepackage[font=small,labelfont=bf]{caption}              % proper formatting for caption text
 % --- END additional packages ---
 
 % --- Page layout ---
@@ -36,7 +39,13 @@
 % --- END commands ---
 
 % the hyperref package if used, MUST BE THE LAST ONE included
-\usepackage[pagebackref=true,bookmarks=true,colorlinks=true,linkcolor=blue,citecolor=cyan,linktocpage=true]{hyperref}
+\usepackage[pagebackref=true,
+            bookmarks=true,
+            colorlinks=true,
+            linkcolor=blue,
+            citecolor=cyan,
+            linktocpage=true]{hyperref}
+\hypersetup{pdfencoding=auto}                              % LuaTeX garbles TOC in pdf viewer without this (see: http://tex.stackexchange.com/questions/24445/hyperref-lualatex-and-unicode-bookmarks-issue-garbled-page-numbers-in-ar-for-l)
 \renewcommand*{\backref}[1]{\emph{Cited in page(s)} #1.}
 % --- END Page layout ---
 
@@ -55,9 +64,8 @@ A first sketch for a general template for article writing}
 % --- END PREAMBLE ---
 
 \begin{document}
-\maketitle              % need full-width title
-
-%\tableofcontents        % if needed
+\maketitle                                                 % need full-width title
+%\tableofcontents                                           % if needed
 
 \begin{abstract}
   Some tips for a \LaTeX\ template.
