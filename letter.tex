@@ -60,11 +60,20 @@
   }
   %\opening{Ex.\textsuperscript{o} Doutor R. Madillo,} % -- Portuguese introduction style
   \opening{Dear Dr. R. MaDillo,}
-%
+{
   \begin{center}
     \textbf{\textsc{Subject of your letter here}}
   \end{center}
+}
+% The ``extra'' braces above and below are required, if you want to use 
+% paragraph first line indentation (and thus not use skip space between 
+% paragraphs) as is customary when writing in Portuguese.
 %
+% Comment the two \setlength commands below if this *undesired*.
+{
+  \setlength{\parindent}{0.5cm}
+  \setlength{\parskip}{0pt plus 0.1pt}
+
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec bibendum 
   suscipit odio, id dapibus ipsum placerat vitae. Quisque vitae magna vel ante 
   semper dapibus sit amet eu elit. Fusce cursus sodales eros, non porta urna 
@@ -106,6 +115,7 @@
   dolor diam sagittis ligula, eget egestas libero turpis vel mi. Nunc nulla. 
   Fusce risus nisl, viverra et, tempor et, pretium in, sapien. Donec venenatis 
   vulputate lorem.
+}
 
   \closing{Yours sincerely,}
 %
