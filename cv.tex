@@ -10,12 +10,21 @@
 %
 \documentclass[a4paper,9pt]{extarticle}
 
+%\usepackage[portuguese]{babel}     % i18n
 \usepackage[top=2.5cm,left=3cm,right=3cm,bottom=2.5cm]{geometry}
 \usepackage[bitstream-charter]{mathdesign}
-%\usepackage[portuguese]{babel}     % i18n
+\usepackage{fontspec}
+\setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
+\defaultfontfeatures[Charis SIL]{Script=latn}
+
+% This improves the quality of the PDF, but slows down the creation
+% time, so you might want to comment it until you have the final version.
+\usepackage{microtype}
 
 %%%%%%%%%%%%%
 
+\usepackage{enumitem}
+\usepackage{marvosym}
 \usepackage{url}
 
 \renewcommand\labelitemi{\fontfamily{cmr}\selectfont\textbullet}
@@ -23,7 +32,7 @@
 \newenvironment{topic}[1]
    {{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{#1}\hrule}%
     \begin{list}{}{%
-       \setlength{\leftmargin}{.25cm}}%
+       \setlength{\leftmargin}{.0cm}}%
     \item[]}
    {\end{list}\medskip}
 
@@ -39,44 +48,47 @@
 \begin{document}
 
 \begin{header}
-{Óscar Francisco Godinho Pereira} 
-{\emph{The address and phone number are omitted in this version, due to privacy concerns}}\smallskip\\
-\texttt{\url{https://erroneousthoughts.org}} \verb+   +|\verb+   + \texttt{\url{oscar@erroneousthoughts.org}}
+  {Óscar Francisco Godinho Pereira} 
+  %{\emph{The address and phone number are omitted in this version, due to privacy concerns}}\smallskip\\
+  % NOTE: fictional address... for illustrative purposes only.
+  { 22nd Baking Steet, Airstrip One, London, Oceania \verb+     + \Telefon +000 12 345 67 89 }\\[5pt]
+  \begin{tabular}{l|r}
+    \texttt{https://erroneousthoughts.org} & \url{oscar@erroneousthoughts.org} 
+  \end{tabular}
 \end{header}
 
 \begin{topic}{Professional Experience}
-  \begin{itemize}
+  \begin{itemize}[leftmargin=*]
     \item {\bfseries AnubisNetworks}---Lisbon, Portugal.\\
-      Software Engineer (i.e. multi-class hacker), 2007--present.
+      Software Engineer (multi-class), June 2007 -- April 2013.
       \begin{itemize}
-	\item Moved from product development to the Operations team. Currently 
-	  handling SpamAssassin management and performance tunning. Development 
-	  of software to ease (or automate) some of the management tasks, as 
-	  well spam statistics collection and analysis.\\
-	  \emph{Requirements}: SpamAssassin, Perl, Apache, RRDTool
-	\item Development of \emph{myFamily} and \emph{Web Protection Service} 
-	  web content filtering services. Focus on user interface and 
-	  authentication modules.\\
-	  \emph{Requirements}: C++, HTML, CSS, HTTP, tcpflow
-	\item Development of MPS' modules that provide secure and transparent 
-	  system administration capabilities---email infrastructure, et al.---to 
+	\item {\scshape October 2012} -- Moved from product development to the Operations team. Handled 
+	  SpamAssassin management and performance tunning. Developed software to 
+	  ease (or automate when possible) some of the management tasks, as well spam 
+	  statistics collection and analysis.\\
+	  {\scshape Requirements}: SpamAssassin, Perl, Apache, RRDTool.
+	\item {\scshape June 2011} -- Development of \emph{myFamily} and \emph{Web Protection Service} 
+	  web content filtering services. Focus on user interface and authentication modules.\\
+	  {Requirements}: C++, HTML, CSS, HTTP, tcpflow.
+	\item {\scshape May 2009} -- Development of MPS' modules that provide secure and transparent 
+	  system administration capabilities\textemdash email infrastructure, et al.---to 
 	  ``upper'' layers (business logic). Also developed distributed 
 	  alternatives to existing centralised architectural scenarios.\\
-	  \emph{Requirements}: Perl, Postfix, LDAP
-	\item Designed and implemented the Reports module of the \emph{Mail 
+	  {\scshape Requirements}: Perl, Postfix, LDAP.
+	\item {\scshape June 2007} -- Designed and implemented the Reports module of the \emph{Mail 
 	  Protection System}\textsuperscript{\texttrademark} appliance 
 	  (MPS)---Anubis' flagship product. Improved the underlying database 
 	  scheme to support the required developments. Maintained the web 
 	  interface and worked on the initial version of an abstraction layer 
 	  aimed at better separating business logic from the underlying system 
 	  operations.\\
-	  \emph{Requirements}: Perl, Apache, MySQL
+	  {\scshape Requirements}: Perl, Apache, MySQL.
       \end{itemize}
   \end{itemize}
 \end{topic}
 
 \begin{topic}{Formal Education}
-  \begin{itemize}
+  \begin{itemize}[leftmargin=*]
     \item {\bfseries Technical University of Lisbon -- IST}, Lisbon, Portugal.\\
       B.Sc. Applied Mathematics, 2010--present.
     \item {\bfseries University of Coimbra}, Coimbra, Portugal.\\
@@ -86,20 +98,20 @@
 
 \begin{topic}{Technical Skills}
   {\itshape Programming Languages}  
-  \begin{itemize}
+  \begin{itemize}[leftmargin=*]
     \item{\bfseries Imperative}: \emph{proficient}: C, Perl; \emph{experienced}: C++, Python;
       \emph{basic skills}: Java, Javascript/JQuery.
     \item{\bfseries Functional}: \emph{basic skills}: Common Lisp.
     \item{\bfseries Markup}: \emph{proficient}: HTML, CSS, \LaTeX; \emph{basic skills}: UML.
   \end{itemize}
   {\itshape Operating Systems} 
-  \begin{itemize}
+  \begin{itemize}[leftmargin=*]
     \item{\bfseries GNU/Linux}: Proficient \textbf{ArchLinux} user; experienced with \textbf{UbuntuServer}.
     \item{\bfseries Microsoft Windows}: Last version regularly used was XP (SP3).
   \end{itemize}
   {\itshape Software}
-  \begin{itemize}
-    \item{\bfseries Text Editors}: Vim (proficient), Emacs (novice), Kate, KDevelop (IDE).
+  \begin{itemize}[leftmargin=*]
+    \item{\bfseries Text Editors}: Vim (proficient), Kate, KDevelop (IDE).
     \item{\bfseries Mathematics}: Mathematica, Matplotlib, SageMath.
     \item{\bfseries Network}: OpenSSH, tcpflow, iptables, Apache, nginx, RRDTool, GnuPG, 
       Mutt.
@@ -108,23 +120,23 @@
 \end{topic}
 
 \begin{topic}{Languages}
-  \begin{itemize}
+  \begin{itemize}[leftmargin=*]
     \item {\bfseries Portuguese}: native speaker.
     \item {\bfseries English}: fluent domain, both written and spoken.
     \item {\bfseries Spanish}: fluent speaker, elementary reading and writing skills.
   \end{itemize}
 \end{topic}
 
-\newpage
+\newpage   % obviously, comment this if unneeded
 \begin{topic}{Additional Information}
   {\itshape Informal Education / Professional Development}\\ 
   {\slshape \small \mbox{\ \ \ \ \ \ \ \ \ \ } Note: only courses completed with certification are listed.}
-  \begin{itemize}
+  \begin{itemize}[leftmargin=*]
     \item {\bfseries Coursera Online Platform}, Stanford University.\\
       Crypto I -- http://www.crypto-class.org -- 2012
   \end{itemize}
   {\itshape Miscellanea}  
-  \begin{itemize}
+  \begin{itemize}[leftmargin=*]
     \item{Outdoor sports enthusiast---currently surf, football, and trying
       snowboard.}
     \item{Enjoys recreational---and often not-so-recreational---mathematics,
@@ -135,9 +147,10 @@
       English). Paraphrasing the Nobel prize winning physicist Richard Feynman: 
       \emph{to explain, one must first understand}. Writing being mostly about 
       the former, it provides a strong incentive to put in the effort needed to 
-      achieve the latter.
-    \item Chronically tends to accumulate more (dead-tree version) books than 
-      what he is able to read (despite being a fairly fast reader!).
+      achieve the latter. Besides, writing helps one to become a better---and 
+      faster!---reader.
+    \item The above notwithstanding, he chronically tends to accumulate more (dead-tree type) books than 
+      what he is able to read.
     \item{Full Portuguese driving license---Category B, passenger light
       vehicles.}
   \end{itemize}
