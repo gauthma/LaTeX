@@ -38,12 +38,14 @@
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 % --- END commands ---
 
+\usepackage[usenames,dvipsnames]{xcolor}  % for MidnightBlue colour
 % the hyperref package if used, MUST BE THE LAST ONE included
 \usepackage[pagebackref=true,
             bookmarks=true,
             colorlinks=true,
-            linkcolor=blue,
-            citecolor=cyan,
+            linkcolor=MidnightBlue,
+            urlcolor=MidnightBlue,
+            citecolor=MidnightBlue,
             linktocpage=true]{hyperref}
 \hypersetup{pdfencoding=auto}                              % LuaTeX garbles TOC in pdf viewer without this (see: http://tex.stackexchange.com/questions/24445/hyperref-lualatex-and-unicode-bookmarks-issue-garbled-page-numbers-in-ar-for-l)
 \renewcommand*{\backref}[1]{\emph{Cited in page(s)} #1.}
