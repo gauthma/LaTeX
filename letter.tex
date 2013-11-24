@@ -1,53 +1,43 @@
 \documentclass[a4paper,12pt]{letter}
 
-%\usepackage[portuguese]{babel} % i18n: uncomment for letters in Portuguese
-
-% --- set up fonts to use ---
-\usepackage{luaotfload}
+% --- Set up fonts to use ---
 \usepackage[bitstream-charter]{mathdesign}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
 \usepackage{fontspec}
 \setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn}
-% --- end code for fonts ---
-
-% --- additional packages here ---
+%\usepackage{microtype}                                    % see README
+% --- END code for fonts ---
+% --- Additional packages here ---
+%\usepackage[portuguese]{babel}                             % i18n: uncomment for letters in Portuguese
 \usepackage{endnotes}   % comment if not needed
 % --- END additional packages ---
-
 % --- Page layout ---
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
 \pdfpagewidth 210mm
 \pdfpageheight 297mm
-
 % no line numbering
 \pagestyle{empty}
-
 % avoid having the closing too ``centered''
 \longindentation=230pt
 % --- END Page layout ---
-
 % --- Commands (new or redefine) ---
 % --- END commands ---
-
 % --- Includes ---
 %\input{custom_commands}
 %\input{mathematics}
 % --- END Includes ---
 
-% --- letter specific info ---
-
+% --- Letter specific info ---
 % for letters, I prefer to set the date explicitly
 \date{February 31, 2013} 
-
 \address{
   22nd Baking Street\\
   2099--101 Acme City\\
   LooneyTuneLand
 }
 \signature{Your Truly's Name}
-
 % --- END PREAMBLE ---
 
 \begin{document}

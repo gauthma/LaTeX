@@ -1,46 +1,59 @@
 % XXX Of the next two lines: use first for 1column, second for 2column
-%\documentclass[a4paper,12pt]{article}
-\documentclass[a4paper,10pt,twocolumn]{article}
+%\documentclass[a4paper,12pt,usenames,dvipsnames]{article}
+\documentclass[a4paper,10pt,twocolumn,usenames,dvipsnames]{article}
 
-%\usepackage[portuguese]{babel}                             % i18n
-\usepackage{graphicx}
-\usepackage{url}
-
-\usepackage{luaotfload}
+% --- Set up fonts to use ---
 \usepackage[bitstream-charter]{mathdesign}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
 \usepackage{fontspec}
 \setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn}
-
-% --- additional packages here ---
-%\usepackage{indentfirst}                                   % needed when writing in Portuguese
-\usepackage{endnotes}                                      % for notes too long for a page footer
-
+%\usepackage{microtype}                                    % see README
+% --- END code for fonts ---
+% --- Additional packages here ---
+%\usepackage[portuguese]{babel}                             % i18n
+%\usepackage{indentfirst}                                   % needed when writing in Portuguese (first paragraph is always indented)
+\usepackage{graphicx}
+\usepackage{url}                                           % for making urls clickable
 \usepackage{epigraph}                                      % for inspirational quotes...
 \setlength{\epigraphwidth}{0.8\columnwidth}                % ... with the right length...
-
 \usepackage[font=small,labelfont=bf]{caption}              % proper formatting for caption text
 % --- END additional packages ---
-
 % --- Page layout ---
 % XXX Of the next two lines: use first for 1column, second for 2column
 %\usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
 \usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
 \setlength{\columnsep}{20pt}
-
+% --- END Page layout ---
 % --- Commands (new or redefine) ---
-% avoid having footnote text too small
-\renewcommand{\footnotesize}{\small}
-
-% if you use endnotes, make footnotes uses symbols (instead of numbers) to avoid confusion
-\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+\renewcommand{\footnotesize}{\small}                       % avoid having footnote text too small
 % --- END commands ---
-
-\usepackage[usenames,dvipsnames]{xcolor}  % for MidnightBlue colour
-% the hyperref package if used, MUST BE THE LAST ONE included
-\usepackage[pagebackref=true,
+% --- Bibliography ---
+\usepackage[ % XXX options to be optimised TODO
+  style=verbose
+ ,backend=bibtex      % biber or bibtex
+ ,backref=true
+ ,style=numeric-comp  % numerical-compressed
+ ,sorting=none        % no sorting
+ ,sortcites=true      % some other example options ...
+ ,block=none
+ ,indexing=false
+ ,citereset=none
+ ,isbn=true
+ ,url=true
+ ,doi=true            % prints doi
+ ,natbib=true         % if you need natbib functions
+]{biblatex} 
+% XXX IMPORTANT NOTE XXX: Bibliographic entries that contain a date *MUST* set 
+% it in AMERICAN FORMAT: YYYY-MM-DD, otherwise biblatex will IGNORE IT! XXX
+% ---
+%\addbibresource{pi1.bib}                                   % load bibliography file
+% --- END Bibliography ---
+% --- HYPER references et al.---
+\usepackage{xcolor}                                         % for MidnightBlue colour!
+% XXX The hyperref package if used, MUST BE THE LAST ONE included!
+\usepackage[pagebackref=false,                             % biblatex takes care of this
             bookmarks=true,
             colorlinks=true,
             linkcolor=MidnightBlue,
@@ -48,21 +61,17 @@
             citecolor=MidnightBlue,
             linktocpage=true]{hyperref}
 \hypersetup{pdfencoding=auto}                              % LuaTeX garbles TOC in pdf viewer without this (see: http://tex.stackexchange.com/questions/24445/hyperref-lualatex-and-unicode-bookmarks-issue-garbled-page-numbers-in-ar-for-l)
-\renewcommand*{\backref}[1]{\emph{Cited in page(s)} #1.}
-% --- END Page layout ---
-
-% --- Includes ---
+% --- END HYPER references et al.---
+% --- Custom Includes ---
 \input{custom_commands}
 \input{mathematics}
-% --- END Includes ---
-
+% --- END Custom Includes ---
 % --- Title page ---
 \title{\large\textbf{\huge Skel for \LaTeX}\\
 A first sketch for a general template for article writing}
 \author{My Name\\\texttt{my.email@provider.tld}}
 \date{}
 % --- END title page ---
-
 % --- END PREAMBLE ---
 
 \begin{document}
@@ -139,19 +148,5 @@ kpsewhich --show-path bst
   %  \vspace{1cm}
   %\end{minipage}
 
-  \bibliographystyle{is-abbrv}
-  % \bibliography{bib_file}     % for BiBTeX file
-
-  And this is an example of an endnote~\endnote{Continuing the example of an 
-  endnote.}.
-
-  % --- show endnotes ---
-  % comment if not needed
-  \begingroup
-  \addcontentsline{toc}{section}{Notes}
-  \renewcommand{\enotesize}{\small}
-  %\def\enoteheading{\section*{Notas}}   % if you need to change the Note's %section title
-  \theendnotes
-  \endgroup
-  % --- end endnotes ---
+%\printbibliography
 \end{document}

@@ -20,8 +20,10 @@ $ rm -rf .git()
 
 Do work with LaTeX skeletons provided, and enjoy profit!!
 
-Article: one vs. two columns 
+Article: 
 ---
+
+### One vs. two columns  
 
 The **article_skel.tex** file contains two comments that start with
 XXX. One is before the two `\documentclass` lines, and another is
@@ -30,8 +32,26 @@ each pair of lines is to produce an article with *one* column; and
 the second of each set is to produce an article with *two* columns.
 Comment and uncomment accordingly.
 
+### The *microtype* package
+
+The last line in the code for fonts loads the *microtype* package
+(commented by default). This package improves the way spacing is
+computed, which usually results in an improved layout. However, it
+slows down, very noticeably, the compile time; which is why it is
+recommended to use (uncomment) it only when producing the final
+version.
+
 The rationale is that for just one column, we use a 12pt font, and
 3cm lateral margins. For two columns, 10pt and 1.5 respectively.
+
+### The xcolor package
+
+The *documentclass* line contains two options (usenames and
+dvipsnames) that belong to the *xcolor* package, but setting those
+options only when loading it might cause conflicts with other
+packages that also automagically load *xcolor* (namele *tikz*).
+Having those options given to *documentclass* avoids the possibility
+of any such conflict.
 
 ArchLinux (AL) packages 
 ---
