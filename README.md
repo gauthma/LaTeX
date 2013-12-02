@@ -49,7 +49,7 @@ The rationale is that for just one column, we use a 12pt font, and
 The *documentclass* line contains two options (usenames and
 dvipsnames) that belong to the *xcolor* package, but setting those
 options only when loading it might cause conflicts with other
-packages that also automagically load *xcolor* (namele *tikz*).
+packages that also automagically load *xcolor* (namely *tikz*).
 Having those options given to *documentclass* avoids the possibility
 of any such conflict.
 
