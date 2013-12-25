@@ -4,7 +4,7 @@ My LaTeX templates
 The example *LaTeX* files are processed using *LuaTeX.*.
 
 The *addons.tex* file includes code for using images (among a couple
-of other stuff). Bear in mind that PDF is a vector format [2], so
+of other stuff). Bear in mind that PDF is a vector format [2]_, so
 including raster images might lead to poor results. You can
 ameliorate the problem by trial and error, tweaking scale factors,
 image width, etc. 
@@ -80,8 +80,9 @@ LaTeX Trickery
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal} 
 ```
 
-The last two lines are to use the default mathcal font, instead of the one with 
-bitstream-charter, which is harder to read [1].
+The last two lines are to use the default mathcal font, instead of
+the one with bitstream-charter, which is harder to read [1]_.
 
-| [1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989 
-| [2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/
+.. [1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989 
+
+.. [2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/
