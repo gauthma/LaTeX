@@ -1,6 +1,6 @@
 % XXX Of the next two lines: use first for 1column, second for 2column
-%\documentclass[a4paper,12pt,usenames,dvipsnames]{article}
-\documentclass[a4paper,10pt,twocolumn,usenames,dvipsnames]{article}
+\documentclass[a4paper,12pt,usenames,dvipsnames]{article}
+%\documentclass[a4paper,10pt,twocolumn,usenames,dvipsnames]{article}
 
 % --- Set up fonts to use ---
 \usepackage[bitstream-charter]{mathdesign}
@@ -14,16 +14,14 @@
 % --- Additional packages here ---
 %\usepackage[portuguese]{babel}                             % i18n
 %\usepackage{indentfirst}                                   % needed when writing in Portuguese (first paragraph is always indented)
-\usepackage{graphicx}
 \usepackage{url}                                           % for making urls clickable
-\usepackage{epigraph}                                      % for inspirational quotes...
-\setlength{\epigraphwidth}{0.8\columnwidth}                % ... with the right length...
+\usepackage{graphicx}
 \usepackage[font=small,labelfont=bf]{caption}              % proper formatting for caption text
 % --- END additional packages ---
 % --- Page layout ---
 % XXX Of the next two lines: use first for 1column, second for 2column
-%\usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
-\usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+%\usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
 \setlength{\columnsep}{20pt}
 % --- END Page layout ---
 % --- Commands (new or redefine) ---
@@ -82,71 +80,8 @@ A first sketch for a general template for article writing}
   Some tips for a \LaTeX\ template.
 \end{abstract}
 
-\section{Styles, et al.}
-  Here I'll describe a way of installing \LaTeX\ styles, BiBTeX styles, and a couple 
-  of other things in a straightforward way---I think this should work with most 
-  *nix systems.
-
-  The first thing to do, is discover where whatever you want to install should 
-  be installed. And the ideal way to do this is using a tool named kpsewhich, 
-  which should get installed when you install LaTeX. It can be used to do a lot 
-  of things (\verb+$ kpsewhich --help+), but the one we’re interested in here, 
-  location of styles, uses the \verb+--show-path NAME+ option. The list of 
-  allowed names is part of the output of the \verb+--help+ option. So for 
-  instance, to discover where to place BiBTeX style files (*.bst), run:
-  \begin{verbatim}
-kpsewhich --show-path bst
-  \end{verbatim}
-
-  This will output a list of locations where BiBTeX style files are searched 
-  for. So if you have a file called mystyle.bst, create a folder named 
-  ``mystyle" in the appropriate location (I use 
-  \verb+/home/user/texmf/bibtex/bst/+), and put mystyle.bst inside the folder 
-  you just created. Then run \verb+$ texhash .+ (don’t forget the dot!) from the 
-  ``appropriate location'' folder you used. And you're done!
-
-\section{Math Stuff}
-  \epigraph{\emph{Ah, the beauty of math!}}{Yours Truly}
-  The commands I use for mathematics are included in the file 
-  \texttt{custom\_commands.tex}.
-
-  For spacing: In a ``math'' environment, LaTeX ignores the spaces you type and 
-  puts in the spacing that it thinks is best. LaTeX formats mathematics the
-  way it’s done in mathematics texts. If you want different spacing, LaTeX 
-  provides the following four commands for use in math mode: 
-
-  \begin{verbatim}
-\; - a thick space
-
-\: – a medium space
-
-\, – a thin space
-
-\! – a negative thin space 
-  \end{verbatim}
-
-\section{Graphics}
-  % image source: 
-  % http://tumblring.net/wp-content/uploads/2011/01/tumblr-tumbeasts.png
-  \begin{figure}[ht!]
-    \centering
-    %\includegraphics{tumbeasts.jpg}
-    %\includegraphics[width=0.5\columnwidth]{tumbeasts.png}
-    \includegraphics[scale=0.42]{tumbeasts.png}
-    \caption{A simple caption}
-    \label{overflow}
-  \end{figure}
-
-  % for ``articles'' for which you need a custom signature
-  % must be used in one-column mode only!
-  %\begin{minipage}[c]{\textwidth}
-  %  \vspace{1cm}
-  %  \flushright\parbox{7.5cm}{\emph{Yours sincerely}\\
-  %  \\[1.0cm]
-  %  Yours Truly's Full Name}
-  %  \flushright\parbox{7.5cm}{}
-  %  \vspace{1cm}
-  %\end{minipage}
+\section{Some section}
+  Some text in this section.
 
 %\printbibliography
 \end{document}

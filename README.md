@@ -3,9 +3,10 @@ My LaTeX templates
 
 The example *LaTeX* files are processed using *LuaTeX.*.
 
-The example article file include code for using images. Bear in mind that PDF
-is a vector format [2], so including raster images might lead to poor results.
-You can ameliorate the problem by trial and error, tweaking scale factors,
+The *addons.tex* file includes code for using images (among a couple
+of other stuff). Bear in mind that PDF is a vector format [2], so
+including raster images might lead to poor results. You can
+ameliorate the problem by trial and error, tweaking scale factors,
 image width, etc. 
 
 Usage 
@@ -32,6 +33,9 @@ each pair of lines is to produce an article with *one* column; and
 the second of each set is to produce an article with *two* columns.
 Comment and uncomment accordingly.
 
+The rationale is that for just one column, we use a 12pt font, and
+3.5cm lateral margins. For two columns, 10pt and 1.5 respectively.
+
 ### The *microtype* package
 
 The last line in the code for fonts loads the *microtype* package
@@ -40,9 +44,6 @@ computed, which usually results in an improved layout. However, it
 slows down, very noticeably, the compile time; which is why it is
 recommended to use (uncomment) it only when producing the final
 version.
-
-The rationale is that for just one column, we use a 12pt font, and
-3cm lateral margins. For two columns, 10pt and 1.5 respectively.
 
 ### The xcolor package
 
@@ -70,15 +71,18 @@ and install them like this:
 3. cd to that location and run $ texhash . -- the dot is part of the
 	 command!
 
-LaTeX Hacks 
+LaTeX Trickery
 ---
 
+```tex
 \usepackage[bitstream-charter]{mathdesign}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
-\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
+\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal} 
+```
 
 The last two lines are to use the default mathcal font, instead of the one with 
 bitstream-charter, which is harder to read [1].
 
 [1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989
+
 [2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/
