@@ -83,6 +83,5 @@ LaTeX Trickery
 The last two lines are to use the default mathcal font, instead of the one with 
 bitstream-charter, which is harder to read [1].
 
-[1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989
-
-[2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/
+| [1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989 
+| [2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/
