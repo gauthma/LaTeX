@@ -1,4 +1,4 @@
-% XXX Of the next two lines: use first for 1column, second for 2column
+% **1 OR 2 COLUMNS** Of the next two lines: use first for 1column, second for 2column
 \documentclass[a4paper,12pt,usenames,dvipsnames]{article}
 %\documentclass[a4paper,10pt,twocolumn,usenames,dvipsnames]{article}
 
@@ -19,7 +19,7 @@
 \usepackage[font=small,labelfont=bf]{caption}              % proper formatting for caption text
 % --- END additional packages ---
 % --- Page layout ---
-% XXX Of the next two lines: use first for 1column, second for 2column
+% **1 OR 2 COLUMNS** Of the next two lines: use first for 1column, second for 2column
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
 %\usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
 \setlength{\columnsep}{20pt}
@@ -28,7 +28,7 @@
 \renewcommand{\footnotesize}{\small}                       % avoid having footnote text too small
 % --- END commands ---
 % --- Bibliography ---
-\usepackage[ % XXX options to be optimised TODO
+\usepackage[ % options to be optimised TODO
   style=verbose
  ,backend=bibtex      % biber or bibtex
  ,backref=true
@@ -43,14 +43,14 @@
  ,doi=true            % prints doi
  ,natbib=true         % if you need natbib functions
 ]{biblatex} 
-% XXX IMPORTANT NOTE XXX: Bibliographic entries that contain a date *MUST* set 
-% it in AMERICAN FORMAT: YYYY-MM-DD, otherwise biblatex will IGNORE IT! XXX
+% *** IMPORTANT NOTE ***: Bibliographic entries that contain a date *MUST* set 
+% it in AMERICAN FORMAT: YYYY-MM-DD, otherwise biblatex will IGNORE IT! ***
 % ---
 %\addbibresource{pi1.bib}                                   % load bibliography file
 % --- END Bibliography ---
 % --- HYPER references et al.---
 \usepackage{xcolor}                                         % for MidnightBlue colour!
-% XXX The hyperref package if used, MUST BE THE LAST ONE included!
+% ***NOTE*** The hyperref package if used, MUST BE THE LAST ONE included!
 \usepackage[pagebackref=false,                             % biblatex takes care of this
             bookmarks=true,
             colorlinks=true,
