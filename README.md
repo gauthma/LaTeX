@@ -25,7 +25,9 @@ $ rm -rf .git()
 
 Do work with LaTeX skeletons provided, compile using adequate
 Makefile target and enjoy profit!! You will have to edit `Makefile`
-and set `NAME` to the *main file*'s name.
+and set `NAME` to the *main file*'s name. Beware: in the makefile,
+the command lines *must* start with a *TAB* (not some number of
+spaces!!).
 
 The files starting with `inc_` are files that are supposed to be
 *included* in another file, and *not* compiled on their own. This

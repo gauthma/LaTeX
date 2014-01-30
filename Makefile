@@ -27,3 +27,6 @@ full :
 # shortcut: <F9>
 clean :
 	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,bbl,blg,ent,run.xml} *-blx.bib
+
+.PHONY : bib all viewer full clean
+
