@@ -1,6 +1,10 @@
 My LaTeX templates 
 ===
 
+These are the templates I use for most of my interactions with
+LaTeX. It's somewhat integrated with my Vim settings (see for
+example the shortcuts in the Makefile).
+
 The example *LaTeX* files are processed using *LuaTeX.*.
 
 The *addons.tex* file includes code for using images (among a couple
@@ -19,16 +23,22 @@ $ git clone https://github.com/gauthma/LaTeX.git .
 $ rm -rf .git()
 ```
 
-Do work with LaTeX skeletons provided, and enjoy profit!!
+Do work with LaTeX skeletons provided, compile using adequate
+Makefile target and enjoy profit!! You will have to edit `Makefile`
+and set `NAME` to the *main file*'s name.
 
-Article: 
+The files starting with `inc_` are files that are supposed to be
+*included* in another file, and *not* compiled on their own. This
+includes the article preamble, as it was getting too long...
+
+Tweakings
 ---
 
 ### One vs. two columns  
 
-The **article_skel.tex** file contains two comments that start with
-XXX. One is before the two `\documentclass` lines, and another is
-before the `\usepackage[...]{geometry}` lines. The first line of
+The **inc_preamble.tex** file contains two comments that start
+with XXX. One is before the two `\documentclass` lines, and another
+is before the `\usepackage[...]{geometry}` lines. The first line of
 each pair of lines is to produce an article with *one* column; and
 the second of each set is to produce an article with *two* columns.
 Comment and uncomment accordingly.
