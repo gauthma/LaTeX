@@ -13,7 +13,7 @@ bib :
 all : 
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)	
 
-# shortcut: <F6>
+# shortcut: <F7>
 viewer : 
 	$(VIEWER) &> /dev/null $(NAME).pdf &	
 
