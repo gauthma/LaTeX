@@ -1,0 +1,63 @@
+\documentclass[16pt]{projector}
+%\usepackage[portuguese]{babel}
+\usepackage{fontspec}
+
+\usepackage{sfmath}
+\renewcommand{\rmdefault}{\sfdefault}
+
+% use big fonts and images
+\style{slide.size=90}
+
+\newcounter{tmpc}
+
+% slide numbers are ugly...
+%\style{foot.text.bot.right=\theslidenum}
+
+\begin{document}
+\begin{slide}
+	\Stripe{Big Fancy Title Here}
+	\vfill
+	\begin{center}
+		{\Large Secure \emph{Peer-to-Peer} system}
+		\vfill
+		Your truly\\Someone else
+	\end{center}
+	\vfill
+\end{slide}
+\begin{slide}
+	\Stripe{Another slide title}
+	\begin{enumerate}
+		\item Some text
+			\begin{itemize}
+				\vfill
+				{\fadeFrom{3}{80}
+				\pitem Some more text
+				}
+				\vfill
+				\pause {\item Semântica da aplicação: ``\emph{I'm Ed Snowden!}''\\
+				{\footnotesize \textbf{Leakage:} \fgcolor{red}{stream correlation!!}}}
+				\vfill
+			\end{itemize}
+	\end{enumerate}
+\end{slide}
+\begin{slide}
+	\Stripe{Yet another title}
+	\begin{enumerate}
+		\item Foo
+			\vfill
+		\pitem Continue enum into next slide
+			\vfill
+		\setcounter{tmpc}{\theenumi}
+	\end{enumerate}
+\end{slide}
+\begin{slide}
+	\Stripe{Enough already!}
+	\begin{enumerate}
+		\setcounter{enumi}{\thetmpc}
+		{\fadeFrom{3}{80}
+		\item Bah
+			\vfill
+		}
+	\end{enumerate}
+\end{slide}
+\end{document}

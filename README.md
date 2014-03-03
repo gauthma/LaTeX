@@ -33,6 +33,12 @@ The files starting with `inc_` are files that are supposed to be
 *included* in another file, and *not* compiled on their own. This
 includes the article preamble, as it was getting too long...
 
+The *PRESENTATION* skeleton (*presentation.tex*) depends on the
+*projector* class, found [here](http://www.shoup.net/projector/).
+Installing it is (usually) as simple as creating `~texmf/tex/latex/`
+and putting the *projector.cls* file in it. Optionally you might
+need to run `$ texhash ~/texmf`.
+
 Tweakings
 ---
 

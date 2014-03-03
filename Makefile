@@ -1,4 +1,4 @@
-NAME="article_skel"
+NAME="presentation"
 
 TEXCMD="lualatex"
 TEXCMDOPTS="--interaction=nonstopmode --shell-escape"
