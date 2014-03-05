@@ -5,13 +5,13 @@ TEXCMDOPTS="--interaction=nonstopmode --shell-escape"
 BIBCMD="bibtex"
 VIEWER="okular"
 
-# shortcut: <F5>
-bib :
-	$(BIBCMD) $(NAME)
-	
 # shortcut: <F6>
 all : 
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)	
+
+# shortcut: <F5>
+bib :
+	$(BIBCMD) $(NAME)
 
 # shortcut: <F7>
 viewer : 
