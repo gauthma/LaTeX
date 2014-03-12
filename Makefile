@@ -15,7 +15,7 @@ bib :
 
 # shortcut: <F7>
 viewer : 
-	$(VIEWER) &> /dev/null $(NAME).pdf &	
+	$(VIEWER) --unique &> /dev/null $(NAME).pdf &
 
 # shortcut: <F8>
 full :
