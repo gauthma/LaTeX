@@ -111,5 +111,5 @@ sub-folders as needed) .
 
 [1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989   
 [2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/   
-[3] - http://en.wikipedia.org/wiki/TeX_Directory_Structure
-[4] - http://tex.stackexchange.com/questions/1137/where-do-i-place-my-own-sty-files-to-make-them-available-to-all-my-tex-files
+[3] - http://en.wikipedia.org/wiki/TeX_Directory_Structure  
+[4] - http://tex.stackexchange.com/questions/1137/where-do-i-place-my-own-sty-files-to-make-them-available-to-all-my-tex-files  
