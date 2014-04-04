@@ -35,9 +35,7 @@ includes the article preamble, as it was getting too long...
 
 The *PRESENTATION* skeleton (*presentation.tex*) depends on the
 *projector* class, found [here](http://www.shoup.net/projector/).
-Installing it is (usually) as simple as creating `~texmf/tex/latex/`
-and putting the *projector.cls* file in it. Optionally you might
-need to run `$ texhash ~/texmf`.
+Installing it is described in the __TeX Trickery__ section.
 
 Tweakings
 ---
@@ -65,8 +63,8 @@ version.
 
 ### The xcolor package
 
-The *documentclass* line contains two options (usenames and
-dvipsnames) that belong to the *xcolor* package, but setting those
+The *documentclass* line contains two options (`usenames` and
+`dvipsnames`) that belong to the *xcolor* package, but setting those
 options only when loading it might cause conflicts with other
 packages that also automagically load *xcolor* (namely *tikz*).
 Having those options given to *documentclass* avoids the possibility
@@ -80,14 +78,7 @@ The __endnotes__ package can be found in the AL package:
 package, but seems not be working. So for now the best approach
 seems to be to get the font's sources from
 [here](http://scripts.sil.org/cms/scripts/page.php?item_id=CharisSIL_download#b3a62bff)
-and install them like this:
-
-1. $ kpsewhich --show-path .ttf 
-2. Choose one of the locations (in my case
-	 ~/.texlive/texmf-var/fonts/truetype/ and put the *.ttf files in
-	 there.
-3. cd to that location and run $ texhash . -- the dot is part of the
-	 command!
+and install them as described in the __TeX Trickery__ section.
 
 LaTeX Trickery
 ---
@@ -101,5 +92,23 @@ LaTeX Trickery
 The last two lines are to use the default mathcal font, instead of
 the one with bitstream-charter, which is harder to read [1].
 
+TeX Trickery
+---
+For installing custom fonts, styles, etc., the easiest way is to replicate in
+your home directory the TeX Directory Structure [3]. The first thing to do is
+to discover where is your TeX home:
+
+```bash
+$ kpsewhich -var-value=TEXMFHOME
+```
+
+In my case it is in `/home/user/texmf`. Create that folder if it does not
+exist. The exact location of things depends on what that thing is concretely
+(fonts, styles, bib styles, etc.). For our purposes, the projector class goes
+in `/home/user/texmf/tex/latex/` and the Charis SIL font (which consist of a
+bunch of \*.ttf files) goes in `/home/user/texmf/fonts/truetype/` (create the
+sub-folders as needed) .
+
 [1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989   
 [2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/   
+[3] - http://en.wikipedia.org/wiki/TeX_Directory_Structure
