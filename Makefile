@@ -2,7 +2,7 @@ NAME="presentation"
 
 TEXCMD="lualatex"
 TEXCMDOPTS="--interaction=nonstopmode --shell-escape"
-BIBCMD="bibtex"
+BIBCMD="biber"
 VIEWER="okular"
 
 # shortcut: <F6>
