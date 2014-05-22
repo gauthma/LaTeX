@@ -1,9 +1,10 @@
-% **1 OR 2 COLUMNS** Of the next two lines: use first for 1column, second for 2column
+% **1 OR 2 COLUMNS** Of the next two ``\documentclass'' lines: 
+% -> use first for 1column, second for 2column
 % ALSO CHECK 'Page layout' IN INC_PREAMBLE.TEX!
 \documentclass[a4paper,12pt,usenames,dvipsnames]{article}
 %\documentclass[a4paper,10pt,twocolumn,usenames,dvipsnames]{article}
 \input{inc_preamble}
-%\addbibresource{pi1.bib}                                   % load bibliography file
+%\addbibresource{pi1.bib}
 % --- Title page ---
 \title{\large\textbf{
 \huge Skel for \LaTeX  % main title
@@ -20,8 +21,8 @@ my.email@provider.tld
 % --- END PREAMBLE ---
 
 \begin{document}
-\maketitle                                                 % need full-width title
-%\tableofcontents                                           % if needed
+\maketitle
+%\tableofcontents
 
 \begin{abstract}
   Some tips for a \LaTeX\ template.
@@ -30,5 +31,5 @@ my.email@provider.tld
 \section{Some section}
   Some text in this section.
 
-%\printbibliography                                         % show bibliography entries
+%\printbibliography
 \end{document}
