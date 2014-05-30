@@ -35,7 +35,10 @@ includes the article preamble, as it was getting too long...
 
 The *PRESENTATION* skeleton (*presentation.tex*) depends on the
 *projector* class, found [here](http://www.shoup.net/projector/).
-Installing it is described in the __TeX Trickery__ section.
+Installing it is described in the __TeX Trickery__ section. Also,
+when displaying presentations, bold is often more emphasizing than
+italics. Thus, the \emph command is redefined to put the text in
+bold; for italics there is the \iemph command.
 
 Tweakings
 ---
