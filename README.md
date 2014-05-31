@@ -33,12 +33,22 @@ The files starting with `inc_` are files that are supposed to be
 *included* in another file, and *not* compiled on their own. This
 includes the article preamble, as it was getting too long...
 
+The Presention skeleton
+-----
+
 The *PRESENTATION* skeleton (*presentation.tex*) depends on the
 *projector* class, found [here](http://www.shoup.net/projector/).
 Installing it is described in the __TeX Trickery__ section. Also,
 when displaying presentations, bold is often more emphasizing than
 italics. Thus, the \emph command is redefined to put the text in
 bold; for italics there is the \iemph command.
+
+Also, due to the fact of not using the inc_preamble, sometimes you
+might need to include additional packages. For example, to use the
+`\mathbb` command, or its shortcut, you need to include the
+`amssymb` package. In the article skeleton this is not needed
+because the code that sets the fonts also includes math symbols, but
+the presentation skeleton uses different fonts.
 
 Tweakings
 ---
