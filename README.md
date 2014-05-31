@@ -33,8 +33,7 @@ The files starting with `inc_` are files that are supposed to be
 *included* in another file, and *not* compiled on their own. This
 includes the article preamble, as it was getting too long...
 
-The Presention skeleton
------
+### The Presention skeleton
 
 The *PRESENTATION* skeleton (*presentation.tex*) depends on the
 *projector* class, found [here](http://www.shoup.net/projector/).
