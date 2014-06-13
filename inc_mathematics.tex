@@ -22,12 +22,11 @@
 \providecommand{\spth}[1]{\ensuremath{ \left [ #1 \right ] } }
 \providecommand{\cpth}[1]{\ensuremath{ \left \{ #1 \right \} } }
 
-% make the optional theorem name bold
 \makeatletter
-\def\th@plain{%
-  \thm@notefont{}% same as heading font
-  \itshape % body font
-}
+% If no newline after theorem et al environment,
+% then no indentation either.
+\patchcmd{\@endtheorem}{\@endpefalse}{}{}{}
+\patchcmd{\endproof}{\@endpefalse}{}{}{}
 \makeatother
 
 % math theorem environments
