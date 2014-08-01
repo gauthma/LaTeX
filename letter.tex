@@ -11,7 +11,8 @@
 % --- END code for fonts ---
 % --- Additional packages here ---
 %\usepackage[portuguese]{babel}                             % i18n: uncomment for letters in Portuguese
-\usepackage{endnotes}   % comment if not needed
+\usepackage{endnotes}                                       % comment if not needed
+\renewcommand{\theendnote}{\Roman{endnote}}                 % Endnotes in Roman numerals (arabic if for footnotes)
 % --- END additional packages ---
 % --- Page layout ---
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
@@ -75,7 +76,7 @@
   augue. Pellentesque facilisis, erat sed pellentesque rutrum, orci turpis 
   dictum mi, sit amet rutrum nibh quam in velit. Vestibulum semper, est eget 
   blandit pellentesque, nisi elit venenatis diam, id vestibulum velit leo quis 
-  orci. 
+	orci.\endnote{Some endnote-ing text.} 
   
   In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis 
   quis tortor malesuada pretium. Pellentesque auctor neque nec urna. Proin 

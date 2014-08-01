@@ -33,21 +33,31 @@ The files starting with `inc_` are files that are supposed to be
 *included* in another file, and *not* compiled on their own. This
 includes the article preamble, as it was getting too long...
 
+### The Letter skeleton
+
+It's pretty straightforward, except for one detail: if you don't use
+footnotes (i.e. don't have any `\endnote{blah blah}` in the text),
+then you must comment out the `theendnotes` command, otherwise
+compiling the document you get an error saying that the `.ent` file
+was not found.
+
 ### The Presention skeleton
 
-The *PRESENTATION* skeleton (*presentation.tex*) depends on the
-*projector* class, found [here](http://www.shoup.net/projector/).
+The `PRESENTATION` skeleton (`presentation.tex`) depends on the
+`projector` class, found [here](http://www.shoup.net/projector/).
 Installing it is described in the __TeX Trickery__ section. Also,
 when displaying presentations, bold is often more emphasizing than
 italics. Thus, the \emph command is redefined to put the text in
 bold; for italics there is the \iemph command.
 
-Also, due to the fact of not using the inc_preamble, sometimes you
-might need to include additional packages. For example, to use the
-`\mathbb` command, or its shortcut, you need to include the
-`amssymb` package. In the article skeleton this is not needed
-because the code that sets the fonts also includes math symbols, but
-the presentation skeleton uses different fonts.
+For math, include the file `inc_mathematics_presentation.tex`.
+
+### The Tikz skeleton
+
+The file for this is named `tikzfig.tex`. The example is adapted
+from [here][5]. I use it as a playgroud for TikZ. The PDF produced
+will be a "full-scale" picture. To include it say, on a
+presentation, do `\centering{\graphicbox{figures/quantum_diag}}`.
 
 Tweakings
 ---
@@ -119,9 +129,10 @@ exist. The exact location of things depends on what that thing is concretely
 (fonts, styles, bib styles, etc.). For our purposes, the projector class goes
 in `/home/user/texmf/tex/latex/` and the Charis SIL font (which consist of a
 bunch of \*.ttf files) goes in `/home/user/texmf/fonts/truetype/` (create the
-sub-folders as needed) .
+sub-folders as needed).
 
 [1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989   
 [2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/   
 [3] - http://en.wikipedia.org/wiki/TeX_Directory_Structure  
 [4] - http://tex.stackexchange.com/questions/1137/where-do-i-place-my-own-sty-files-to-make-them-available-to-all-my-tex-files  
+[5] - http://www.texample.net/tikz/examples/quantum-circuit/  

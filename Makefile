@@ -1,4 +1,4 @@
-NAME="presentation"
+NAME="tikzfig"
 
 TEXCMD="lualatex"
 TEXCMDOPTS="--interaction=nonstopmode --shell-escape"

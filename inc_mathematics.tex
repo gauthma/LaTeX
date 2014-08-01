@@ -2,24 +2,9 @@
 
 \usepackage{amsmath}   % has to come before eulervm, or things bork!
 \usepackage{amsthm}    % required for proof environ (et al.)
-
 % --- END math packages ---
 
-% math stuff
-\newcommand{\eqv}{\Leftrightarrow}
-
-\newcommand{\pvec}[1]{\ensuremath{\overrightarrow{#1}}}
-\newcommand{\npvec}[1]{\ensuremath{\norm{\pvec{#1}}}}
-
-\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
-\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
-
-\providecommand{\abs}[1]{\ensuremath{  \left \lvert #1 \right \rvert } }
-\providecommand{\norm}[1]{\ensuremath{ \left \lVert #1 \right \rVert } }
-
-\providecommand{\pth}[1]{\ensuremath{  \left ( #1 \right ) } }
-\providecommand{\spth}[1]{\ensuremath{ \left [ #1 \right ] } }
-\providecommand{\cpth}[1]{\ensuremath{ \left \{ #1 \right \} } }
+\input{inc_common_math}
 
 \makeatletter
 % If no newline after theorem et al environment,
@@ -38,16 +23,3 @@
 \newtheorem{remark}[thm]{Remark}
 
 \renewcommand\qedsymbol{$\blacksquare$}  % for proofs to end with a black *filled* square (requires amssymb)
-
-%
-% math hacks
-%
-
-% scalable middle bar; see 
-% http://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows
-\newcommand{\relmiddle}[1]{\mathrel{}\middle#1\mathrel{}}
-
-% it's a cheat but this makes spacing less wrong around quantifiers
-\DeclareMathOperator{\Nexists}{\nexists}
-\DeclareMathOperator{\Exists}{\exists}
-\DeclareMathOperator{\Forall}{\forall}
