@@ -1,6 +1,6 @@
 NAME="tikzfig"
 
-TEXCMD="lualatex"
+TEXCMD="lualatex" # IMPORTANT: before changing this, see Note (1)
 TEXCMDOPTS="--interaction=nonstopmode --shell-escape"
 BIBCMD="biber"
 VIEWER="okular"
@@ -30,3 +30,6 @@ clean :
 
 .PHONY : bib all viewer full clean
 
+# NOTES
+# (1) - When changing the TEXCMD variable, ~/.vim/ftplugin/tex.vim#BuildOnWrite
+# must be changed accordingly (the `pidof` line).
