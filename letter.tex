@@ -26,7 +26,7 @@
 % --- Commands (new or redefine) ---
 % --- END commands ---
 % --- Includes ---
-%\input{inc_custom_commands}
+\input{inc_custom_commands}
 %\input{inc_mathematics}
 % --- END Includes ---
 
@@ -56,51 +56,54 @@
     \textbf{\textsc{Subject of your letter here}}\\[2em]
   \end{center}
 }
-% The ``extra'' braces above and below are required, if you want to use 
-% paragraph first line indentation (and thus not use skip space between 
-% paragraphs) as is customary when writing in Portuguese.
+% 
+% By default, the paragraphs are separated by a blank line, and there is no 
+% first line indentation. When writing in Portuguese, it is customary to do the 
+% *opposite*, i.e. indent the paragraph's first line and don't use blank lines 
+% between paragraphs. To obtain this setup, comment the two \setlength and the 
+% \vspace commands below, as well as the two \setlength before \closing.
 %
-% Comment the two \setlength commands below if this *undesired*.
-{
-  \setlength{\parindent}{0.5cm}
-  \setlength{\parskip}{0pt plus 0.1pt}
+% \setlength{\parindent}{0.5cm}
+% \setlength{\parskip}{0pt plus 0.1pt}
+% \vspace{1em}
 
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec bibendum 
-  suscipit odio, id dapibus ipsum placerat vitae. Quisque vitae magna vel ante 
-  semper dapibus sit amet eu elit. Fusce cursus sodales eros, non porta urna 
-  bibendum et. Ut mauris risus, malesuada sit amet semper ac, molestie in 
-  tellus. Nam imperdiet metus sed massa faucibus sed vulputate risus laoreet. 
-  Aenean tincidunt, purus ac euismod lobortis, tortor lacus iaculis eros, non 
-  egestas orci massa in ligula. Cras bibendum suscipit lacus nec mollis. Nullam 
-  neque erat, molestie ac bibendum eget, molestie non nunc. Morbi quis orci 
-  augue. Pellentesque facilisis, erat sed pellentesque rutrum, orci turpis 
-  dictum mi, sit amet rutrum nibh quam in velit. Vestibulum semper, est eget 
-  blandit pellentesque, nisi elit venenatis diam, id vestibulum velit leo quis 
-	orci.\endnote{Some endnote-ing text.} 
-  
-  In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis 
-  quis tortor malesuada pretium. Pellentesque auctor neque nec urna. Proin 
-  sapien ipsum, porta a, auctor quis, euismod ut, mi. Aenean viverra rhoncus 
-  pede. Pellentesque habitant morbi tristique senectus et netus et malesuada 
-  fames ac turpis egestas. Ut non enim eleifend felis pretium feugiat. Vivamus 
-  quis mi. Phasellus a est. Phasellus magna.
-}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec bibendum 
+suscipit odio, id dapibus ipsum placerat vitae. Quisque vitae magna vel ante 
+semper dapibus sit amet eu elit. Fusce cursus sodales eros, non porta urna 
+bibendum et. Ut mauris risus, malesuada sit amet semper ac, molestie in 
+tellus. Nam imperdiet metus sed massa faucibus sed vulputate risus laoreet. 
+Aenean tincidunt, purus ac euismod lobortis, tortor lacus iaculis eros, non 
+egestas orci massa in ligula. Cras bibendum suscipit lacus nec mollis. Nullam 
+neque erat, molestie ac bibendum eget, molestie non nunc. Morbi quis orci 
+augue. Pellentesque facilisis, erat sed pellentesque rutrum, orci turpis 
+dictum mi, sit amet rutrum nibh quam in velit. Vestibulum semper, est eget 
+blandit pellentesque, nisi elit venenatis diam, id vestibulum velit leo quis 
+orci.\endnote{Some endnote-ing text.} 
 
-  \closing{Yours sincerely,}
+In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis 
+quis tortor malesuada pretium. Pellentesque auctor neque nec urna. Proin 
+sapien ipsum, porta a, auctor quis, euismod ut, mi. Aenean viverra rhoncus 
+pede. Pellentesque habitant morbi tristique senectus et netus et malesuada 
+fames ac turpis egestas. Ut non enim eleifend felis pretium feugiat. Vivamus 
+quis mi. Phasellus a est. Phasellus magna.
+
+% \setlength{\parindent}{0.0cm}
+% \setlength{\parskip}{0.7em}
+\closing{Yours sincerely,}
 %
-  \ps{P.\ S.: Some more latin should go here.}
-  \encl{A vacation postcard!}
+\ps{P.\ S.: Some more latin should go here.}
+\encl{A vacation postcard!}
 
-  % --- show endnotes ---
-  % comment if not using the endnotes package
-  \vspace{1cm}
-  \begingroup
-  %\addcontentsline{toc}{section}{Notes}
-  \def\enotesize{\small}
-  \def\enoteheading{\Large \textsc{Notes}}
-  \theendnotes
-  \endgroup
-  % --- end endnotes ---
+% --- show endnotes ---
+% comment if not using the endnotes package
+\vspace{1cm}
+\begingroup
+%\addcontentsline{toc}{section}{Notes}
+\def\enotesize{\small}
+\def\enoteheading{\Large \textsc{Notes}}
+\theendnotes
+\endgroup
+% --- end endnotes ---
 \end{letter}
 \end{document}
 

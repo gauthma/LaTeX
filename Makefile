@@ -1,4 +1,4 @@
-NAME="tikzfig"
+NAME="letter"
 
 TEXCMD="lualatex" # IMPORTANT: before changing this, see Note (1)
 TEXCMDOPTS="--interaction=nonstopmode --shell-escape"
