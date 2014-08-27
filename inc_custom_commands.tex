@@ -10,6 +10,40 @@
 \setlength{\@fptop}{0pt}
 \makeatother
 
+%
+% Custom environments
+%
+
+% Bullets
+% (1) foo
+% (2) bar
+\newenvironment{enum1}
+{
+\renewcommand{\theenumi}{\textup{(\arabic{enumi})}}
+\renewcommand{\labelenumi}{\theenumi}
+\begin{enumerate}}
+{\end{enumerate}}
+
+% Bullets
+%  i. foo
+% ii. bar
+\newenvironment{enumi}
+{
+\renewcommand{\labelenumi}{\theenumi}
+\renewcommand{\theenumi}{\textup{\roman{enumi}.}}
+\begin{enumerate}}
+{\end{enumerate}}
+
+% Bullets
+%  I. foo
+% II. bar
+\newenvironment{enumI}
+{
+\renewcommand{\labelenumi}{\theenumi}
+\renewcommand{\theenumi}{\textup{\Roman{enumi}.}}
+\begin{enumerate}}
+{\end{enumerate}}
+
 % [1] - When inserting an em-dash like this: --- any adjacent words 
 %       are NOT HYPHENATED. Using \textemdash (or the newly defined 
 %       shortcut)fixes this issue.
