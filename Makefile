@@ -1,13 +1,14 @@
-NAME="letter"
+NAME="tikzfig"
 
-TEXCMD="lualatex" # IMPORTANT: before changing this, see Note (1)
-TEXCMDOPTS="--interaction=nonstopmode --shell-escape"
-BIBCMD="biber"
-VIEWER="okular"
+# IMPORTANT: before changing this, see Note (1)
+TEXCMD=lualatex
+TEXCMDOPTS=--interaction=nonstopmode --shell-escape
+BIBCMD=biber
+VIEWER=okular
 
 # shortcut: <F6>
 all : 
-	$(TEXCMD) $(TEXCMDOPTS) $(NAME)	
+	$(TEXCMD) $(NAME)	$(TEXCMDOPTS)
 
 # shortcut: <F5>
 bib :
@@ -19,10 +20,10 @@ viewer :
 
 # shortcut: <F8>
 full :
-	$(TEXCMD) $(TEXCMDOPTS) $(NAME)	
+	$(TEXCMD) $(NAME)	$(TEXCMDOPTS)
 	$(BIBCMD) $(NAME)
-	$(TEXCMD) $(TEXCMDOPTS) $(NAME)	
-	$(TEXCMD) $(TEXCMDOPTS) $(NAME)	
+	$(TEXCMD) $(NAME)	$(TEXCMDOPTS)
+	$(TEXCMD) $(NAME)	$(TEXCMDOPTS)
 
 # shortcut: <F9>
 clean :
