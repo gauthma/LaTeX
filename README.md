@@ -114,8 +114,8 @@ LaTeX Trickery
 The last two lines are to use the default mathcal font, instead of
 the one with bitstream-charter, which is [harder to read][1].
 
-TeX Trickery 
---- 
+TeX Trickery
+---
 
 For installing custom fonts, styles, etc., the
 easiest way is to replicate in your home directory the TeX Directory
