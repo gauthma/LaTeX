@@ -5,7 +5,7 @@ These are the templates I use for most of my interactions with
 LaTeX. It's somewhat integrated with my Vim settings (see for
 example the shortcuts in the Makefile).
 
-The example *LaTeX* files are processed using *LuaTeX.*.
+The example *LaTeX* files are processed using *LuaLaTeX.*.
 
 The *addons.tex* file includes code for using images (among a couple
 of other stuff). Bear in mind that PDF is a vector format [2], so
@@ -37,7 +37,7 @@ includes the article preamble, as it was getting too long...
 
 It's pretty straightforward, except for one detail: if you don't use
 footnotes (i.e. don't have any `\endnote{blah blah}` in the text),
-then you must comment out the `theendnotes` command, otherwise
+then you must comment out the `\theendnotes` command, otherwise
 compiling the document you get an error saying that the `.ent` file
 was not found.
 
@@ -45,10 +45,10 @@ was not found.
 
 The `PRESENTATION` skeleton (`presentation.tex`) depends on the
 `projector` class, found [here](http://www.shoup.net/projector/).
-Installing it is described in the __TeX Trickery__ section. Also,
-when displaying presentations, bold is often more emphasizing than
-italics. Thus, the \emph command is redefined to put the text in
-bold; for italics there is the \iemph command.
+Installing it is described in the [TeX Trickery][#tex-trickery]
+section. Also, when displaying presentations, bold is often more
+emphasizing than italics. Thus, the \emph command is redefined to
+put the text in bold; for italics there is the \iemph command.
 
 For math, include the file `inc_mathematics_presentation.tex`.
 
@@ -100,7 +100,7 @@ The __endnotes__ package can be found in the AL package:
 package, but seems not be working. So for now the best approach
 seems to be to get the font's sources from
 [here](http://scripts.sil.org/cms/scripts/page.php?item_id=CharisSIL_download#b3a62bff)
-and install them as described in the __TeX Trickery__ section.
+and install them as described in the [TeX Trickery][#tex-trickery] section.
 
 LaTeX Trickery
 ---
@@ -124,15 +124,32 @@ to discover where is your TeX home:
 $ kpsewhich -var-value=TEXMFHOME
 ```
 
-In my case it is in `/home/user/texmf`. Create that folder if it does not
-exist. The exact location of things depends on what that thing is concretely
-(fonts, styles, bib styles, etc.). For our purposes, the projector class goes
-in `/home/user/texmf/tex/latex/` and the Charis SIL font (which consist of a
-bunch of \*.ttf files) goes in `/home/user/texmf/fonts/truetype/` (create the
-sub-folders as needed).
+In my case it is in `/home/user/texmf`[^1]. Create that folder if it
+does not exist. The exact location of things depends on what that
+thing is concretely (fonts, styles, bib styles, etc.). For our
+purposes, the projector class goes in `/home/user/texmf/tex/latex/`
+and the Charis SIL font (which consist of a bunch of `\*.ttf` files)
+goes in `/home/user/texmf/fonts/truetype/` (create the sub-folders
+as needed).
 
-[1] - http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989   
-[2] - http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/   
-[3] - http://en.wikipedia.org/wiki/TeX_Directory_Structure  
-[4] - http://tex.stackexchange.com/questions/1137/where-do-i-place-my-own-sty-files-to-make-them-available-to-all-my-tex-files  
-[5] - http://www.texample.net/tikz/examples/quantum-circuit/  
+[^1]: If you don't want yet another directory littering your $HOME,
+		you can change it like described [here][6]. In my case it
+		amounted to (replace `~/.texmf` with whatever location you
+		like):
+
+```bash
+$ mv ~/texmf ~/.texmf
+$ mkdir -p ~/.texmf/web2c
+$ cp /usr/share/texmf-dist/web2c/texmf.cnf .texmf/web2c/
+# change the TEXMFHOME line to look like this: "TEXMFHOME = ~/.texmf", 
+$ vim .texmf/web2c/texmf.cnf
+$ echo -e "TEXMFCNF=$HOME/.texmf/web2c\nexport TEXMFCNF" >> ~.bashrc
+$ source ~/.bashrc
+```
+
+[1]: http://www.latex-community.org/forum/viewtopic.php?f=48&t=6989   
+[2]: http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/   
+[3]: http://en.wikipedia.org/wiki/TeX_Directory_Structure  
+[4]: http://tex.stackexchange.com/questions/1137/where-do-i-place-my-own-sty-files-to-make-them-available-to-all-my-tex-files  
+[5]: http://www.texample.net/tikz/examples/quantum-circuit/  
+[6]: http://www.tex.ac.uk/cgi-bin/texfaq2html?label=privinst
