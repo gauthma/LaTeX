@@ -8,7 +8,7 @@ example the shortcuts in the Makefile).
 The example *LaTeX* files are processed using *LuaLaTeX.*.
 
 The *addons.tex* file includes code for using images (among a couple
-of other stuff). Bear in mind that PDF is a vector format [2], so
+of other stuff). Bear in mind that PDF is a [vector format][2], so
 including raster images might lead to poor results. You can
 ameliorate the problem by trial and error, tweaking scale factors,
 image width, etc. 
@@ -114,8 +114,8 @@ LaTeX Trickery
 The last two lines are to use the default mathcal font, instead of
 the one with bitstream-charter, which is [harder to read][1].
 
-TeX Trickery 
---- 
+TeX Trickery
+---
 
 For installing custom fonts, styles, etc., the
 easiest way is to replicate in your home directory the TeX Directory
