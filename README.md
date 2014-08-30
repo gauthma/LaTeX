@@ -45,7 +45,7 @@ was not found.
 
 The `PRESENTATION` skeleton (`presentation.tex`) depends on the
 `projector` class, found [here](http://www.shoup.net/projector/).
-Installing it is described in the [TeX Trickery][#tex-trickery]
+Installing it is described in the [TeX Trickery](#tex-trickery)
 section. Also, when displaying presentations, bold is often more
 emphasizing than italics. Thus, the \emph command is redefined to
 put the text in bold; for italics there is the \iemph command.
@@ -100,7 +100,7 @@ The __endnotes__ package can be found in the AL package:
 package, but seems not be working. So for now the best approach
 seems to be to get the font's sources from
 [here](http://scripts.sil.org/cms/scripts/page.php?item_id=CharisSIL_download#b3a62bff)
-and install them as described in the [TeX Trickery][#tex-trickery] section.
+and install them as described in the [TeX Trickery](#tex-trickery) section.
 
 LaTeX Trickery
 ---
@@ -112,13 +112,15 @@ LaTeX Trickery
 ```
 
 The last two lines are to use the default mathcal font, instead of
-the one with bitstream-charter, which is harder to read [1].
+the one with bitstream-charter, which is [harder to read][1].
 
-TeX Trickery
----
-For installing custom fonts, styles, etc., the easiest way is to replicate in
-your home directory the TeX Directory Structure [3][4]. The first thing to do is
-to discover where is your TeX home:
+TeX Trickery 
+--- 
+
+For installing custom fonts, styles, etc., the
+easiest way is to replicate in your home directory the TeX Directory
+Structure (details [here][3] and [here][4]). The first thing to do
+is to discover where is your TeX home:
 
 ```bash
 $ kpsewhich -var-value=TEXMFHOME
@@ -131,6 +133,8 @@ purposes, the projector class goes in `/home/user/texmf/tex/latex/`
 and the Charis SIL font (which consist of a bunch of `\*.ttf` files)
 goes in `/home/user/texmf/fonts/truetype/` (create the sub-folders
 as needed).
+
+----
 
 [^1]: If you don't want yet another directory littering your $HOME,
 		you can change it like described [here][6]. In my case it
