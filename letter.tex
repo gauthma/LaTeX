@@ -11,6 +11,7 @@
 % --- END code for fonts ---
 % --- Additional packages here ---
 \usepackage[UKenglish]{babel}                               % replace UKenglish with portuguese or other lang
+\usepackage[bottom]{footmisc}                               % make sure footnotes are placed on the bottom
 \usepackage{endnotes}                                       % comment if not needed
 \renewcommand{\theendnote}{\Roman{endnote}}                 % Endnotes in Roman numerals (arabic if for footnotes)
 % --- END additional packages ---
@@ -60,7 +61,7 @@
 % By default, the paragraphs are separated by a blank line, and there is no 
 % first line indentation. When writing in Portuguese, it is customary to do the 
 % *opposite*, i.e. indent the paragraph's first line and don't use blank lines 
-% between paragraphs. To obtain this setup, comment the two \setlength and the 
+% between paragraphs. To obtain this setup, UNcomment the two \setlength and the 
 % \vspace commands below, as well as the two \setlength before \closing.
 %
 % \setlength{\parindent}{0.5cm}
