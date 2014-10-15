@@ -3,12 +3,16 @@ NAME="tikzfig"
 # IMPORTANT: before changing this, see Note (1)
 TEXCMD=lualatex
 TEXCMDOPTS=--interaction=batchmode --shell-escape
+DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape
 BIBCMD=biber
 VIEWER=okular
 
 # shortcut: <F6>
 all : 
-	$(TEXCMD) $(NAME)	$(TEXCMDOPTS)
+	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
+
+debug :
+	$(TEXCMD) $(DEBUG_TEXCMDOPTS) $(NAME)
 
 # shortcut: <F5>
 bib :
@@ -16,7 +20,7 @@ bib :
 
 # shortcut: <F7>
 viewer : 
-	$(VIEWER) --unique &> /dev/null $(NAME).pdf &
+	$(VIEWER) &> /dev/null $(NAME).pdf &
 
 # shortcut: <F8>
 full :
@@ -27,7 +31,9 @@ full :
 
 # shortcut: <F9>
 clean :
-	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,bcf,bbl,blg,ent,run.xml} *-blx.bib
+	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table}
+	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo}
+	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot} *-blx.bib
 
 .PHONY : bib all viewer full clean
 

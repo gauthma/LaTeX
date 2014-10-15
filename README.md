@@ -74,14 +74,23 @@ Comment and uncomment accordingly.
 The rationale is that for just one column, we use a 12pt font, and
 3.5cm lateral margins. For two columns, 10pt and 1.5 respectively.
 
-### The *microtype* package
+### Draft mode
 
-The last line in the code for fonts loads the *microtype* package
-(commented by default). This package improves the way spacing is
-computed, which usually results in an improved layout. However, it
-slows down, very noticeably, the compile time; which is why it is
-recommended to use (uncomment) it only when producing the final
-version.
+The second from last line in the code for fonts loads the `microtype`
+package. This package improves the way spacing is computed, which
+usually results in an improved layout. However, it slows down, very
+noticeably, the compile time; the solution is the line after it, which
+indicates to `microtype` that the document is to be processed in draft
+mode---which disables all the layout improvements. When producing the
+final version, set `draft=false`.
+
+The above method only disables the `microtype` improvements (which
+already improves compilation time considerably). But to improve it even
+further, you can set *the whole document* in draft mode, by adding
+`draft` to the `documentclass` options. This, besides also disabling
+`microtype`, further disables all sorts of things, like images,
+cross-refereces, etc. If you use this latter option, there is no need to
+disable `microtype`---it is done automagically.
 
 ### The xcolor package
 
