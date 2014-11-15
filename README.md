@@ -32,7 +32,7 @@ The files starting with `inc_` are files that are supposed to be
 *included* in another file, and *not* compiled on their own. This
 includes the article preamble, as it was getting too long...
 
-***IMPORTANT NOTE***: Do not forget the *last* step, i.e.\ removing the
+***IMPORTANT NOTE***: Do not forget the *last* step, i.e. removing the
 `.git` folder! It can needlessly occupy quite a few MB!
 
 ### The Letter skeleton
