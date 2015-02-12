@@ -3,12 +3,17 @@
 \usepackage{fontspec}
 
 \usepackage{sfmath}
-\renewcommand{\rmdefault}{\sfdefault}
-\renewcommand{\emph}[1]{\textbf{#1}}
-\newcommand{\iemph}[1]{\textbf{\textit{#1}}}
+\usepackage{tikz}
+\usepackage{marvosym}
 
-% use big fonts and images
-\style{slide.size=90}
+% either use arev or ...
+\usepackage{arev}
+% ... uncomment the below lines
+% \renewcommand{\rmdefault}{\sfdefault}
+% \renewcommand{\emph}[1]{\textbf{#1}}
+% \style{slide.size=90}                                     % use big fonts and images
+
+\newcommand{\iemph}[1]{\textbf{\textit{#1}}}
 
 \newcounter{tmpc}
 
@@ -63,5 +68,53 @@
 			\vfill
 		}
 	\end{enumerate}
+	\vfill
+\end{slide}
+\begin{slide}
+	\Stripe{State of the art}
+	\vfill
+	\centering{\bfseries Block cipher security}
+	\vfill
+	\begin{itemize}
+		{
+			\fadeFrom{2}{80}
+			\item No ``one size fits all'' definition.
+		}
+		\vfill
+		{
+			\fadeFrom{3}{80}
+			\fadeTo{1}{85}
+			\item Maximise resistance to (\textit{known!}) attacks.
+		}
+		\vfill
+		{
+			\fadeFrom{4}{80}
+			\fadeTo{2}{85}
+			\item Future-proof design: what about \emph{unknown} attacks?
+		}
+		\vfill
+		{
+			% \fadeFrom{5}{80}
+			\fadeTo{3}{85}
+			\item Can simplicity be a prerequisite for security?
+		}
+		\vfill
+	\end{itemize}
+	\vfill
+\end{slide}
+\begin{slide}
+	\Stripe{Questions?}
+	\vfill
+	\begin{center}
+		\begin{tikzpicture}[ultra thick,scale=0.5]
+			\draw[line width=3.5,line cap=round] (1.5,0) .. controls ++(0,4) and 
+			++(0,-2) .. (4,4)
+			to[out=90,in=0] (2,6)
+			to[out=180,in=90] 
+			(0,4);
+		\end{tikzpicture}
+	\end{center}
+	\vfill
+	\putbox{0.435\textwidth}{0.04\textheight}{\Huge \Smiley}
 \end{slide}
 \end{document}

@@ -1,4 +1,4 @@
-NAME="tikzfig"
+NAME="presentation"
 
 # IMPORTANT: before changing this, see Note (1)
 TEXCMD=lualatex

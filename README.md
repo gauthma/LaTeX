@@ -11,7 +11,12 @@ The *addons.tex* file includes code for using images (among a couple of
 other stuff). Bear in mind that PDF is a [vector format][2], so
 including raster images might lead to poor results. You can ameliorate
 the problem by trial and error, tweaking scale factors, image width,
-etc. 
+etc.
+
+All of these templates depend on a... *sizable* number of packages.
+However, all of these should be available in TeXLive. If such is not the
+case, the reader can always install them on a local TeX tree (see the
+[TeX Trickery](#tex-trickery) section).
 
 Usage 
 ---
@@ -48,10 +53,11 @@ The `PRESENTATION` skeleton (`presentation.tex`) depends on the
 `projector` class, found [here](http://www.shoup.net/projector/).
 Installing it is described in the [TeX Trickery](#tex-trickery) section.
 Also, when displaying presentations, bold is often more emphasizing than
-italics. Thus, the \emph command is redefined to put the text in bold;
-for italics there is the \iemph command.
+italics. Thus, the `\emph` command is redefined to put the text in bold;
+for italics there is the `\iemph` command.
 
-For math, include the file `inc_mathematics_presentation.tex`.
+For math, include the file `inc_mathematics_presentation.tex`---comment
+out if not needed.
 
 ### The Tikz skeleton
 
