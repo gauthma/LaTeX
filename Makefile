@@ -35,8 +35,16 @@ clean :
 	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo}
 	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot} *-blx.bib
 
-.PHONY : bib all viewer full clean
+# see Note (2)
+get_compiler_pid :
+	pidof $(TEXCMD) || echo -n ""
+
+.PHONY : bib all viewer full clean get_compiler_pid
 
 # NOTES
 # (1) - When changing the TEXCMD variable, ~/.vim/ftplugin/tex.vim#BuildOnWrite
 # must be changed accordingly (the `pidof` line).
+#
+# (2) - `pidof` sets $? to 1 if no process of the given name is running, which
+# in turn causes `make` to spew a lengthy error message; the `echo` hack makes it
+# work properly.
