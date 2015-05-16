@@ -29,7 +29,7 @@
 	\begin{center}
 		{\Large Secure \emph{Peer-to-Peer} system}
 		\vfill
-		Your truly\\Someone else
+		Yours truly\\\texttt{me@somewhere.org}
 	\end{center}
 	\vfill
 \end{slide}
@@ -39,22 +39,28 @@
 		\item Some text
 			\begin{itemize}
 				\vfill
-				{\fadeFrom{3}{80}
-				\pitem Some more text \mb{Z}
+				{
+					\fadeTo{1}{80}
+					\fadeFrom{3}{80}
+					\item Some more text \mb{Z}
 				}
 				\vfill
-				\pause {\item Semântica da aplicação: ``\emph{I'm Ed Snowden!}''\\
-				{\footnotesize \textbf{Leakage:} \fgcolor{red}{stream correlation!!}}}
+				{
+					\fadeTo{2}{80}
+					% \fadeFrom{4}{80}
+					\item Semântica da aplicação: ``\emph{I'm Ed Snowden!}''\\
+					{\footnotesize \textbf{Leakage:} \fgcolor{red}{stream correlation!!}}
+				}
 				\vfill
 			\end{itemize}
 	\end{enumerate}
 \end{slide}
 \begin{slide}
-	\Stripe{Yet another title}
+	\Stripe{Spill into next slide}
 	\begin{enumerate}
 		\item Foo
 			\vfill
-		\pitem Continue enum into next slide
+		\item Continue enum into next slide
 			\vfill
 		\setcounter{tmpc}{\theenumi}
 	\end{enumerate}
@@ -63,10 +69,9 @@
 	\Stripe{Enough already!}
 	\begin{enumerate}
 		\setcounter{enumi}{\thetmpc}
-		{\fadeFrom{3}{80}
-		\item Bah
+		\item Bar
 			\vfill
-		}
+		\item Baz
 	\end{enumerate}
 	\vfill
 \end{slide}
@@ -82,20 +87,20 @@
 		}
 		\vfill
 		{
-			\fadeFrom{3}{80}
 			\fadeTo{1}{85}
+			\fadeFrom{3}{80}
 			\item Maximise resistance to (\textit{known!}) attacks.
 		}
 		\vfill
 		{
-			\fadeFrom{4}{80}
 			\fadeTo{2}{85}
+			\fadeFrom{4}{80}
 			\item Future-proof design: what about \emph{unknown} attacks?
 		}
 		\vfill
 		{
-			% \fadeFrom{5}{80}
 			\fadeTo{3}{85}
+			% \fadeFrom{5}{80} % comment in LAST item to avoid extra overlay...
 			\item Can simplicity be a prerequisite for security?
 		}
 		\vfill
