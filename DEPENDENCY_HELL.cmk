@@ -1,0 +1,13 @@
+# Rationale of this file #
+
+It is a good thing that the packages available through CTAN number in
+the thousands, but that means some really... *unexpected* things can
+occur when some package loads some other package you're unaware of. To
+(try) to make the situation manageable, I list here some of the most
+unexpected (at least to me) dependencies.
+
+* biblatex (depends on:)
+	- etoolbox (provides `\patchcmd`)
+
+* mathdesign
+	- amssymb (provides `\blackquare` for QED symbol)
