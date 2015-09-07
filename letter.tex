@@ -14,6 +14,7 @@
 \usepackage[bottom]{footmisc}                               % make sure footnotes are placed on the bottom
 \usepackage{endnotes}                                       % comment if not needed
 \renewcommand{\theendnote}{\Roman{endnote}}                 % Endnotes in Roman numerals (arabic if for footnotes)
+\usepackage[absolute]{textpos}
 % --- END additional packages ---
 % --- Page layout ---
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
@@ -46,6 +47,9 @@
 \signature{Your Truly's Name}
 % --- END PREAMBLE ---
 
+\setlength{\TPHorizModule}{30mm}
+\setlength{\TPVertModule}{\TPHorizModule}
+
 \begin{document}
 \begin{letter}{
     R. MaDillo\\
@@ -54,6 +58,11 @@
     Altiero Spinelli 07F343\\
     B-1047 Bruxelles 
   }
+
+	\begin{textblock}{10}(1.0, 0.3)
+		\includegraphics{logo}
+	\end{textblock}
+
   %\opening{Ex.\textsuperscript{o} Doutor R. Madillo,} % -- Portuguese introduction style
   \opening{Dear Dr. R. MaDillo,}
 {
@@ -88,9 +97,7 @@ orci.\endnote{Some endnote-ing text.}
 In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis 
 quis tortor malesuada pretium. Pellentesque auctor neque nec urna. Proin 
 sapien ipsum, porta a, auctor quis, euismod ut, mi. Aenean viverra rhoncus 
-pede. Pellentesque habitant morbi tristique senectus et netus et malesuada 
-fames ac turpis egestas. Ut non enim eleifend felis pretium feugiat. Vivamus 
-quis mi. Phasellus a est. Phasellus magna.
+pede. 
 
 % \setlength{\parindent}{0.0cm}
 % \setlength{\parskip}{0.7em}
