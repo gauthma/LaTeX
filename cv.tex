@@ -6,16 +6,24 @@
 % https://blog.erroneousthoughts.org/wp-content/uploads/2012/11/OscarPereiraCV.pdf
 %
 % WARNING: as it uses custom fonts, this file is supposed to be compiled with
-% LuaTeX
+% LuaTeX.
+% 
+% NOTA BENE: this is an OUTDATED version, to illustrate the LaTeX structure only.
 %
 \documentclass[a4paper,9pt]{extarticle}
 
-\usepackage[UKenglish]{babel}                               % replace UKenglish with portuguese or other lang
 \usepackage[top=2.5cm,left=3cm,right=3cm,bottom=2.5cm]{geometry}
 \usepackage[bitstream-charter]{mathdesign}
 \usepackage{fontspec}
 \setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn}
+
+% Languages et al.
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\setkeys{english}{variant=british}
+% \setmainlanguage{portuges}
+% END Languages et al.
 
 % This improves the quality of the PDF, but slows down the creation
 % time, so you might want to comment it until you have the final version.

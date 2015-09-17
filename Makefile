@@ -1,4 +1,4 @@
-NAME="letter"
+NAME="cv"
 
 # IMPORTANT: before changing this, see Note (1)
 TEXCMD=lualatex
