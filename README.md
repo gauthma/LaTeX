@@ -7,11 +7,9 @@ shortcuts in the Makefile).
 
 The example *LaTeX* files are processed using *LuaLaTeX.*.
 
-The *addons.tex* file includes code for using images (among a couple of
-other stuff). Bear in mind that PDF is a [vector format][2], so
-including raster images might lead to poor results. You can ameliorate
-the problem by trial and error, tweaking scale factors, image width,
-etc.
+Bear in mind that PDF is a [vector format][2], so including raster
+images might lead to poor results. You can ameliorate the problem by
+trial and error, tweaking scale factors, image width, etc.
 
 All of these templates depend on a... *sizable* number of packages.
 However, all of these should be available in TeXLive. If such is not the
