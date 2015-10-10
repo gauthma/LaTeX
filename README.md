@@ -143,19 +143,39 @@ your TeX home:
 $ kpsewhich -var-value=TEXMFHOME
 ```
 
-In my case it is in `/home/user/texmf`[^1]. Create that folder if it
+In my case it is in `/home/user/.texmf`[^1]. Create that folder if it
 does not exist. The exact location of things depends on what that thing
 is concretely (fonts, styles, bib styles, etc.). For our purposes, the
-projector class goes in `/home/user/texmf/tex/latex/` and the Charis SIL
-font (which consist of a bunch of `\*.ttf` files) goes in
-`/home/user/texmf/fonts/truetype/` (create the sub-folders as needed).
+projector class goes in `/home/user/.texmf/tex/latex/` and the Charis
+SIL font (which consist of a bunch of `\*.ttf` files) goes in
+`/home/user/.texmf/fonts/truetype/` (create the sub-folders as needed).
+
+More generally, the first thing to do, to discover where whatever you
+want to install should be installed, is using a tool named `kpsewhich`,
+which should get installed when you install LaTeX. It can be used to do
+a lot of things (`$ kpsewhich --help`), but the one we’re interested in
+here, location of styles, uses the `--show-path NAME` option. The list
+of allowed names is part of the output of the `--help-formats` option.
+So for instance, to discover where to place BiBTeX style files
+(`*.bst`), run:
+
+~~~ bash
+kpsewhich --show-path bst
+~~~
+
+This will output a list of locations where BiBTeX style files are
+searched for. So if you have a file called `mystyle.bst`, create a
+folder named "mystyle" in the appropriate location (I use
+`/home/user/.texmf/bibtex/bst/`), and put `mystyle.bst` inside the
+folder you just created. Then run `$ texhash .` (don't forget the dot!)
+from the "appropriate location" folder you used. And you're done!
 
 ----
 
-[^1]: If you don't want yet another directory littering your $HOME,
-		you can change it like described [here][6]. In my case it
-		amounted to (replace `~/.texmf` with whatever location you
-		like):
+[^1]: The default for me was `/home/user/texmf`. But if you don't want
+		yet another directory littering your $HOME, you can change it like
+		described [here][6]. In my case it amounted to (replace `~/.texmf`
+		with whatever location you like):
 
 ```bash
 $ mv ~/texmf ~/.texmf
