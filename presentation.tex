@@ -1,110 +1,34 @@
 \documentclass[16pt]{projector}
-\usepackage[UKenglish]{babel}                               % replace UKenglish with portuguese or other lang
-\usepackage{fontspec}
 
-\usepackage{sfmath}
-\usepackage{tikz}
-\usepackage{marvosym}
-
-% either use arev or ...
-\usepackage{arev}
-% ... uncomment the below lines
-% \renewcommand{\rmdefault}{\sfdefault}
-% \renewcommand{\emph}[1]{\textbf{#1}}
-% \style{slide.size=90}                                     % use big fonts and images
-
-\newcommand{\iemph}[1]{\textbf{\textit{#1}}}
+\include{inc_presentation_preamble}
 
 \newcounter{tmpc}
 
-\include{inc_mathematics_presentation}
-
-% slide numbers are ugly...
-%\style{foot.text.bot.right=\theslidenum}
-
 \begin{document}
 \begin{slide}
-	\Stripe{Big Fancy Title Here}
+	\Stripe{Slide \#1}
 	\vfill
-	\begin{center}
-		{\Large Secure \emph{Peer-to-Peer} system}
-		\vfill
-		Yours truly\\\texttt{me@somewhere.org}
-	\end{center}
+	\theme{Theme A}
 	\vfill
-\end{slide}
-\begin{slide}
-	\Stripe{Another slide title}
-	\begin{enumerate}
-		\item Some text
-			\begin{itemize}
-				\vfill
-				{
-					\fadeTo{1}{80}
-					\fadeFrom{3}{80}
-					\item Some more text \mb{Z}
-				}
-				\vfill
-				{
-					\fadeTo{2}{80}
-					% \fadeFrom{4}{80}
-					\item Semântica da aplicação: ``\emph{I'm Ed Snowden!}''\\
-					{\footnotesize \textbf{Leakage:} \fgcolor{red}{stream correlation!!}}
-				}
-				\vfill
-			\end{itemize}
-	\end{enumerate}
-\end{slide}
-\begin{slide}
-	\Stripe{Spill into next slide}
-	\begin{enumerate}
-		\item Foo
-			\vfill
-		\item Continue enum into next slide
-			\vfill
-		\setcounter{tmpc}{\theenumi}
-	\end{enumerate}
-\end{slide}
-\begin{slide}
-	\Stripe{Enough already!}
-	\begin{enumerate}
-		\setcounter{enumi}{\thetmpc}
-		\item Bar
-			\vfill
-		\item Baz
-	\end{enumerate}
+	{
+		\fadeFrom{2}{85}
+		\bulletN[19] Lorem ipsum dolor sit amet
+	}
 	\vfill
-\end{slide}
-\begin{slide}
-	\Stripe{State of the art}
+	{
+		\fadeTo{1}{85}
+		\fadeFrom{3}{85}
+		\bulletB Consectetur \emph{adipiscing} elit
+  }
 	\vfill
-	\centering{\bfseries Block cipher security}
+	\theme{Theme B}
 	\vfill
-	\begin{itemize}
-		{
-			\fadeFrom{2}{80}
-			\item No ``one size fits all'' definition.
-		}
-		\vfill
-		{
-			\fadeTo{1}{85}
-			\fadeFrom{3}{80}
-			\item Maximise resistance to (\textit{known!}) attacks.
-		}
-		\vfill
-		{
-			\fadeTo{2}{85}
-			\fadeFrom{4}{80}
-			\item Future-proof design: what about \emph{unknown} attacks?
-		}
-		\vfill
-		{
-			\fadeTo{3}{85}
-			% \fadeFrom{5}{80} % comment in LAST item to avoid extra overlay...
-			\item Can simplicity be a prerequisite for security?
-		}
-		\vfill
-	\end{itemize}
+	{
+		\fadeTo{2}{85}
+		\begin{lemma}[Foo's identity]
+			bar and so on\ldots
+		\end{lemma}
+	}
 	\vfill
 \end{slide}
 \begin{slide}
