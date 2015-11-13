@@ -21,23 +21,21 @@
 
 % Different kinds of (symbol) bullets
 \newcommand{\bulletA}[1]{%
-	\hspace{1em}$\ast$ #1}
+	\hspace{0.5em}$\ast$ #1}
 \newcommand{\bulletB}[1]{%
-	\hspace{1em}$\bullet$ #1}
+	\hspace{0.5em}$\bullet$ #1}
 \newcommand{\bulletD}[1]{%
-	\hspace{1em}$\diamond$ #1}
+	\hspace{0.5em}$\diamond$ #1}
 \newcommand{\bulletT}[1]{%
-	\hspace{1em}$\triangleright$ #1}
+	\hspace{0.5em}$\triangleright$ #1}
 
 % Numbered bullet:
-% \bulletN[<number>]{text...}
-\newcommand{\bulletN}[2][b]{%
-	\hspace{1em}$#1.$ #2}
+% \bulletN{<number>} text...
+\newcommand{\bulletN}[2]{%
+	\hspace{0.5em}$#1.$ #2}
 
-\newcommand{\theme}[1]{%
-	\begin{center}%
-		\textbf{#1}%
-	\end{center}}
+\newcommand{\topic}[1]{%
+	\Banner{#1}}
 
 % --- math packages (in ArchLinux they're all part of TeXLive) ---
 
