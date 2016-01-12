@@ -1,4 +1,4 @@
-NAME="presentation"
+NAME="article"
 
 # IMPORTANT: before changing this, see Note (1)
 TEXCMD=lualatex
