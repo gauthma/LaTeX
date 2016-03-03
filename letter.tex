@@ -8,29 +8,30 @@
 \setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn}
 %\usepackage{microtype}                                    % see README
-% --- END code for fonts ---
+% --- END font set up ---
+
 % --- Additional packages here ---
 % Languages et al.
 \usepackage{polyglossia}
 \setmainlanguage{english}
 \setkeys{english}{variant=british}
 % \setmainlanguage{portuges}
-% END Languages et al.
+% END languages set up
 
 \usepackage[bottom]{footmisc}                               % make sure footnotes are placed on the bottom
 \usepackage{endnotes}                                       % comment this ***and the next line*** if not needed
 \renewcommand{\theendnote}{\Roman{endnote}}                 % Endnotes in Roman numerals (arabic if for footnotes)
 \usepackage[absolute]{textpos}                              % For the positioning of the logo
 % --- END additional packages ---
+
 % --- Page layout ---
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm]{geometry}
 \pdfpagewidth 210mm
 \pdfpageheight 297mm
-% no line numbering
-\pagestyle{empty}
-% avoid having the closing too ``centered''
-\longindentation=230pt
+\pagestyle{empty}                                           % no line numbering
+\longindentation=230pt                                      % avoid having the closing too ``centered''
 % --- END Page layout ---
+
 % --- Commands (new or redefine) ---
 % --- END commands ---
 % --- Includes ---
@@ -40,16 +41,21 @@
 
 % --- Letter specific info ---
 % NOTA BENE:
-% 1) Stripping \address makes closing and signature *left aligned*
-% 2) Stripping \opening removes both opening AND date & address from top of letter
+% 1) Stripping (sender's) \address makes closing and signature *left aligned*;
+% 2) Stripping \opening removes both opening AND date & address from top of letter.
 
 % for letters, I prefer to set the date explicitly
 \date{February 31, 2013} 
+
+% Sender's address.
 \address{
+	% Contents can be commented if not needed.
   22nd Baking Street\\
   2099--101 Acme City\\
   LooneyTuneLand
 }
+
+% Can be commented if not needed.
 \signature{Your Truly's Name}
 % --- END PREAMBLE ---
 
@@ -57,7 +63,9 @@
 \setlength{\TPVertModule}{\TPHorizModule}
 
 \begin{document}
+% Recipent's (name and) address.
 \begin{letter}{
+	% Contents can be commented if not needed.
 	R. MaDillo\\
 	European Parliament\\
 	Rue Wiertz\\
@@ -65,6 +73,8 @@
 	B-1047 Bruxelles 
 }
 
+% Logo in the top left corner.
+% Can be commented if not needed.
 \begin{textblock}{10}(1.0, 0.3)
 	\includegraphics{logo}
 \end{textblock}
@@ -107,18 +117,26 @@
 	sapien ipsum, porta a, auctor quis, euismod ut, mi. Aenean viverra rhoncus 
 	pede. 
 
+%
 % \setlength{\parindent}{0.0cm}
 % \setlength{\parskip}{0.7em}
-\closing{Yours sincerely,}
 %
-\ps{P.\ S.: Some more latin should go here.}
-\encl{A vacation postcard!}
+
+%
+% Closing matter.
+%
+\closing{Yours sincerely,} % optional; see below for alternative.
+\ps{P.\ S.: Some more latin should go here.} % optional.
+\encl{A vacation postcard!} % optional.
+
+%
+% LETTER CONTENT ENDED
+%
 
 % --- show endnotes ---
-% comment if not using the endnotes package
+% Comment if not using the endnotes package.
 \vspace{1cm}
 \begingroup
-%\addcontentsline{toc}{section}{Notes}
 \def\enotesize{\small}
 \def\enoteheading{\Large \textsc{Notes}}
 \theendnotes
@@ -127,12 +145,12 @@
 \end{letter}
 \end{document}
 
-% ALTERNATIVE CLOSING: if you want to send a letter that will not be 
-% printed, you can add an image with your signature replacing the \closing 
+% ALTERNATIVE CLOSING: if you want to send a letter that will not be
+% printed, you can add an image with your signature REPLACING the \closing
 % with this:
 %
 %  \closing{Yours sincerely,\\
-%    \fromsig{\includegraphics[scale=0.5]{signature.png}}\\
+%    \fromsig{\includegraphics[scale=0.2]{signature.png}}\\
 %    \fromname{Your Truly's Name}
 %  }
 %
