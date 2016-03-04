@@ -47,12 +47,13 @@
 % for letters, I prefer to set the date explicitly
 \date{February 31, 2013} 
 
-% Sender's address.
+% Sender's (name and) address.
 \address{
 	% Contents can be commented if not needed.
-  22nd Baking Street\\
-  2099--101 Acme City\\
-  LooneyTuneLand
+	Your's Truly, J.D.\\
+	22nd Baking Street\\
+	2099--101 Acme City\\
+	LooneyTuneLand
 }
 
 % Can be commented if not needed.
@@ -66,7 +67,7 @@
 % Recipent's (name and) address.
 \begin{letter}{
 	% Contents can be commented if not needed.
-	R. MaDillo\\
+	R.\ MaDillo\\
 	European Parliament\\
 	Rue Wiertz\\
 	Altiero Spinelli 07F343\\
@@ -80,7 +81,7 @@
 \end{textblock}
 
 %\opening{Ex.\textsuperscript{o} Doutor R. Madillo,} % -- Portuguese introduction style
-\opening{Dear Dr. R. MaDillo,}
+\opening{Dear Dr.\ R.\ MaDillo,}
 {
 \begin{center}
 	\textbf{\textsc{Subject of your letter here}}\\[2em]
@@ -142,6 +143,7 @@
 \theendnotes
 \endgroup
 % --- end endnotes ---
+
 \end{letter}
 \end{document}
 
@@ -149,9 +151,10 @@
 % printed, you can add an image with your signature REPLACING the \closing
 % with this:
 %
-%  \closing{Yours sincerely,\\
-%    \fromsig{\includegraphics[scale=0.2]{signature.png}}\\
-%    \fromname{Your Truly's Name}
-%  }
+% \closing{Yours sincerely,\\
+%		\fromsig{\includegraphics[scale=0.2]{signature.png}}\\
+%		\fromname{Your Truly's Name}
+% }
 %
-% NOTE: If you use this, you have to remove the \signature, in the preamble.
+% NOTA BENE: If you use this, you have to REMOVE OR COMMENT the \signature, in 
+% the preamble.
