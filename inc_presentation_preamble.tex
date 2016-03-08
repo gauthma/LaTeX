@@ -20,21 +20,21 @@
 % \style{foot.text.bot.right=\theslidenum}                  % slide numbers are ugly...
 
 % Different kinds of (symbol) bullets
-\newcommand{\bulletA}[1]{%
+\newcommand{\bulletA}[1]{ %
 	\hspace{0.5em}$\ast$ #1}
-\newcommand{\bulletB}[1]{%
+\newcommand{\bulletB}[1]{ %
 	\hspace{0.5em}$\bullet$ #1}
-\newcommand{\bulletD}[1]{%
+\newcommand{\bulletD}[1]{ %
 	\hspace{0.5em}$\diamond$ #1}
-\newcommand{\bulletT}[1]{%
+\newcommand{\bulletT}[1]{ %
 	\hspace{0.5em}$\triangleright$ #1}
 
 % Numbered bullet:
 % \bulletN{<number>} text...
-\newcommand{\bulletN}[2]{%
+\newcommand{\bulletN}[2]{ %
 	\hspace{0.5em}$#1.$ #2}
 
-\newcommand{\topic}[1]{%
+\newcommand{\topic}[1]{ %
 	\Banner{#1}}
 
 % --- math packages (in ArchLinux they're all part of TeXLive) ---
@@ -52,6 +52,5 @@
 \newtheoremframe{corollary}{Corollary}
 \newtheoremframe{lemma}{Lemma}
 \newtheoremframe{definition}{Definition} % 'def' cannot be used as environ name
-
 \theoremstyle{remark}
 \newtheoremframe{remark}{Remark}
