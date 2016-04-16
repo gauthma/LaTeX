@@ -1,3 +1,10 @@
+# Options for name (remember that .tex extension is not needed):
+# article.tex
+# cv.tex
+# letter.tex
+# presentation.tex
+# tikzfig.tex
+#
 NAME="article"
 
 # Optional: the final name of the .pdf file (without extension).
