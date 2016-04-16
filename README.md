@@ -113,9 +113,8 @@ The __endnotes__ package can be found in the AL package:
 *texlive-latexextra*. The Charis SIL font can be found in an AUR
 package, but seems not be working. So for now the best approach seems to
 be to get the font's sources from
-[here](http://scripts.sil.org/cms/scripts/page.php?item_id=CharisSIL_download#b3a62bff)
-and install them as described in the [TeX Trickery](#tex-trickery)
-section.
+[here](http://software.sil.org/charis/download/) and install them as
+described in the [TeX Trickery](#tex-trickery) section.
 
 LaTeX Trickery
 ---
