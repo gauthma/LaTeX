@@ -1,11 +1,15 @@
 NAME="article"
 
+# Optional: the final name of the .pdf file (without extension).
+# In my setup, works "out of the box" with spaces, foreigh chars, ...
+# ENDNAME="my complicated file name"
+ENDNAME=$(NAME)
+
 # IMPORTANT: before changing this, see Note (1)
 TEXCMD=lualatex
 TEXCMDOPTS=--interaction=batchmode --shell-escape
 DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape
 BIBCMD=biber
-VIEWER=okular
 
 all : 
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
@@ -13,22 +17,25 @@ all :
 debug :
 	$(TEXCMD) $(DEBUG_TEXCMDOPTS) $(NAME)
 
-big :
+full :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(BIBCMD) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
 clean :
-	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table}
+	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb}
 	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo,xdy}
 	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot} *-blx.bib
+
+name_final :
+	mv $(NAME).pdf $(ENDNAME).pdf
 
 # see Note (2)
 get_compiler_pid :
 	pidof $(TEXCMD) || echo -n ""
 
-.PHONY : bib all viewer full clean get_compiler_pid
+.PHONY : all debug full clean name_final get_compiler_pid
 
 # NOTES
 # (1) - When changing the TEXCMD variable, ~/.vim/ftplugin/tex.vim#BuildOnWrite
