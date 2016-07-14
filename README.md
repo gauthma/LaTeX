@@ -1,3 +1,1 @@
-# Readme
-
-See `doc` folder.
+doc/README.md

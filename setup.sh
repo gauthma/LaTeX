@@ -49,12 +49,13 @@ case "$TYPE" in
 esac
 
 rm -rf .git
-rm -f article.* \
+rm -f \
+$(ls  article.* \
       cv.* \
   		letter.* letter_logo* \
   		presentation.* \
   		tikzfig.* \
-| grep -v $TYPE
+| grep -v $TYPE)
 
 # Setup the Makefile
 # NB: this requires *GNU* sed
