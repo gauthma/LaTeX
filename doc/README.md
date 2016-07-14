@@ -20,23 +20,26 @@ Usage
 ---
 
 ```bash
-$ mkdir article_dir
+$ git clone https://github.com/gauthma/LaTeX.git article_dir
 $ cd article_dir
-$ git clone https://github.com/gauthma/LaTeX.git .
-$ rm -rf .git
+$ sh setup.sh [article, cv, letter, presentation, tikzfig]
 ```
 
+The `setup.sh` script will edit `Makefile` and set `NAME` to the *main
+file*'s name. It will also **remove the .git folder**, in addition to
+any undeeded files, depending on the value of its argument. E.g. if
+argument is `cv`, then it will remove `article.*`, `letter.*`, etc.
+
 Do work with LaTeX skeletons provided, compile using adequate Makefile
-target and enjoy profit!! You will have to edit `Makefile` and set
-`NAME` to the *main file*'s name. Beware: in the makefile, the command
-lines *must* start with a *TAB* (not some number of spaces!!).
+target and enjoy profit!! Beware: in the makefile, the command lines
+*must* start with a *TAB* (not some number of spaces!!).
+
+If you need the final PDF document to have a different, then you can use
+the `ENDNAME` Makefile variable, together with the `name_final` target.
 
 The files starting with `inc_` are files that are supposed to be
 *included* in another file, and *not* compiled on their own. This
 includes the article preamble, as it was getting too long...
-
-***IMPORTANT NOTE***: Do not forget the *last* step, i.e. removing the
-`.git` folder! It can needlessly occupy quite a few MB!
 
 ### The Letter skeleton
 
