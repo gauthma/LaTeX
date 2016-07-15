@@ -30,6 +30,10 @@ file*'s name. It will also **remove the .git folder**, in addition to
 any undeeded files, depending on the value of its argument. E.g. if
 argument is `cv`, then it will remove `article.*`, `letter.*`, etc.
 
+**Warning**: the script required **GNU sed** to edit the `Makefile`; if
+you don't have it, then comment that line and edit the `Makefile`
+manually.
+
 Do work with LaTeX skeletons provided, compile using adequate Makefile
 target and enjoy profit!! Beware: in the makefile, the command lines
 *must* start with a *TAB* (not some number of spaces!!).
