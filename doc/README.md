@@ -30,7 +30,7 @@ file*'s name. It will also **remove the .git folder**, in addition to
 any undeeded files, depending on the value of its argument. E.g. if
 argument is `cv`, then it will remove `article.*`, `letter.*`, etc.
 
-**Warning**: the script required **GNU sed** to edit the `Makefile`; if
+**Warning**: the script requires **GNU sed** to edit the `Makefile`; if
 you don't have it, then comment that line and edit the `Makefile`
 manually.
 
