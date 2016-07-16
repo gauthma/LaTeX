@@ -12,7 +12,7 @@ To call script pwd must be same as script location.
 EOF
 }
 
-# full path of script
+# full dir path of script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # current dir
 CURR_DIR="$(pwd)"
