@@ -1,10 +1,21 @@
+\RequirePackage{luatex85}
+
 \documentclass[16pt]{projector}
 
-\include{includes/inc_presentation_preamble}
-
-\newcounter{tmpc}
+\input{includes/inc_presentation_preamble}
 
 \begin{document}
+\begin{slide}
+	\thispagestyle{empty}
+	\vfill
+	\begin{center}
+		{\Large How I'm going to bore you for a couple of minutes}
+		\vfill
+		R.\ MaDillo\\
+		\texttt{blah@TeX-mess.org}
+	\end{center}
+	\vfill
+\end{slide}
 \begin{slide}
 	\Stripe{Slide \#1}
 	\vfill
@@ -33,7 +44,7 @@
 	\vfill
 \end{slide}
 \begin{slide*}
-	\Stripe{Verbathimgs}
+	\Stripe{Verbathings}
 	\vfill
 	\bulletB Not verbatim text, vs.\ \verb+verbatim text+
 	\vfill
@@ -45,7 +56,7 @@ Lorem ipsur blah blah...
 	\vfill
 \end{slide*}
 \begin{slide}
-	\Stripe{Questions?}
+	\Stripe{Questions\dots}
 	\vfill
 	\begin{center}
 		\begin{tikzpicture}[ultra thick,scale=0.5]

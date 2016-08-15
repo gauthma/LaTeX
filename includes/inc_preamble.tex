@@ -52,6 +52,8 @@
 % Make author surname show up first.
 \DeclareNameAlias{sortname}{last-first}
 \DeclareNameAlias{default}{last-first}
+% Make reference list by bold number followed by dot.
+\DeclareFieldFormat{labelnumberwidth}{\mkbibbold{#1.}}
 % --- END Bibliography ---
 % --- HYPER references et al.---
 \usepackage{xcolor}                                         % for MidnightBlue colour!
