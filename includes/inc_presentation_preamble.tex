@@ -13,6 +13,13 @@
 % \renewcommand{\rmdefault}{\sfdefault}
 % \renewcommand{\emph}[1]{\textbf{#1}}
 
+% For fancy title with \pagestyle{empty} (for no page num on title slide)
+\newcommand{\mytitle}[1]{%
+	\par\noindent\colorbox{blue!60}%
+	{\parbox{\dimexpr\textwidth-2\fboxsep\relax}%
+	{\setlength{\baselineskip}{2\baselineskip}%
+		\centering\textcolor{white}{\textbf{#1}}}}}
+
 % In slides, emphasis means italic AND bold face.
 \renewcommand{\emph}[1]{\textbf{\textit{#1}}}
 
