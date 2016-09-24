@@ -3,17 +3,21 @@
 %
 % A pdf version (probably with outdated information, but with the same style)
 % can be found here:
-% https://blog.erroneousthoughts.org/wp-content/uploads/2012/11/OscarPereiraCV.pdf
+% https://erroneousthoughts.org/media/OscarPereiraCV.pdf
 %
 % WARNING: as it uses custom fonts, this file is supposed to be compiled with
 % LuaTeX.
 % 
 % NOTA BENE: this is an OUTDATED version, to illustrate the LaTeX structure only.
 %
-\documentclass[a4paper,9pt]{extarticle}
+\documentclass[a4paper,10pt]{extarticle}
 
 \usepackage[top=2.5cm,left=3cm,right=3cm,bottom=2.5cm]{geometry}
+%\usepackage[portuguese]{babel}     % i18n
+
 \usepackage[bitstream-charter]{mathdesign}
+\DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
+\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
 \usepackage{fontspec}
 \setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn}
@@ -28,8 +32,7 @@
 % This improves the quality of the PDF, but slows down the creation
 % time, so you might want to comment it until you have the final version.
 \usepackage{microtype}
-
-%%%%%%%%%%%%%
+\usepackage{multicol}
 
 \usepackage{enumitem}
 \usepackage{marvosym}
@@ -37,19 +40,23 @@
 \usepackage[usenames,dvipsnames]{xcolor}  % for MidnightBlue colour
 \usepackage[colorlinks=true, urlcolor=MidnightBlue]{hyperref}
 
-\renewcommand\labelitemi{\fontfamily{cmr}\selectfont\textbullet}
+\renewcommand\labelitemi{\fontfamily{lmr}\selectfont\textbullet}
 
 \newenvironment{topic}[1]
-   {{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{#1}\hrule}%
+   {{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{#1}\hrule\par}%
     \begin{list}{}{%
-       \setlength{\leftmargin}{.0cm}}%
-    \item[]}
+       \setlength{\leftmargin}{.0cm}}\item[]}
    {\end{list}\medskip}
 
 \newenvironment{header}[1]
-   {\centering{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{\LARGE\bfseries #1}\hrule}%
-    \begin{center}}
-   {\end{center}\medskip}
+   {\raggedleft{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{%
+		 \Large\bfseries Curriculum Vit\ae\ --- #1\par}\hrule}%
+		 \begin{center}}
+		 {\end{center}\medskip}
+
+% --> Change these lengths as needed
+\newlength{\leftheaderlength}\setlength{\leftheaderlength}{0.56\textwidth}
+\newlength{\rightheaderlength}\setlength{\rightheaderlength}{0.44\textwidth}
 
 \pagestyle{empty}
 
@@ -57,122 +64,148 @@
 
 \begin{document}
 
-\begin{header}
-  {Óscar Francisco Godinho Pereira} 
-  %{\emph{The address and phone number are omitted in this version, due to privacy concerns}}\smallskip\\
-  % NOTE: fictional address... for illustrative purposes only.
-  { 22nd Baking Steet, Airstrip One, London, Oceania \verb+     + \Telefon +000 12 345 67 89 }\\[5pt]
-  \begin{tabular}{l|r}
-    \url{https://erroneousthoughts.org} & \texttt{oscar@erroneousthoughts.org} 
-  \end{tabular}
+% NB: table alignment b0rks if they do not have same # of rows;
+% so ensure that this is the case! (phantom is your friend)
+\begin{header}{Óscar Francisco Godinho Pereira} 
+	\begin{minipage}[t]{\leftheaderlength}%
+		\begin{tabular}{c l}
+			\Letter  & Postal address and phone number have been\\
+			         & withheld for privacy reasons\\
+							 & \phantom{xpto}
+		\end{tabular}
+	\end{minipage}%
+	\begin{minipage}[t]{\rightheaderlength}%
+		\begin{tabular}{cl}
+			\Keyboard   & \url{https://erroneousthoughts.org}\\
+			            & \texttt{oscar@erroneousthoughts.org}\\
+			\Mobilefone & 00 000 00 00\\
+			% \phantom{xpto}
+		\end{tabular}
+	\end{minipage}\\[1.5em]
 \end{header}
+
+\begin{topic}{Formal Education}
+  \begin{itemize}[leftmargin=*]
+    \item {\bfseries University of Minho}, Braga, Portugal.\\
+      PhD in Informatics, MAP-i Doctoral Programme, Fall 2015--present.
+    \item {\bfseries University of Minho}, Braga, Portugal.\\
+			MSc in Informatics Engineering, Fall 2013--Fall 2015. \emph{Grade:} 16 out 
+			of 20.\\
+			\emph{Master Thesis}: Towards a Fully Algebrisable Symmetric Cryptosystem. 
+			\emph{Grade:} 18 out of 20.\\
+			Academic performance in curricular part got him the \textbf{2013/2014 
+			Multicert School Award}\footnote{See 
+			\url{https://www.multicert.com/en/about-us/universities/}.}.
+    \item {\bfseries University of Coimbra}, Coimbra, Portugal.\\
+			\emph{Licenciatura} (roughly a 5 year pre-Bologna BSc) in Informatics 
+			Engineering, Fall 2001--Fall 2006.
+  \end{itemize}
+\end{topic}
 
 \begin{topic}{Professional Experience}
   \begin{itemize}[leftmargin=*]
     \item {\bfseries AnubisNetworks}---Lisbon, Portugal.\\
       Software Engineer (multi-class), June 2007 -- April 2013.
       \begin{itemize}
-	\item {\scshape October 2012} -- Moved from product development to the Operations team. Handled 
-	  SpamAssassin management and performance tunning. Developed software to 
-	  ease (or automate when possible) some of the management tasks, as well spam 
-	  statistics collection and analysis.\\
-	  {\scshape Requirements}: SpamAssassin, Perl, Apache, RRDTool.
-	\item {\scshape June 2011} -- Development of \emph{myFamily} and \emph{Web Protection Service} 
-	  web content filtering services. Focus on user interface and authentication modules.\\
-	  {\scshape Requirements}: C{}\verb!++!, HTML, CSS, HTTP, tcpflow.
-	\item {\scshape May 2009} -- Development of MPS' modules that provide secure and transparent 
-	  system administration capabilities\textemdash email infrastructure, et al.---to 
-	  ``upper'' layers (business logic). Also developed distributed 
-	  alternatives to existing centralised architectural scenarios.\\
-	  {\scshape Requirements}: Perl, Postfix, LDAP.
-	\item {\scshape June 2007} -- Designed and implemented the Reports module of the \emph{Mail 
-	  Protection System}\textsuperscript{\texttrademark} appliance 
-	  (MPS)---Anubis' flagship product. Improved the underlying database 
-	  scheme to support the required developments. Maintained the web 
-	  interface and worked on the initial version of an abstraction layer 
-	  aimed at better separating business logic from the underlying system 
-	  operations.\\
-	  {\scshape Requirements}: Perl, Apache, MySQL.
+				\item {\scshape From October 2012} -- Moved to the Operations team. 
+					Handled SpamAssassin management and performance tunning. Developed 
+					software to partially automate some management tasks, as well as spam 
+					statistics collection and analysis.\\
+					{\scshape Requirements}: SpamAssassin, Perl, Apache, RRDTool.
+				\item {\scshape From June 2011} -- Development of \emph{myFamily} and \emph{Web 
+					Protection Service} web content filtering services. Focus on user 
+					interface and authentication.\\
+					{\scshape Requirements}: C{}\verb!++!, HTML, CSS, HTTP, tcpflow.
+				\item {\scshape From May 2009} -- Participated in the development of a distributed 
+					architecture for MPS. The purpose was to allow multi-node 
+					installations, in order to meet the scalability requirements needed by 
+					carriers and other large customers.\\
+					{\scshape Requirements}: Perl, Postfix, LDAP.
+				\item {\scshape From June 2007} -- Implemented the Reports 
+					module of the \emph{Mail Protection 
+					System}\textsuperscript{\texttrademark} appliance (MPS)---Anubis' 
+					flagship product. Redesigned the latter's database to support that 
+					module---and to begin separating business logic from underlying system 
+					actions. Also became the \emph{de facto} maintainer of the web 
+					interface, during this period.\\
+					{\scshape Requirements}: Perl, Apache, MySQL.
       \end{itemize}
-  \end{itemize}
-\end{topic}
-
-\begin{topic}{Formal Education}
-  \begin{itemize}[leftmargin=*]
-    \item {\bfseries University of Minho}, Braga, Portugal.\\
-      M.Sc. Informatics Engineering, 2013--present.
-    \item {\bfseries Technical University of Lisbon -- IST}, Lisbon, Portugal.\\
-      B.Sc. Applied Mathematics, 2010--present (\emph{currently suspended}).
-    \item {\bfseries University of Coimbra}, Coimbra, Portugal.\\
-      B.Sc. Informatics Engineering (pre-Bologna -- 5 years), 2001--2007.
   \end{itemize}
 \end{topic}
 
 \begin{topic}{Technical Skills}
-  {\itshape Programming Languages}  
+  {\rhd\ \ \bfseries \scshape Programming Languages}  
   \begin{itemize}[leftmargin=*]
     \item{\bfseries Imperative}: \emph{proficient}: C, Perl; \emph{experienced}: C{}\verb!++!, Python;
-      \emph{basic skills}: Java, Javascript/JQuery.
+      \emph{basic skills}: Java, Javascript/JQuery, Vim script.
     \item{\bfseries Functional}: \emph{basic skills}: Common Lisp.
-    \item{\bfseries Markup}: \emph{proficient}: HTML, CSS, \LaTeX; \emph{basic skills}: UML.
+    \item{\bfseries Markup}: \emph{proficient}: HTML, CSS, \LaTeX, Markdown; \emph{basic skills}: UML.
   \end{itemize}
-  {\itshape Operating Systems} 
+  {\rhd\ \ \bfseries \scshape Operating Systems} 
   \begin{itemize}[leftmargin=*]
-    \item{\bfseries GNU/Linux}: Has been fiddling with different distributions 
-      since 2000; became a regular user circa 2005.
+		\item{\bfseries GNU/Linux}: Began experimenting different distributions in 
+			2000; became a regular user circa 2005.
       \begin{itemize}
-	\item Proficient \textsc{Arch Linux} user (current distribution of choice for personal computers).
-	\item Experienced with \textsc{Ubuntu Server} (mainly for small network 
-	  servers).
+				\item Proficient \textsc{Arch Linux} user (current distribution of choice for personal computers).
+				\item Experienced with \textsc{Debian} and \textsc{Ubuntu Server} (mainly for small-network servers).
       \end{itemize}
-    \item{\bfseries Microsoft Windows}: Last version regularly used was XP (SP3).
+		\item{\bfseries Microsoft Windows}: Last version regularly used was XP 
+			(SP3). Nowadays, occasionally fires up Win 10, to play the occasional 
+			computer game.
   \end{itemize}
-  {\itshape Software}
-  \begin{itemize}[leftmargin=*]
-    \item{\bfseries Text Editors}: Vim (proficient), Kate, KDevelop (IDE).
-    \item{\bfseries Mathematics}: Mathematica, Matplotlib, SageMath.
-    \item{\bfseries Network}: OpenSSH, tcpflow, iptables, Apache, nginx, RRDTool, GnuPG, 
-      Mutt.
-    \item{\bfseries Databases}: MySQL, SQLite, PostgreSQL.
-  \end{itemize}
+	\newpage % obviously, comment this if unneeded
+  {\rhd\ \ \bfseries \scshape Miscellaneous Software}\\[1em]
+	\begin{minipage}{0.5\textwidth}
+		\begin{itemize}
+			% see comment at header for \phantom...
+			\item{\bfseries Text Editors}: Vim (proficient).\\\phantom{xpto}
+			\item{\bfseries Mathematics}: GNUplot, SageMath, 
+				\texttt{libgmp}.
+		\end{itemize}
+	\end{minipage}%
+	\begin{minipage}{0.5\textwidth}
+		\begin{itemize}
+			\item{\bfseries Network}: Open\{SSH,SSL\}, tcpflow, iptables, RRDTool, GnuPG.
+			\item{\bfseries Databases}: MySQL, SQLite, PostgreSQL.
+		\end{itemize}
+	\end{minipage}
 \end{topic}
 
 \begin{topic}{Languages}
+  {\hspace*{2em} \slshape \small \textbf{Common European Framework of Reference for Languages} 
+	(\href{http://en.wikipedia.org/wiki/Common\_European\_Framework\_of\_Reference\_for\_Languages#Common\_reference\_levels}{CEFRL}) 
+	levels given for non-native idioms.}
   \begin{itemize}[leftmargin=*]
-    \item {\bfseries Portuguese}: native speaker. (\emph{Note: European 
-      Portuguese})
-    \item {\bfseries English}: fluent domain, both written and spoken.
-    \item {\bfseries Spanish}: fluent speaker, elementary reading and writing skills.
+    \item {\bfseries Portuguese}: native language. (\emph{Note: European Portuguese})
+    \item {\bfseries English}: fluent, both written (C1) and spoken (C1).
+    \item {\bfseries Spanish}: basic writing skills (A2) but fluent speaker (B2).
   \end{itemize}
 \end{topic}
 
-\newpage   % obviously, comment this if unneeded
 \begin{topic}{Additional Information}
-  {\itshape Informal Education / Professional Development}\\ 
-  {\slshape \small \mbox{\ \ \ \ \ \ \ \ \ \ } Note: only courses completed with certification are listed.}
+  {\hspace*{2em} \itshape Informal Education / Professional Development}
   \begin{itemize}[leftmargin=*]
-    \item {\bfseries Coursera Online Platform}, Stanford University.\\
-      Crypto I -- \url{http://www.crypto-class.org} -- 2012
+    \item {\bfseries Cryptography I}, Stanford University, 2012.\\
+      Coursera Online Platform -- \url{http://www.crypto-class.org}. \emph{Grade:} 98\%.
+    \item {\bfseries Curso Especial de Empresa}, (employer-sponsored Spanish language training), 2008--2009.\\
+			Instituto Cervantes de Lisboa. \emph{Grade:} Sobresaliente (9 out of 10).
   \end{itemize}
-  {\itshape Miscellanea}  
+  {\hspace*{2em} \itshape Miscellanea}  
   \begin{itemize}[leftmargin=*]
-    \item{Outdoor sports enthusiast---currently surf, football, and trying
-      snowboard.}
+    \item{Outdoor sports enthusiast---mainly surf and football.}
     \item{Enjoys recreational---and often not-so-recreational---mathematics,
       as well as physics (and chess).}
     \item{Participated in the 2003 and 2004 editions of \emph{Minho Campus
-      Party} (Portugal's first large scale LAN party!).}
-    \item Writes at \url{https://blog.erroneousthoughts.org} (Portuguese and 
-      English). Paraphrasing the Nobel prize winning physicist Richard Feynman: 
-      \emph{to explain, one must first understand}. Writing being mostly about 
-      the former, it provides a strong incentive to put in the effort needed to 
-      achieve the latter. Besides, writing helps one to become a better---and 
-      faster!---reader.
+			Party} (Portugal's first large scale LAN party!).}
+		\item Writes at \url{https://erroneousthoughts.org/blog}. Paraphrasing the 
+			Nobel prize winning physicist Richard Feynman: \emph{to explain, one must 
+			first understand}. Writing being mostly about the former, it provides a 
+			strong incentive to put in the effort needed to achieve the latter. 
+			Besides, writing helps one to become a better---and faster!---reader.
     \item The above notwithstanding, he chronically tends to accumulate more books than 
       what he is able to read.
     \item{Full Portuguese driving license---Category B, passenger light
       vehicles.}
   \end{itemize}
 \end{topic}
-
 \end{document}
