@@ -57,6 +57,5 @@ $(ls  article.* \
   		tikzfig.* \
 | grep -v $TYPE)
 
-# Setup the Makefile (using sed the portable way)
-sed -e "/^NAME=/c\NAME=\"$TYPE\"" Makefile > Makefile.new
-mv Makefile.new Makefile
+# Setup the Makefile (requires GNU sed)
+sed -e "/^NAME=/c\NAME=\"$TYPE\"" Makefile
