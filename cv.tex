@@ -1,6 +1,17 @@
+% My CV's .tex file. Inspired by this one:
+% http://www.danielmathews.info/about-me
+%
+% A pdf version (probably with outdated information, but with the same style)
+% can be found here:
+% https://erroneousthoughts.org/media/OscarPereiraCV.pdf
+%
+% WARNING: as it uses custom fonts, this file is supposed to be compiled with
+% LuaTeX.
+% 
+% NOTA BENE: this is an OUTDATED version, to illustrate the LaTeX structure only.
+%
 \documentclass[a4paper,10pt]{extarticle}
 
-%%%%%%%%%%%%%%%
 \usepackage[top=2.5cm,left=3cm,right=3cm,bottom=2.5cm]{geometry}
 %\usepackage[portuguese]{babel}     % i18n
 
@@ -10,14 +21,23 @@
 \usepackage{fontspec}
 \setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn}
-\usepackage{microtype}
 
+% Languages et al.
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\setkeys{english}{variant=british}
+% \setmainlanguage{portuges}
+% END Languages et al.
+
+% This improves the quality of the PDF, but slows down the creation
+% time, so you might want to comment it until you have the final version.
+\usepackage{microtype}
 \usepackage{multicol}
+
 \usepackage{enumitem}
 \usepackage{marvosym}
 \usepackage{url}
-\usepackage[usenames,dvipsnames]{xcolor}
-
+\usepackage[usenames,dvipsnames]{xcolor}  % for MidnightBlue colour
 \usepackage[colorlinks=true, urlcolor=MidnightBlue]{hyperref}
 
 \renewcommand\labelitemi{\fontfamily{lmr}\selectfont\textbullet}
@@ -29,14 +49,14 @@
    {\end{list}\medskip}
 
 \newenvironment{header}[1]
-   {\centering{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{%
+   {\raggedleft{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{%
 		 \Large\bfseries Curriculum Vit\ae\ --- #1\par}\hrule}%
 		 \begin{center}}
 		 {\end{center}\medskip}
 
 % --> Change these lengths as needed
-\newlength{\leftheaderlength}\setlength{\leftheaderlength}{0.60\textwidth}
-\newlength{\rightheaderlength}\setlength{\rightheaderlength}{0.40\textwidth}
+\newlength{\leftheaderlength}\setlength{\leftheaderlength}{0.56\textwidth}
+\newlength{\rightheaderlength}\setlength{\rightheaderlength}{0.44\textwidth}
 
 \pagestyle{empty}
 
@@ -55,10 +75,11 @@
 		\end{tabular}
 	\end{minipage}%
 	\begin{minipage}[t]{\rightheaderlength}%
-		\begin{tabular}{l}
-			\url{https://erroneousthoughts.org}\\
-			\texttt{oscar@erroneousthoughts.org}\\
-			+00 00 000 00 00\\
+		\begin{tabular}{cl}
+			\Keyboard   & \url{https://erroneousthoughts.org}\\
+			            & \texttt{oscar@erroneousthoughts.org}\\
+			\Mobilefone & 00 000 00 00\\
+			% \phantom{xpto}
 		\end{tabular}
 	\end{minipage}\\[1.5em]
 \end{header}
@@ -76,8 +97,8 @@
 			Multicert School Award}\footnote{See 
 			\url{https://www.multicert.com/en/about-us/universities/}.}.
     \item {\bfseries University of Coimbra}, Coimbra, Portugal.\\
-			Licenciatura (roughly a 5 year pre-Bologna B.Sc.) Informatics Engineering, 
-			Fall 2001--Fall 2006.
+			\emph{Licenciatura} (roughly a 5 year pre-Bologna BSc) in Informatics 
+			Engineering, Fall 2001--Fall 2006.
   \end{itemize}
 \end{topic}
 
@@ -85,6 +106,30 @@
   \begin{itemize}[leftmargin=*]
     \item {\bfseries AnubisNetworks}---Lisbon, Portugal.\\
       Software Engineer (multi-class), June 2007 -- April 2013.
+      \begin{itemize}
+				\item {\scshape From October 2012} -- Moved to the Operations team. 
+					Handled SpamAssassin management and performance tunning. Developed 
+					software to partially automate some management tasks, as well as spam 
+					statistics collection and analysis.\\
+					{\scshape Requirements}: SpamAssassin, Perl, Apache, RRDTool.
+				\item {\scshape From June 2011} -- Development of \emph{myFamily} and \emph{Web 
+					Protection Service} web content filtering services. Focus on user 
+					interface and authentication.\\
+					{\scshape Requirements}: C{}\verb!++!, HTML, CSS, HTTP, tcpflow.
+				\item {\scshape From May 2009} -- Participated in the development of a distributed 
+					architecture for MPS. The purpose was to allow multi-node 
+					installations, in order to meet the scalability requirements needed by 
+					carriers and other large customers.\\
+					{\scshape Requirements}: Perl, Postfix, LDAP.
+				\item {\scshape From June 2007} -- Implemented the Reports 
+					module of the \emph{Mail Protection 
+					System}\textsuperscript{\texttrademark} appliance (MPS)---Anubis' 
+					flagship product. Redesigned the latter's database to support that 
+					module---and to begin separating business logic from underlying system 
+					actions. Also became the \emph{de facto} maintainer of the web 
+					interface, during this period.\\
+					{\scshape Requirements}: Perl, Apache, MySQL.
+      \end{itemize}
   \end{itemize}
 \end{topic}
 
@@ -108,15 +153,22 @@
 			(SP3). Nowadays, occasionally fires up Win 10, to play the occasional 
 			computer game.
   \end{itemize}
-  {\rhd\ \ \bfseries \scshape Miscellaneous Software}
-	\begin{multicols}{2}
-		\begin{itemize}[leftmargin=*]
-			\item{\bfseries Text Editors}: Vim (proficient), Kate (KDE default editor).
-			\item{\bfseries Mathematics}: GNUplot, SageMath, \texttt{libgmp}.
+	\newpage % obviously, comment this if unneeded
+  {\rhd\ \ \bfseries \scshape Miscellaneous Software}\\[1em]
+	\begin{minipage}{0.5\textwidth}
+		\begin{itemize}
+			% see comment at header for \phantom...
+			\item{\bfseries Text Editors}: Vim (proficient).\\\phantom{xpto}
+			\item{\bfseries Mathematics}: GNUplot, SageMath, 
+				\texttt{libgmp}.
+		\end{itemize}
+	\end{minipage}%
+	\begin{minipage}{0.5\textwidth}
+		\begin{itemize}
 			\item{\bfseries Network}: Open\{SSH,SSL\}, tcpflow, iptables, RRDTool, GnuPG.
 			\item{\bfseries Databases}: MySQL, SQLite, PostgreSQL.
 		\end{itemize}
-	\end{multicols}
+	\end{minipage}
 \end{topic}
 
 \begin{topic}{Languages}
@@ -130,7 +182,6 @@
   \end{itemize}
 \end{topic}
 
-\newpage
 \begin{topic}{Additional Information}
   {\hspace*{2em} \itshape Informal Education / Professional Development}
   \begin{itemize}[leftmargin=*]

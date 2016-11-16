@@ -22,6 +22,8 @@
 
 % In slides, emphasis means italic AND bold face.
 \renewcommand{\emph}[1]{\textbf{\textit{#1}}}
+% Align with \fadeTo (easier for vim-motions when changing numbers)
+\newcommand{\fadeFr}[1]{\fadeFrom{#1}}
 
 % \style{slide.size=90}                                     % use big fonts and images
 \style{foot.text.bot.right=\theslidenum/\lastslide}         % slide numbers are ugly... but necessary
