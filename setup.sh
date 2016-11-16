@@ -58,4 +58,4 @@ $(ls  article.* \
 | grep -v $TYPE)
 
 # Setup the Makefile (requires GNU sed)
-sed -e "/^NAME=/c\NAME=\"$TYPE\"" Makefile
+sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
