@@ -187,7 +187,7 @@ $ mkdir -p ~/.texmf/web2c
 $ cp /usr/share/texmf-dist/web2c/texmf.cnf .texmf/web2c/
 # change the TEXMFHOME line to look like this: "TEXMFHOME = ~/.texmf", 
 $ vim .texmf/web2c/texmf.cnf
-$ echo -e "TEXMFCNF=$HOME/.texmf/web2c\nexport TEXMFCNF" >> ~.bashrc
+$ echo -e "TEXMFCNF=$HOME/.texmf/web2c\nexport TEXMFCNF" >> ~/.bashrc
 $ source ~/.bashrc
 ```
 
