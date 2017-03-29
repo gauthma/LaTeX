@@ -12,9 +12,7 @@ NAME="presentation"
 # ENDNAME="my complicated file name"
 ENDNAME=$(NAME)
 
-# IMPORTANT: before changing this, see Note (1)
 TEXCMD=lualatex
-# TEXCMD=pdflatex
 TEXCMDOPTS=--interaction=batchmode --shell-escape
 DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape
 BIBCMD=biber
@@ -39,16 +37,14 @@ clean :
 name_final :
 	mv $(NAME).pdf $(ENDNAME).pdf
 
-# see Note (2)
+# see Note (1)
 get_compiler_pid :
 	pidof $(TEXCMD) || echo -n ""
 
 .PHONY : all debug full clean name_final get_compiler_pid
 
 # NOTES
-# (1) - When changing the TEXCMD variable, ~/.vim/ftplugin/tex.vim#BuildOnWrite
-# must be changed accordingly (the `pidof` line).
 #
-# (2) - `pidof` sets $? to 1 if no process of the given name is running, which
+# (1) - `pidof` sets $? to 1 if no process of the given name is running, which
 # in turn causes `make` to spew a lengthy error message; the `echo` hack makes it
 # work properly.
