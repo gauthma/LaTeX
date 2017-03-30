@@ -113,6 +113,79 @@ that also automagically load *xcolor* (namely *tikz*). Having those
 options given to *documentclass* avoids the possibility of any such
 conflict.
 
+SyncTeX
+---
+
+This is a technology that allows you to go from a specific place in a
+TeX source file, to the corresponding place in the PDF file (**forward
+search**), or the other way round (**backward search**). The `vim`
+plugin I use for LaTeX management---the awesome TeX-9---is synctex
+enabled, but sadly only for *graphical* `vim` (`gvim`) and `evince`.
+The setup I elaborate below will get us synctex for *terminal* `vim` an
+`okular` (it still requires TeX-9, though). And of course, your document
+must have been compiled with `--synctex=1`, or have synctex enabled in
+some other manner.
+
+### Forward direction
+
+Dump the following in `~/.vim/ftplugin/tex.vim` (and change the mapping
+to your liking):
+
+~~~ vim
+function! SyncTexForward()
+	let cmd = "silent !okular --unique ".tex_nine#GetOutputFile()."\\#src:".line(".")."%:p &> /dev/null &"
+	exec cmd
+	redraw!
+	redrawstatus!
+endfunction
+nmap <Leader>f :call SyncTexForward()<CR>
+~~~
+
+That's it; triggering that map in a specific place in the source file
+should cause `okular` to go to the corresponding location in the PDF
+file.
+
+### Backward direction
+
+The secret is to, when editing TeX file, invoke `vim` with the
+`--servername` option (traditionally this is done just for graphical
+environment, but it can be used in the terminal as well). To do this,
+first create an alias in `~/.bashrc` that directs vim to a script, that
+we shall aptly name `vim.sh` (don't forget to re-source that file, 
+`. ~/.bashrc`).
+
+~~~ bash
+alias vim='sh /path/to/vim.sh'
+~~~
+
+That script shall contain the following:
+
+~~~ bash
+#!/bin/bash
+
+ARGS=("$@") # Needed to iterate over arguments with spaces.
+
+# Add --servername option (for synctex) when opening .tex files.
+for f in "${ARGS[@]}" ; do 
+	if [[ $f == *.tex ]] ; then
+		vim --servername VIM "$@"
+		exit 0
+	fi
+done
+
+# Call vim as usual when opening other files.
+vim "$@"
+~~~
+
+Lastly, in `okular`'s preferences, set the **Editor** to 
+
+`vim --servername VIM --remote +%l %f`
+
+Now, **in browse mode only** (`Ctrl+1`), hitting `Shift` and left
+clicking in a word should move the cursor in vim to the relevant place.
+If you're using TeX-9's `mainfile:` modeline, vim will also open the
+relevant file, if necessary. How awesome is that?!
+
 ArchLinux (AL) packages 
 ---
 
