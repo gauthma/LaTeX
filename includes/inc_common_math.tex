@@ -1,5 +1,7 @@
 %
-% math hacks
+% Math hacks. Basically put here stuff that also works in presentations 
+% (projector). Everything else should go in inc_mathematics.tex (which \input's 
+% this file).
 %
 
 % scalable middle bar; see 
@@ -14,3 +16,22 @@
 % the original \emptyset is just a crossed zero...
 \let\oldemptyset\emptyset
 \let\emptyset\varnothing
+
+%
+% --- \abs and \norm that scale ---
+%
+\usepackage{mathtools}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+% --- END \abs and \norm that scale ---

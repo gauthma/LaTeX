@@ -1,4 +1,6 @@
+%
 % --- Set up fonts to use ---
+%
 \usepackage[bitstream-charter]{mathdesign}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
@@ -8,29 +10,32 @@
 \usepackage{microtype}
 \microtypesetup{draft=true}                                % see README
 % --- END code for fonts ---
-% --- Additional packages here ---
-% Languages et al.
-\usepackage{polyglossia}
-\setmainlanguage{english}
-\setkeys{english}{variant=british}
-% \setmainlanguage{portuges}
-% END Languages et al.
 
-% \usepackage{indentfirst}                                 % needed when writing in Portuguese (first paragraph is always indented)
-\usepackage{url}                                           % for making urls clickable
-\usepackage{graphicx}
-\usepackage[font=small,labelfont=bf]{caption}              % proper formatting for caption text
-% --- END additional packages ---
+%
 % --- Page layout ---
+%
 % **1 OR 2 COLUMNS** Of the next three lines: use first for 1column, next two for 2column
 % ALSO CHECK '\documentclass' IN MAIN TeX FILE!
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
 % \usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
 % \setlength{\columnsep}{20pt}
 % --- END Page layout ---
+
+%
 % --- Commands (new or redefine) ---
+%
 % --- END commands ---
+
+%
 % --- Bibliography ---
+%
+% --- --- Languages et al. --- ---
+% Language must be set before biblatex is used, or error ensues.
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\setkeys{english}{variant=british}
+% \setmainlanguage{portuges}
+% END --- --- Languages et al. --- ---
 \usepackage[ % options to be optimised TODO
   style=verbose
  ,backend=biber
@@ -55,9 +60,28 @@
 % Make reference list by bold number followed by dot.
 \DeclareFieldFormat{labelnumberwidth}{\mkbibbold{#1.}}
 % --- END Bibliography ---
+
+%
+% --- Additional packages here ---
+%
+% \usepackage{indentfirst}                                 % for Portuguese (1st par always indented)
+\usepackage{url}                                           % for making urls clickable
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}              % proper formatting for caption text
+% --- END additional packages ---
+
+%
+% --- Custom Includes ---
+%
+\input{includes/inc_custom_commands}
+\input{includes/inc_mathematics}
+% --- END Custom Includes ---
+
+%
 % --- HYPER references et al.---
-\usepackage{xcolor}                                         % for MidnightBlue colour!
 % ***NOTE*** The hyperref package if used, MUST BE THE LAST ONE included!
+%
+\usepackage{xcolor}                                        % for MidnightBlue colour!
 \usepackage[pagebackref=false,                             % biblatex takes care of this
             bookmarks=true,
             colorlinks=true,
@@ -67,7 +91,3 @@
             linktocpage=true]{hyperref}
 \hypersetup{pdfencoding=auto}                              % LuaTeX garbles TOC in pdf viewer without this (see: http://tex.stackexchange.com/questions/24445/hyperref-lualatex-and-unicode-bookmarks-issue-garbled-page-numbers-in-ar-for-l)
 % --- END HYPER references et al.---
-% --- Custom Includes ---
-\input{includes/inc_custom_commands}
-\input{includes/inc_mathematics}
-% --- END Custom Includes ---
