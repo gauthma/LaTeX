@@ -13,8 +13,8 @@ NAME="presentation"
 ENDNAME=$(NAME)
 
 TEXCMD=lualatex
-TEXCMDOPTS=--interaction=batchmode --shell-escape
-DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape
+TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1
+DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1
 BIBCMD=biber
 
 all : 
