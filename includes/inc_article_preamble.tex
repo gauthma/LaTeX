@@ -37,6 +37,14 @@
 %-------------------------
 
 % --- Bibliography ---
+%
+% --- --- Languages et al. --- ---
+% Language must be set before biblatex is used, or error ensues.
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\setkeys{english}{variant=british}
+% \setmainlanguage{portuges}
+% END --- --- Languages et al. --- ---
 \usepackage[ % options to be optimised TODO
   style=verbose
  ,backend=biber
@@ -63,8 +71,9 @@
 % --- END Bibliography ---
 
 % --- HYPER references et al.---
-\usepackage{xcolor}                                         % for MidnightBlue colour!
 % ***NOTE*** The hyperref package if used, MUST BE THE LAST ONE included!
+%
+\usepackage{xcolor}                                        % for MidnightBlue colour!
 \usepackage[pagebackref=false,                             % biblatex takes care of this
             bookmarks=true,
             colorlinks=true,

@@ -13,8 +13,8 @@ NAME="presentation"
 ENDNAME=$(NAME)
 
 TEXCMD=lualatex
-TEXCMDOPTS=--interaction=batchmode --shell-escape
-DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape
+TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1
+DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1
 BIBCMD=biber
 
 all : 
@@ -30,7 +30,7 @@ full :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
 clean :
-	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb}
+	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb} *.synctex.gz
 	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo,xdy}
 	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot} *-blx.bib
 

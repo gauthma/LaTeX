@@ -121,7 +121,7 @@ TeX source file, to the corresponding place in the PDF file (**forward
 search**), or the other way round (**backward search**). The `vim`
 plugin I use for LaTeX management---the awesome TeX-9---is synctex
 enabled, but sadly only for *graphical* `vim` (`gvim`) and `evince`.
-The setup I elaborate below will get us synctex for *terminal* `vim` an
+The setup I elaborate below will get us synctex for *terminal* `vim` and
 `okular` (it still requires TeX-9, though). And of course, your document
 must have been compiled with `--synctex=1`, or have synctex enabled in
 some other manner.
@@ -182,9 +182,9 @@ Lastly, in `okular`'s preferences, set the **Editor** to
 `vim --servername VIM --remote +%l %f`
 
 Now, **in browse mode only** (`Ctrl+1`), hitting `Shift` and left
-clicking in a word should move the cursor in vim to the relevant place.
-If you're using TeX-9's `mainfile:` modeline, vim will also open the
-relevant file, if necessary. How awesome is that?!
+clicking in a word should move the cursor in `vim` to the relevant
+place. If you're using TeX-9's `mainfile:` modeline, `vim` will also
+open the relevant file, if necessary. How awesome is that?!
 
 ArchLinux (AL) packages 
 ---
