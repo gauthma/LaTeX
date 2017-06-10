@@ -1,24 +1,4 @@
-% --- math packages (in ArchLinux they're all part of TeXLive) ---
-
-\usepackage{amsmath}   % has to come before eulervm, or things bork!
-\usepackage{amsthm}    % required for proof environ (et al.)
-% --- END math packages ---
-
-\input{includes/inc_common_math}
-
-\makeatletter
-% If no newline after theorem et al environment,
-% then no indentation either.
-\patchcmd{\@endtheorem}{\@endpefalse}{}{}{}
-\patchcmd{\endproof}{\@endpefalse}{}{}{}
-\makeatother
-
-% math theorem environments
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{definition}[theorem]{Definition} % 'def' cannot be used as environ name
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-
-\renewcommand\qedsymbol{$\blacksquare$}  % for proofs to end with a black *filled* square (requires amssymb)
+%---------------------------------------------------------------------
+% --- Place in this file the required math stuff (if any), and then
+% --- have it \input'd where required.
+%---------------------------------------------------------------------

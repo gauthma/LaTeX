@@ -1,0 +1,79 @@
+---
+title: Mathematics for TeX archive
+author: gauthma
+date: 2017-06-10
+---
+
+# Intro
+
+This document lists mathematics for TeX snippets. Copy to
+`inc_mathematics.tex` (or do anything else) as required.
+
+# Environments 
+
+This works in article et al., but b0rks in presentation.
+
+~~~ tex
+% --- math packages (in ArchLinux they're all part of TeXLive) ---
+\usepackage{amsmath}   % has to come before eulervm, or things bork!
+\usepackage{amsthm}    % required for proof environ (et al.).
+\usepackage{amssymb}   % required (at least) for proof environ black square.
+% --- END math packages ---
+
+% If no newline after theorem et al environment,
+% then no indentation either.
+\makeatletter
+\patchcmd{\@endtheorem}{\@endpefalse}{}{}{}
+\patchcmd{\endproof}{\@endpefalse}{}{}{}
+\makeatother
+
+% math theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition} % 'def' cannot be used as environ name.
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\renewcommand\qedsymbol{$\blacksquare$}
+~~~
+
+# Quantifiers
+
+It's a cheat but this makes spacing less wrong around quantifiers:
+
+~~~ tex
+\DeclareMathOperator{\Nexists}{\nexists}
+\DeclareMathOperator{\Exists}{\exists}
+\DeclareMathOperator{\Forall}{\forall}
+~~~
+
+# Algebraic stuff
+
+For set conditional definition. Unknown for presentation.
+
+~~~ tex
+\usepackage{mathtools}
+% https://tex.stackexchange.com/questions/180308/why-dont-the-curly-braces-and-the-mid-bar-become-bigger
+\providecommand\given{}  % just to make sure it exists
+\newcommand\SetSymbol[1][]{\nonscript\:#1\vert\nonscript\:\allowbreak}
+\DeclarePairedDelimiterX\Set[1]\lbrace\rbrace{%
+  \renewcommand\given{\SetSymbol[\delimsize]}#1}
+~~~
+
+For `\norm` and `\abs` (starred versions grow when needed):
+
+~~~ tex
+\usepackage{mathtools}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+~~~
+
+## Relation vs. Operator
+
+Short and simple:
+
+~~~ tex
+% \mid -> binary relation
+% \vert -> binary operator
+~~~

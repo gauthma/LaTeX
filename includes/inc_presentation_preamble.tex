@@ -1,9 +1,9 @@
-\usepackage[UKenglish]{babel}                               % replace UKenglish with portuguese or other lang
-\usepackage{fontspec}                                       % needed for non-ascii chars to display correctly
+\usepackage[UKenglish]{babel}                              % replace UKenglish with portuguese or other lang
+\usepackage{fontspec}                                      % needed for non-ascii chars to display correctly
 
-\usepackage{sfmath}
-\usepackage{tikz}
-\usepackage{marvosym}                                       % for \Smiley, and LOTS of other things
+\usepackage{sfmath}                                        % math in sans serif font
+\usepackage{tikz}                                          % to draw pictures!
+\usepackage{marvosym}                                      % for \Smiley, and LOTS of other things
 
 % Arev is a great font for presentations. However, it cannot display some
 % characters, namely € (euro), «, » and §. If these are really necessary, 
@@ -25,41 +25,30 @@
 % Align with \fadeTo (easier for vim-motions when changing numbers)
 \newcommand{\fadeFr}[1]{\fadeFrom{#1}}
 
-% \style{slide.size=90}                                     % use big fonts and images
-\style{foot.text.bot.right=\theslidenum/\lastslide}         % slide numbers are ugly... but necessary
+% \style{slide.size=90}                                    % use big fonts and images
+\style{foot.text.bot.right=\theslidenum/\lastslide}        % slide numbers are ugly... but necessary
 
 % Different kinds of (symbol) bullets
-\newcommand{\bulletA}[1]{ %
+\newcommand{\bulletA}[1]{%
 	\hspace{0.5em}$\ast$ #1}
-\newcommand{\bulletB}[1]{ %
+\newcommand{\bulletB}[1]{%
 	\hspace{0.5em}$\bullet$ #1}
-\newcommand{\bulletD}[1]{ %
+\newcommand{\bulletD}[1]{%
 	\hspace{0.5em}$\diamond$ #1}
-\newcommand{\bulletT}[1]{ %
+\newcommand{\bulletT}[1]{%
 	\hspace{0.5em}$\triangleright$ #1}
 
 % Numbered bullet:
 % \bulletN{<number>} text...
-\newcommand{\bulletN}[2]{ %
+\newcommand{\bulletN}[2]{%
 	\hspace{0.5em}$#1.$ #2}
 
-\newcommand{\topic}[1]{ %
+\newcommand{\topic}[1]{%
 	\Banner{#1}}
 
-% --- math packages (in ArchLinux they're all part of TeXLive) ---
-
-\usepackage{amssymb}   % for blackboard math (automagically loaded in article)
-\usepackage{amsmath}   % has to come before eulervm, or things bork!
-\usepackage{amsthm}    % required for proof environ and remark theoremstyle (et al.)
-% --- END math packages ---
-
-% Uncomment if needed.
-% \input{inc_common_math}
-
-% math theorem environments
-\newtheoremframe{theorem}{Theorem}
-\newtheoremframe{corollary}{Corollary}
-\newtheoremframe{lemma}{Lemma}
-\newtheoremframe{definition}{Definition} % 'def' cannot be used as environ name
-\theoremstyle{remark}
-\newtheoremframe{remark}{Remark}
+%---------------------
+% --- CUSTOM STUFF ---
+%---------------------
+%-------------------------
+% --- END CUSTOM STUFF ---
+%-------------------------
