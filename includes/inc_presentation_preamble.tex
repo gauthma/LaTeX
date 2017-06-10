@@ -29,14 +29,12 @@
 \style{foot.text.bot.right=\theslidenum/\lastslide}        % slide numbers are ugly... but necessary
 
 % Different kinds of (symbol) bullets
-\newcommand{\bulletA}[1]{%
-	\hspace{0.5em}$\ast$ #1}
-\newcommand{\bulletB}[1]{%
-	\hspace{0.5em}$\bullet$ #1}
-\newcommand{\bulletD}[1]{%
-	\hspace{0.5em}$\diamond$ #1}
-\newcommand{\bulletT}[1]{%
-	\hspace{0.5em}$\triangleright$ #1}
+\newlength{\bulletIndentLen}
+\setlength{\bulletIndentLen}{0.5em}
+\newcommand{\bulletA}{\hspace{\bulletIndentLen}$\ast$ }
+\newcommand{\bulletB}{\hspace{\bulletIndentLen}$\bullet$ }
+\newcommand{\bulletD}{\hspace{\bulletIndentLen}$\diamond$ }
+\newcommand{\bulletT}{\hspace{\bulletIndentLen}$\triangleright$ }
 
 % Numbered bullet:
 % \bulletN{<number>} text...
