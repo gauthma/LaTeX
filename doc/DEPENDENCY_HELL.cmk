@@ -11,3 +11,14 @@ unexpected (at least to me) dependencies.
 
 * mathdesign
 	- amssymb (provides `\blackquare` for QED symbol)
+
+## Breakages due to (mis)ordering ##
+
+##### amssymb, bm and stmaryrd
+
+amssymb and stmaryrd break if used together (`\circledS` command defined
+by both). To overcome this, before loading amssymb, do
+`\let\circledS\undefined`.
+
+Also bm, if used, must come *after* amssymb; otherwise `Error: Too many
+symbol fonts declared` ensues.
