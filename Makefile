@@ -5,7 +5,7 @@
 # presentation.tex
 # tikzfig.tex
 #
-NAME="presentation"
+NAME="article"
 
 # Optional: the final name of the .pdf file (without extension).
 # In my setup, works "out of the box" with spaces, foreigh chars, ...
