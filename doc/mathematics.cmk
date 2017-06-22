@@ -1,7 +1,7 @@
 ---
 title: Mathematics for TeX archive
 author: gauthma
-date: 2017-06-10
+date: 2017-06-22
 ---
 
 # Intro
@@ -38,6 +38,20 @@ This works in article et al., but b0rks in presentation.
 \renewcommand\qedsymbol{$\blacksquare$}
 ~~~
 
+# Functions
+
+Arguments: letter that names the function, object set, range set.
+
+~~~ tex
+\newcommand\funcdecl[#3]{#1\colon #2 \rightarrow #3}
+~~~
+
+Arguments: independent variable, function expression.
+
+~~~ tex
+\newcommand\funcdef[#2]{#1 \mapsto #2}
+~~~
+
 # Quantifiers
 
 It's a cheat but this makes spacing less wrong around quantifiers:
@@ -50,16 +64,37 @@ It's a cheat but this makes spacing less wrong around quantifiers:
 
 # Algebraic stuff
 
-For set conditional definition. Unknown for presentation.
+## Sets
+
+For set conditional definition. Unknown if works for presentation.
 
 ~~~ tex
 \usepackage{mathtools}
 % https://tex.stackexchange.com/questions/180308/why-dont-the-curly-braces-and-the-mid-bar-become-bigger
 \providecommand\given{}  % just to make sure it exists
 \newcommand\SetSymbol[1][]{\nonscript\:#1\vert\nonscript\:\allowbreak}
-\DeclarePairedDelimiterX\Set[1]\lbrace\rbrace{%
-  \renewcommand\given{\SetSymbol[\delimsize]}#1}
+\DeclarePairedDelimiterX\Set[1]\lbrace\rbrace{\, %
+  \renewcommand\given{\SetSymbol[\delimsize]}#1 \,}
 ~~~
+
+The extra space is according Knuth's recommendation (only) for
+conditionally defined sets[^1]. Example usage: 
+
+~~~ tex
+\Set[\Big]{x \in \mathbb{Q} \given \left(\frac{x}{2}\right)^2=1}
+~~~
+
+The optional argument is to correct the size of braces and middle bar,
+if necessary.
+
+For "regular" extensively (and thus non conditionally) defined sets, use
+something like:
+
+~~~ tex
+\newcommand\eSet[1]{\{#1\}}
+~~~
+
+## Vectors et al
 
 For `\norm` and `\abs` (starred versions grow when needed):
 
@@ -77,3 +112,5 @@ Short and simple:
 % \mid -> binary relation
 % \vert -> binary operator
 ~~~
+
+[^1]: https://tex.stackexchange.com/questions/37789/using-colon-or-in-formulas
