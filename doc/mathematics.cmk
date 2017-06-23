@@ -11,7 +11,9 @@ This document lists mathematics for TeX snippets. Copy to
 
 # Environments 
 
-This works in article et al., but b0rks in presentation.
+This works in article et al., but b0rks in presentation. For making the
+optional names of theorems and definitions bold, see
+[this](https://tex.stackexchange.com/questions/43966/how-to-make-the-optional-title-of-a-theorem-bold-with-amsthm).
 
 ~~~ tex
 % --- math packages (in ArchLinux they're all part of TeXLive) ---
@@ -25,6 +27,19 @@ This works in article et al., but b0rks in presentation.
 \makeatletter
 \patchcmd{\@endtheorem}{\@endpefalse}{}{}{}
 \patchcmd{\endproof}{\@endpefalse}{}{}{}
+\makeatother
+
+% Make optional names for theorems and definitions bold (assuming amsthm is 
+% loaded).
+\makeatletter
+\def\th@plain{%
+  \thm@notefont{}% same as heading font
+  \itshape % body font
+}
+\def\th@definition{%
+  \thm@notefont{}% same as heading font
+  \normalfont % body font
+}
 \makeatother
 
 % math theorem environments
