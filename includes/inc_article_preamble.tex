@@ -9,16 +9,12 @@
 \microtypesetup{draft=true}                                % see README
 % --- END code for FONTS ---
 
-% --- Languages, style et al. ---
-\usepackage{polyglossia}
-\setmainlanguage{english}
-\setkeys{english}{variant=british}
-% \setmainlanguage{portuges}
+% --- Style, etc. ---
 % \usepackage{indentfirst}                                 % needed when writing in Portuguese (first paragraph is always indented)
 \usepackage{url}                                           % for making urls clickable
 \usepackage{graphicx}                                      % for graphics inclusion, ...
 \usepackage[font=small,labelfont=bf]{caption}              % proper formatting for caption text
-% --- END Language, style et al. ---
+% --- END style etc. ---
 
 % --- Page LAYOUT ---
 % **1 OR 2 COLUMNS** Of the next three lines: use first for 1column, next two for 2column
@@ -38,13 +34,14 @@
 
 % --- Bibliography ---
 %
-% --- --- Languages et al. --- ---
+% --- --- Languages --- ---
 % Language must be set before biblatex is used, or error ensues.
 \usepackage{polyglossia}
 \setmainlanguage{english}
 \setkeys{english}{variant=british}
 % \setmainlanguage{portuges}
-% END --- --- Languages et al. --- ---
+\usepackage{csquotes}                                      % Suggested by polyglossia
+% END --- --- Languages --- ---
 \usepackage[ % options to be optimised TODO
   style=verbose
  ,backend=biber
