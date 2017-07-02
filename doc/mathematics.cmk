@@ -58,13 +58,13 @@ optional names of theorems and definitions bold, see
 Arguments: letter that names the function, object set, range set.
 
 ~~~ tex
-\newcommand\funcdecl[#3]{#1\colon #2 \rightarrow #3}
+\newcommand\funcdecl[3]{#1\colon #2 \rightarrow #3}
 ~~~
 
 Arguments: independent variable, function expression.
 
 ~~~ tex
-\newcommand\funcdef[#2]{#1 \mapsto #2}
+\newcommand\funcdef[2]{#1 \mapsto #2}
 ~~~
 
 # Quantifiers
