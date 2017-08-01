@@ -45,6 +45,7 @@
 % END --- --- Languages --- ---
 \usepackage[ % options to be optimised TODO
   style=verbose
+ ,dateabbrev=false
  ,backend=biber
  ,backref=true
  ,style=numeric-comp  % numerical-compressed
@@ -67,6 +68,16 @@
 \DeclareNameAlias{default}{last-first}
 % Make reference list by bold number followed by dot.
 \DeclareFieldFormat{labelnumberwidth}{\mkbibbold{#1.}}
+% Chapter name of bibliography section: References
+% http://tex.stackexchange.com/questions/56950/trying-to-change-bibliography-references-header
+\DefineBibliographyStrings{english}{%
+  bibliography = {References},
+}
+% Date *displayed* format: Month Day, Year.
+\DeclareFieldFormat{urldate}{%
+  (Accessed: \mkbibmonth{\thefield{urlmonth}}\addspace%
+	\thefield{urlday},\addspace%
+  \thefield{urlyear}\isdot)}
 % --- END Bibliography ---
 
 % --- HYPER references et al.---
