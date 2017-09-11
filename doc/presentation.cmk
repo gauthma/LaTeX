@@ -56,3 +56,41 @@ class.  As `\graphicbox` command options, you can scale the image, or
 trim it (i.e. set the amount of image to *remove*, from left, bottom,
 right and top sides, in this order); note that this requires the `clip`
 option to be set.
+
+## Backgound image
+
+This section describes how to add a faded background image to all
+slides, except to the title and question mark ones. Let us say your
+image is named `bg.pdf`.
+
+This goes in the preamble:
+
+~~~ tex
+\usepackage{eso-pic}
+\newcommand\BackgroundPic{%
+\AtStockLowerLeft{%
+\put(0,0){\parbox[b][\paperheight]{\paperwidth}{{\transparent{0.1}%
+	\hspace*{0.98\pagewidth}\vspace{-4em}%
+	\includegraphics[scale=2.5,keepaspectratio]{haslab-logo_vectorial}}%
+}}}}
+~~~
+
+You will need to tweak the `\vspace` and `\hspace` lens to place the
+image properly (I usually put it a little past the right edge of the
+slides). After the title page stuff, add the following:
+
+~~~ tex
+\clearpage
+\AddToShipoutPicture{\BackgroundPic}
+~~~
+
+The `\clearpage` is necessary, otherwise the background is added to all
+slides, including title and question mark. Then, just before the
+`\begin{slide}` of the question mark, add the following:
+
+~~~ tex
+\ClearShipoutPicture
+~~~
+
+You may need to compile twice to make sure some things (e.g.\
+transparency) are working properly. Other than that, you are done.
