@@ -67,6 +67,7 @@ This goes in the preamble:
 
 ~~~ tex
 \usepackage{eso-pic}
+\usepackage{transparent}
 \newcommand\BackgroundPic{%
 \AtStockLowerLeft{%
 \put(0,0){\parbox[b][\paperheight]{\paperwidth}{{\transparent{0.1}%
