@@ -5,12 +5,12 @@
 # presentation.tex
 # tikzfig.tex
 #
-NAME="presentation"
+NAME="article"
 
 # Optional: the final name of the .pdf file (without extension).
 # In my setup, works "out of the box" with spaces, foreigh chars, ...
 # ENDNAME="my complicated file name"
-ENDNAME=$(NAME)
+ENDNAME="$(NAME)_FINAL"
 
 TEXCMD=lualatex
 TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1
@@ -29,13 +29,14 @@ full :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
+final :
+	make full
+	cp $(NAME).pdf $(ENDNAME).pdf
+
 clean :
 	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb} *.synctex.gz
 	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo,xdy}
 	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot} *-blx.bib
-
-name_final :
-	mv $(NAME).pdf $(ENDNAME).pdf
 
 # see Note (1)
 get_compiler_pid :
