@@ -7,9 +7,11 @@
 #
 NAME="article"
 
-# Optional: the final name of the .pdf file (without extension).
-# In my setup, works "out of the box" with spaces, foreigh chars, ...
-# ENDNAME="my complicated file name"
+# The final name of the .pdf file (without extension). Defaults to original
+# name with "_FINAL" appended. In my setup, works "out of the box" with spaces,
+# foreigh chars, ...
+# I also use this to keep a "full version" of a large document (for
+# consultation only), while writing on a reduced version (\includeonly, etc...)
 ENDNAME="$(NAME)_FINAL"
 
 TEXCMD=lualatex
