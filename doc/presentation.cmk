@@ -76,9 +76,10 @@ This goes in the preamble:
 }}}}
 ~~~
 
-You will need to tweak the `\vspace` and `\hspace` lens to place the
+You will need to tweak the `\vspace` and `\hspace` lenghts to place the
 image properly (I usually put it a little past the right edge of the
-slides). After the title page stuff, add the following:
+slides). After the title page stuff, *outside of the slide environment*,
+add the following:
 
 ~~~ tex
 \clearpage
@@ -87,7 +88,8 @@ slides). After the title page stuff, add the following:
 
 The `\clearpage` is necessary, otherwise the background is added to all
 slides, including title and question mark. Then, just before the
-`\begin{slide}` of the question mark, add the following:
+`\begin{slide}` of the question mark (i.e. again out of the slide
+environment), add the following:
 
 ~~~ tex
 \ClearShipoutPicture
