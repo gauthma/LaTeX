@@ -1,0 +1,15 @@
+\RequirePackage{luatex85}
+
+\documentclass{standalone}
+
+\usepackage[all]{xy}
+
+\begin{document}
+% The second axiom from category theory,
+% taken from xyguide.pdf
+\xymatrix{
+  A \ar[r]^f \ar[dr]_{f;g}
+  & B \ar[d]^g \ar[dr]^{g;h} \\
+  & C \ar[r]_h & D
+}
+\end{document}

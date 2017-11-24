@@ -5,7 +5,7 @@ TYPE="$1"
 function usage()
 {
 	cat <<EOF
-Usage: $ sh $0 [article, cv, letter, presentation, tikzfig]
+Usage: $ sh $0 [article, cv, letter, presentation, standalone]
 
 To call script pwd must be same as script location.
 
@@ -32,7 +32,7 @@ case "$TYPE" in
 		;;
 	presentation)
 		;;
-	tikzfig)
+	standalone)
 		;;
 	-h)
 		usage
@@ -52,9 +52,9 @@ rm -rf .git
 rm -f \
 $(ls  article.* \
       cv.* \
-  		letter.* letter_logo* \
-  		presentation.* \
-  		tikzfig.* \
+      letter.* letter_logo* \
+      presentation.* \
+      standalone.* \
 | grep -v $TYPE)
 
 # Setup the Makefile (requires GNU sed)

@@ -22,7 +22,7 @@ Usage
 ```bash
 $ git clone https://github.com/gauthma/LaTeX.git article_dir
 $ cd article_dir
-$ sh setup.sh [article, cv, letter, presentation, tikzfig]
+$ sh setup.sh [article, cv, letter, presentation, standalone]
 ```
 
 The `setup.sh` script will edit `Makefile` and set `NAME` to the *main
@@ -64,12 +64,12 @@ for italics there is the `\iemph` command.
 For math, include the file `inc_mathematics_presentation.tex`---comment
 out if not needed.
 
-### The Tikz skeleton
+### The standalone skeleton
 
-The file for this is named `tikzfig.tex`. The example is adapted from
-[here][5]. I use it as a playground for TikZ. The PDF produced will be a
+The file for this is named `standalone.tex`. I use it as a playground
+for graphics packages, like `xy` or `TikZ`. The PDF produced will be a
 "full-scale" picture. To include it say, on a presentation, do
-`\centering{\graphicbox{figures/quantum_diag}}`.
+`\centering{\graphicbox{figures/standalone}}`.
 
 Tweakings
 ---
@@ -268,5 +268,4 @@ $ source ~/.bashrc
 [2]: http://www.youthedesigner.com/2012/08/12/how-to-explain-raster-vs-vector-to-your-clients/   
 [3]: http://en.wikipedia.org/wiki/TeX_Directory_Structure  
 [4]: http://tex.stackexchange.com/questions/1137/where-do-i-place-my-own-sty-files-to-make-them-available-to-all-my-tex-files  
-[5]: http://www.texample.net/tikz/examples/quantum-circuit/  
 [6]: http://www.tex.ac.uk/cgi-bin/texfaq2html?label=privinst

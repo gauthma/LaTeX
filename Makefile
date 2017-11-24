@@ -3,9 +3,9 @@
 # cv.tex
 # letter.tex
 # presentation.tex
-# tikzfig.tex
+# standalone.tex
 #
-NAME="article"
+NAME="standalone"
 
 # The final name of the .pdf file (without extension). Defaults to original
 # name with "_FINAL" appended. In my setup, works "out of the box" with spaces,
