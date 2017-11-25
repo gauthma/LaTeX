@@ -1,0 +1,50 @@
+\documentclass[dvipsnames]{llncs}
+
+\input{includes/inc_llncs_preamble}
+
+% --- Title heading ---
+\title{
+Skeleton for \LaTeX\ articles  % main title
+\\[1em]
+\normalsize A first sketch for a general template for article writing  % subtitle
+}
+\author{
+  R.\ Madillo\inst{1}
+\and
+  Jane Doe\inst{2}
+}
+\institute{
+  \LaTeX\ Corp., Shire, Middle Earth% don't delete this '%'!
+  \thanks{%
+    This work is financed by some very nice folks!
+  }\\
+  \email{mad@TeX.tld}
+\and
+  Evil Corp., NY, U.S.% don't delete this '%'!
+  \thanks{%
+    This work is financed by some very evil folks!
+  }\\
+  \email{jane@evil.tld}
+}
+
+\date{}
+% --- END title heading ---
+% --- END PREAMBLE ---
+
+\begin{document}
+\maketitle
+% \tableofcontents
+
+\begin{abstract}
+  Some tips for a \LaTeX\ template.
+\end{abstract}
+
+\section{Introduction}
+	Science is cool!~\cite{Sagan}. But lots of people don't get 
+	it\ldots~\cite{Feynman74}.
+  
+\bibliography{sources}
+\bibliographystyle{splncs03}
+\end{document}
+
+% vim: spell spelllang=en

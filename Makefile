@@ -2,16 +2,15 @@
 # article.tex
 # cv.tex
 # letter.tex
+# llncs.tex
 # presentation.tex
 # standalone.tex
 #
-NAME="standalone"
+NAME="article"
 
 # The final name of the .pdf file (without extension). Defaults to original
 # name with "_FINAL" appended. In my setup, works "out of the box" with spaces,
 # foreigh chars, ...
-# I also use this to keep a "full version" of a large document (for
-# consultation only), while writing on a reduced version (\includeonly, etc...)
 ENDNAME="$(NAME)_FINAL"
 
 TEXCMD=lualatex
@@ -31,9 +30,14 @@ full :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
-final :
+Fullcopy :
 	make full
-	cp $(NAME).pdf $(ENDNAME).pdf
+	mv "$(NAME).pdf" "$(NAME)_FULL_COPY.pdf"
+
+final :
+	make clean
+	make full
+	cp "$(NAME).pdf" "$(ENDNAME).pdf"
 
 clean :
 	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb} *.synctex.gz
@@ -44,7 +48,7 @@ clean :
 get_compiler_pid :
 	pidof $(TEXCMD) || echo -n ""
 
-.PHONY : all debug full clean name_final get_compiler_pid
+.PHONY : all debug full Fullcopy final clean get_compiler_pid
 
 # NOTES
 #

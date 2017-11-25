@@ -5,7 +5,7 @@ TYPE="$1"
 function usage()
 {
 	cat <<EOF
-Usage: $ sh $0 [article, cv, letter, presentation, standalone]
+Usage: $ sh $0 [article, cv, letter, llncs, presentation, standalone]
 
 To call script pwd must be same as script location.
 
@@ -30,6 +30,8 @@ case "$TYPE" in
 		;;
 	letter)
 		;;
+	llncs)
+		;;
 	presentation)
 		;;
 	standalone)
@@ -53,9 +55,15 @@ rm -f \
 $(ls  article.* \
       cv.* \
       letter.* letter_logo* \
+      llncs.* \
       presentation.* \
       standalone.* \
 | grep -v $TYPE)
 
 # Setup the Makefile (requires GNU sed)
 sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
+
+if [[ "${TYPE}" == "llncs" ]]; then
+  sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
+  sed -i "/^BIBCMD=/c\BIBCMD=bibtex" Makefile
+fi

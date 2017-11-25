@@ -10,7 +10,13 @@
 % --- END code for FONTS ---
 
 % --- Style, etc. ---
-\usepackage[runin]{abstract}                               % To avoid an extra line saying ``Abstract''. LoL.
+% To avoid an extra line saying ``Abstract''. LoL.
+\renewenvironment{abstract}
+  {\list{}{
+    \leftmargin=2.5cm
+    \rightmargin\leftmargin}%
+    \item[\textbf{Abstract.}]\relax}
+  {\endlist}
 \usepackage{url}                                           % for making urls clickable
 \usepackage{graphicx}                                      % for graphics inclusion, ...
 \usepackage[font=small,labelfont=bf]{caption}              % proper formatting for caption text
@@ -18,11 +24,7 @@
 % --- END style etc. ---
 
 % --- Page LAYOUT ---
-% **1 OR 2 COLUMNS** Of the next three lines: use first for 1column, next two for 2column
-% ALSO CHECK '\documentclass' IN MAIN TeX FILE!
 \usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
-% \usepackage[top=2.5cm, bottom=2.5cm, left=1.5cm, right=1.5cm]{geometry}
-% \setlength{\columnsep}{20pt}
 % --- END Page LAYOUT ---
 
 %---------------------

@@ -1,0 +1,18 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{url}                                           % for making urls clickable
+\usepackage{graphicx}                                      % for graphics inclusion, ...
+
+\newcommand{\emd}{\textemdash}
+\newcommand{\fn}[1]{\footnote{#1}}
+
+\usepackage{xcolor}                                        % for MidnightBlue colour!
+\usepackage[pagebackref=false,                             % biblatex takes care of this
+            bookmarks=true,
+            colorlinks=true,
+            linkcolor=MidnightBlue,
+            urlcolor=MidnightBlue,
+            citecolor=MidnightBlue,
+            linktocpage=true]{hyperref}
+\hypersetup{pdfencoding=auto}                              % LuaTeX garbles TOC in pdf viewer without this (see: http://tex.stackexchange.com/questions/24445/hyperref-lualatex-and-unicode-bookmarks-issue-garbled-page-numbers-in-ar-for-l)

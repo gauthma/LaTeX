@@ -52,6 +52,16 @@ footnotes (i.e. don't have any `\endnote{blah blah}` in the text), then
 you must comment out the `\theendnotes` command, otherwise compiling the
 document you get an error saying that the `.ent` file was not found.
 
+### The llncs skeleton
+
+Much like article, but uses Springer's `llncs` style (including
+bibliography), which is assumed installed. Useful because it is designed
+to run with `pdflatex` and `bibtex`, which is what is expected when
+submitting papers to conferences or journals (you usually have to submit
+the `.tex` sources and check the PDF that the submission site
+generates)---and they almost always assume those sources compile with
+`pdflatex`.
+
 ### The Presention skeleton
 
 The `PRESENTATION` skeleton (`presentation.tex`) depends on the
@@ -64,7 +74,7 @@ for italics there is the `\iemph` command.
 For math, include the file `inc_mathematics_presentation.tex`---comment
 out if not needed.
 
-### The standalone skeleton
+### The Standalone skeleton
 
 The file for this is named `standalone.tex`. I use it as a playground
 for graphics packages, like `xy` or `TikZ`. The PDF produced will be a
