@@ -1,12 +1,8 @@
-% **1 OR 2 COLUMNS** Of the next two ``\documentclass'' lines: 
-% -> use first for 1column, second for 2column
-% ALSO CHECK 'Page LAYOUT' in includes/inc_article_preamble.tex!
 \documentclass[a4paper,12pt,usenames,dvipsnames]{article}
-% \documentclass[a4paper,10pt,twocolumn,usenames,dvipsnames]{article}
 \input{includes/inc_article_preamble}
 
 %	--- BIBLIOGRAPHY (add filename WITH EXTENSION).
-\addbibresource{article.bib}
+\addbibresource{sources.bib}
 % --- END bibliography
 
 % --- Title page ---
@@ -16,10 +12,14 @@ Skeleton for \LaTeX\ articles  % main title
 \large A first sketch for a general template for article writing  % subtitle
 }
 \author{
-R.\ Madillo
-\\\texttt{
-rmadillo@acme.tld
-}}
+  R.\ Madillo\fn{
+    \LaTeX\ Corp., Shire, Middle Earth. \texttt{mad@TeX.tld}.
+  }
+\and
+  Jane Doe\fn{
+    Evil Corp., NY, U.S. \texttt{jane@evil.tld}.
+  }
+}
 \date{}
 % --- END title page ---
 % --- END PREAMBLE ---
@@ -29,7 +29,7 @@ rmadillo@acme.tld
 % \tableofcontents
 
 \begin{abstract}
-  \noindent Some tips for a \LaTeX\ template.
+  Some tips for a \LaTeX\ template.
 \end{abstract}
 
 \section{Introduction}
