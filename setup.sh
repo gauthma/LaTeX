@@ -50,20 +50,26 @@ case "$TYPE" in
 		fi
 esac
 
-rm -rf .git
-rm -f \
-$(ls  article.* \
-      cv.* \
-      letter.* letter_logo* \
-      llncs.* \
-      presentation.* \
-      standalone.* \
-| grep -v $TYPE)
+echo "WARNING! WARNING! WARNING!"
+echo "You are about to DELETE .git folder and data files!!"
+read -p "Are you sure you want to continue? [type uppercase y]" -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Y]$ ]]; then
+  rm -rf .git
+  rm -f \
+  $(ls  article.* \
+        cv.* \
+        letter.* letter_logo* \
+        llncs.* \
+        presentation.* \
+        standalone.* \
+  | grep -v $TYPE)
 
-# Setup the Makefile (requires GNU sed)
-sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
+  # Setup the Makefile (requires GNU sed)
+  sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
 
-if [[ "${TYPE}" == "llncs" ]]; then
-  sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
-  sed -i "/^BIBCMD=/c\BIBCMD=bibtex" Makefile
+  if [[ "${TYPE}" == "llncs" ]]; then
+    sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
+    sed -i "/^BIBCMD=/c\BIBCMD=bibtex" Makefile
+  fi
 fi
