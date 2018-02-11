@@ -62,3 +62,6 @@ get_compiler_pid :
 # (1) - `pidof` sets $? to 1 if no process of the given name is running, which
 # in turn causes `make` to spew a lengthy error message; the `echo` hack makes it
 # work properly.
+# (2) - For `llncs` uses pdflatex and bibtex:
+# TEXCMD=pdflatex
+# BIBCMD=bibtex
