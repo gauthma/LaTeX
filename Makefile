@@ -30,17 +30,20 @@ full :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
+# Runs in subdir created by Fullcopy target.
+_Fullcopy_subdir :
+	sed -e '/^\s*\\includeonly/ s/^/% /' -i $(NAME).tex
+	${MAKE} full
+
 Fullcopy :
 	mkdir -p _FULLCOPY
 	cp -r `ls | grep -v _FULLCOPY` _FULLCOPY/
-	cd _FULLCOPY/
-	make full
-	cd ..
+	${MAKE} -C _FULLCOPY _Fullcopy_subdir
 	mv "_FULLCOPY/$(NAME).pdf" "Fullcopy.pdf"
 
 final :
-	make clean
-	make full
+	${MAKE} clean
+	${MAKE} full
 	cp "$(NAME).pdf" "$(ENDNAME).pdf"
 
 clean :
