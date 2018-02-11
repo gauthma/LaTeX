@@ -18,7 +18,7 @@ TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1
 DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1
 BIBCMD=biber
 
-all : 
+all :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
 debug :
@@ -31,8 +31,12 @@ full :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
 Fullcopy :
+	mkdir -p _FULLCOPY
+	cp -r `ls | grep -v _FULLCOPY` _FULLCOPY/
+	cd _FULLCOPY/
 	make full
-	mv "$(NAME).pdf" "$(NAME)_FULL_COPY.pdf"
+	cd ..
+	mv "_FULLCOPY/$(NAME).pdf" "Fullcopy.pdf"
 
 final :
 	make clean
