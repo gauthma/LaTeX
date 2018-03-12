@@ -18,7 +18,7 @@ TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1
 DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1
 BIBCMD=biber
 
-all : 
+all :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
 debug :
@@ -30,13 +30,22 @@ full :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
+# Runs in subdir created by Fullcopy target.
+# Comments out all the \includeonly, if any
+# (so as to procude a Fullcopy).
+_Fullcopy_subdir :
+	sed -e '/^\s*\\includeonly/ s/^/% /' -i $(NAME).tex
+	${MAKE} full
+
 Fullcopy :
-	make full
-	mv "$(NAME).pdf" "$(NAME)_FULL_COPY.pdf"
+	mkdir -p _FULLCOPY
+	cp -r `ls | grep -v _FULLCOPY` _FULLCOPY/
+	${MAKE} -C _FULLCOPY _Fullcopy_subdir
+	mv "_FULLCOPY/$(NAME).pdf" "Fullcopy.pdf"
 
 final :
-	make clean
-	make full
+	${MAKE} clean
+	${MAKE} full
 	cp "$(NAME).pdf" "$(ENDNAME).pdf"
 
 clean :
