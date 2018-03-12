@@ -6,7 +6,7 @@
 # presentation.tex
 # standalone.tex
 #
-NAME="article"
+NAME="presentation"
 
 # The final name of the .pdf file (without extension). Defaults to original
 # name with "_FINAL" appended. In my setup, works "out of the box" with spaces,
