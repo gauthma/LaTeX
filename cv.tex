@@ -13,7 +13,6 @@
 \documentclass[a4paper,10pt]{extarticle}
 
 \usepackage[top=2.5cm,left=3cm,right=3cm,bottom=2.5cm]{geometry}
-%\usepackage[portuguese]{babel}     % i18n
 
 \usepackage[bitstream-charter]{mathdesign}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
@@ -32,10 +31,9 @@
 % This improves the quality of the PDF, but slows down the creation
 % time, so you might want to comment it until you have the final version.
 \usepackage{microtype}
-\usepackage{multicol}
 
 \usepackage{enumitem}
-\usepackage{marvosym}
+\usepackage{fontawesome}
 \usepackage{url}
 \usepackage[usenames,dvipsnames]{xcolor}  % for MidnightBlue colour
 \usepackage[colorlinks=true, urlcolor=MidnightBlue]{hyperref}
@@ -50,38 +48,21 @@
 
 \newenvironment{header}[1]
    {\raggedleft{\noindent\large\bfseries\raisebox{0pt}[\height][1ex]{%
-		 \Large\bfseries Curriculum Vit\ae\ --- #1\par}\hrule}%
+     \Large\bfseries{\itshape Curriculum Vit\ae}\ \hspace{0.1em} --- \hspace{0.1em} #1\par}\hrule}%
 		 \begin{center}}
 		 {\end{center}\medskip}
 
-% --> Change these lengths as needed
-\newlength{\leftheaderlength}\setlength{\leftheaderlength}{0.56\textwidth}
-\newlength{\rightheaderlength}\setlength{\rightheaderlength}{0.44\textwidth}
-
 \pagestyle{empty}
-
-\hyphenation{in-fra-struc-ture}
 
 \begin{document}
 
-% NB: table alignment b0rks if they do not have same # of rows;
-% so ensure that this is the case! (phantom is your friend)
-\begin{header}{Óscar Francisco Godinho Pereira} 
-	\begin{minipage}[t]{\leftheaderlength}%
-		\begin{tabular}{c l}
-			\Letter  & Postal address and phone number have been\\
-			         & withheld for privacy reasons\\
-							 & \phantom{xpto}
-		\end{tabular}
-	\end{minipage}%
-	\begin{minipage}[t]{\rightheaderlength}%
-		\begin{tabular}{cl}
-			\Keyboard   & \url{https://erroneousthoughts.org}\\
-			            & \texttt{oscar@erroneousthoughts.org}\\
-			\Mobilefone & 00 000 00 00\\
-			% \phantom{xpto}
-		\end{tabular}
-	\end{minipage}\\[1.5em]
+\begin{header}{Óscar Francisco Godinho Pereira}
+  \faHome \enskip  Postal address and phone number have been withheld for privacy reasons\\[0.7em]
+  \faFirefox \enskip \url{https://erroneousthoughts.org}%
+    \enskip \textbullet \enskip%
+    \faEnvelopeO \enskip \texttt{oscar@domain.name}%
+    \enskip \textbullet \enskip%
+    \faPhone\enskip +0 00000
 \end{header}
 
 \begin{topic}{Formal Education}
