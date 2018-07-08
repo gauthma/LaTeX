@@ -20,15 +20,15 @@ Usage
 ---
 
 ```bash
-$ git clone https://github.com/gauthma/LaTeX.git article_dir
-$ cd article_dir
-$ sh setup.sh [article, cv, letter, presentation, standalone]
+$ git clone https://github.com/gauthma/LaTeX.git document_dir
+$ cd document_dir
+$ sh setup.sh [report, cv, letter, presentation, standalone]
 ```
 
 The `setup.sh` script will edit `Makefile` and set `NAME` to the *main
 file*'s name. It will also **remove the .git folder**, in addition to
 any undeeded files, depending on the value of its argument. E.g. if
-argument is `cv`, then it will remove `article.*`, `letter.*`, etc.
+argument is `cv`, then it will remove `report.*`, `letter.*`, etc.
 
 **Warning**: the script requires **GNU sed** to edit the `Makefile`; if
 you don't have it, then comment that line and edit the `Makefile`
@@ -54,7 +54,7 @@ document you get an error saying that the `.ent` file was not found.
 
 ### The llncs skeleton
 
-Much like article, but uses Springer's `llncs` style (including
+Like an article, using Springer's `llncs` style (including
 bibliography), which is assumed installed. Useful because it is designed
 to run with `pdflatex` and `bibtex`, which is what is expected when
 submitting papers to conferences or journals (you usually have to submit
