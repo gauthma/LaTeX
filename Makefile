@@ -1,12 +1,12 @@
 # Options for name (remember that .tex extension is not needed):
-# article.tex
+# report.tex
 # cv.tex
 # letter.tex
 # llncs.tex
 # presentation.tex
 # standalone.tex
 #
-NAME="presentation"
+NAME="report"
 
 # The final name of the .pdf file (without extension). Defaults to original
 # name with "_FINAL" appended. In my setup, works "out of the box" with spaces,
