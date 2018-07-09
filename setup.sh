@@ -5,7 +5,7 @@ TYPE="$1"
 function usage()
 {
 	cat <<EOF
-Usage: $ sh $0 [article, cv, letter, llncs, presentation, standalone]
+Usage: $ sh $0 [report, cv, letter, llncs, presentation, standalone]
 
 To call script pwd must be same as script location.
 
@@ -24,7 +24,7 @@ if [ "$DIR" != "$CURR_DIR" ]; then
 fi
 
 case "$TYPE" in
-	article)
+	report)
 		;;
 	cv)
 		;;
@@ -57,7 +57,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -rf .git
   rm -f \
-  $(ls  article.* \
+  $(ls  report.* \
         cv.* \
         letter.* letter_logo* \
         llncs.* \
