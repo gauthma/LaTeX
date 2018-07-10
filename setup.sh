@@ -5,7 +5,7 @@ TYPE="$1"
 function usage()
 {
 	cat <<EOF
-Usage: $ sh $0 [article, cv, letter, llncs, presentation, standalone]
+Usage: $ sh $0 [report, cv, letter, llncs, presentation, standalone]
 
 To call script pwd must be same as script location.
 
@@ -24,7 +24,7 @@ if [ "$DIR" != "$CURR_DIR" ]; then
 fi
 
 case "$TYPE" in
-	article)
+	report)
 		;;
 	cv)
 		;;
@@ -51,13 +51,13 @@ case "$TYPE" in
 esac
 
 echo "WARNING! WARNING! WARNING!"
-echo "You are about to DELETE .git folder and data files!!"
+echo "You are about to DELETE .git folder and data files (and THIS SCRIPT)!!"
 read -p "Are you sure you want to continue? [type uppercase y]" -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -rf .git
   rm -f \
-  $(ls  article.* \
+  $(ls  report.* \
         cv.* \
         letter.* letter_logo* \
         llncs.* \
@@ -72,4 +72,6 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
     sed -i "/^BIBCMD=/c\BIBCMD=bibtex" Makefile
   fi
+  # finally, delete this script (no use for it after everything set up)
+  rm -- "$0"
 fi
