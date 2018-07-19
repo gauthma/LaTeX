@@ -8,7 +8,7 @@
 \newcommand{\fn}[1]{\footnote{#1}}
 
 \usepackage{xcolor}                                        % for MidnightBlue colour!
-\usepackage[pagebackref=false,                             % biblatex takes care of this
+\usepackage[pagebackref=true,                              % biblatex takes care of this -- but bibtex doesn't!
             bookmarks=true,
             colorlinks=true,
             linkcolor=MidnightBlue,
@@ -16,3 +16,12 @@
             citecolor=MidnightBlue,
             linktocpage=true]{hyperref}
 \hypersetup{pdfencoding=auto}                              % LuaTeX garbles TOC in pdf viewer without this (see: http://tex.stackexchange.com/questions/24445/hyperref-lualatex-and-unicode-bookmarks-issue-garbled-page-numbers-in-ar-for-l)
+
+% Provide context for backref numbers.
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{({%
+    \ifcase #1 Not cited%
+          \or Cited on page~#2%
+          \else Cited on pages #2%
+    \fi%
+})}
