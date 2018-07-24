@@ -51,7 +51,7 @@ final :
 clean :
 	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb} *.synctex.gz
 	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo,xdy}
-	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot} *-blx.bib
+	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot,brf} *-blx.bib
 
 # see Note (1)
 get_compiler_pid :
