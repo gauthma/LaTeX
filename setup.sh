@@ -64,6 +64,11 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
         presentation.* \
         standalone.* \
   | grep -v $TYPE)
+  rm -f \
+  $(ls  includes/inc_report_preamble.tex \
+        includes/inc_llncs_preamble.tex \
+        includes/inc_presentation_preamble.tex \
+  | grep -v $TYPE)
 
   # Setup the Makefile (requires GNU sed)
   sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
