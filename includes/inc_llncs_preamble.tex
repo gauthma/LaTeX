@@ -4,14 +4,16 @@
 \usepackage{url}                                           % for making urls clickable
 \usepackage{graphicx}                                      % for graphics inclusion, ...
 
-
 %--------------------------------------------------------
 %--------------------------------------------------------
 % ------------------- CUSTOM STUFF ----------------------
 %--------------------------------------------------------
 %--------------------------------------------------------
+
+% These commands I always use.
 \newcommand{\emd}{\textemdash}
 \newcommand{\fn}[1]{\footnote{#1}}
+\renewcommand{\ts}{\textsection}                           % llncs defines \ts, but uses it nowhere...
 %--------------------------------------------------------
 %--------------------------------------------------------
 % ----------------- END CUSTOM STUFF --------------------
@@ -30,9 +32,9 @@
 
 % Provide context for backref numbers.
 \renewcommand*{\backref}[1]{}
-\renewcommand*{\backrefalt}[4]{({%
+\renewcommand*{\backrefalt}[4]{{%
     \ifcase #1 Not cited%
           \or Cited on page~#2%
           \else Cited on pages #2%
     \fi%
-})}
+}.}
