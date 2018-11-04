@@ -32,7 +32,7 @@ full :
 
 # Runs in subdir created by Fullcopy target.
 # Comments out all the \includeonly, if any
-# (so as to procude a Fullcopy).
+# (so as to produce a Fullcopy).
 _Fullcopy_subdir :
 	sed -e '/^\s*\\includeonly/ s/^/% /' -i $(NAME).tex
 	${MAKE} full
