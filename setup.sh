@@ -76,7 +76,10 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   if [[ "${TYPE}" == "llncs" ]]; then
     sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
     sed -i "/^BIBCMD=/c\BIBCMD=bibtex" Makefile
+  elif [[ "${TYPE}" == "standalone" ]]; then
+    rm -rf includes/
+    rm sources.bib
   fi
-  # finally, delete this script (no use for it after everything set up)
+  # Finally, delete this script (no use for it after everything is set up)
   rm -- "$0"
 fi
