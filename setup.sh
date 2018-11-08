@@ -80,6 +80,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     rm -rf includes/
     rm sources.bib
   fi
-  # Finally, delete this script (no use for it after everything is set up)
+  # Finally remove README and delete this script (no use for it after everything is set up)
+  rm README.md
   rm -- "$0"
 fi
