@@ -13,6 +13,7 @@ NAME="report"
 # foreigh chars, ...
 ENDNAME="$(NAME)_FINAL"
 
+# See Note (2)
 TEXCMD=lualatex
 TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1
 DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1
@@ -48,12 +49,11 @@ final :
 	${MAKE} full
 	cp "$(NAME).pdf" "$(ENDNAME).pdf"
 
+# See Note (3)
 clean :
-	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb} *.synctex.gz
-	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo,xdy}
-	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot,brf} *-blx.bib
+	grep -v "\#\|^$$" .gitignore | while read in; do rm -f $$in; done
 
-# see Note (1)
+# See Note (1)
 get_compiler_pid :
 	pidof $(TEXCMD) || echo -n ""
 
@@ -67,3 +67,4 @@ get_compiler_pid :
 # (2) - For `llncs` uses pdflatex and bibtex:
 # TEXCMD=pdflatex
 # BIBCMD=bibtex
+# (3) - Removes the same file types that are ignored by git.
