@@ -1,5 +1,3 @@
-\RequirePackage{luatex85}
-
 \documentclass[16pt]{projector}
 
 \input{includes/inc_presentation_preamble}
@@ -34,14 +32,14 @@
 	{
 		\fadeTo{1}{85}
 		\fadeFr{3}{85}
-		\bulletN{19} Lorem ipsum dolor sit amet
+    \bulletN{19} Science is cool!~\citep{Sagan}
 	}
 	\vfill
 	{
 		\fadeTo{2}{85}
 		\fadeFr{4}{85}
-		\bulletB Consectetur \emph{adipiscing} elit, but a real\\
-		\hspace{1.5em}bit longer
+		\bulletB Unfortunately \emph{a big great many lot} of people\\
+    \hspace{1.5em}do not seem to get it\dots~\citep{Feynman74}
   }
 	\vfill
 	\topic{Topic B}
@@ -63,6 +61,13 @@ Lorem ipsur blah blah...
 	\end{verbatim}
 	\vfill
 \end{slide*}
+\begin{slide}
+  \Stripe{References}
+  \vfill
+  \bibliography{sources}
+  \bibliographystyle{plainnat}
+  \vfill
+\end{slide}
 \begin{slide}
 	\Stripe{Thank you for listening!}
 	\vfill

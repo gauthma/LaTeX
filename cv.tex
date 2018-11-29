@@ -1,14 +1,15 @@
 % My CV's .tex file. Inspired by this one:
 % http://www.danielmathews.info/about-me
 %
-% A pdf version (probably with outdated information, but with the same style)
-% can be found here:
+% A pdf version (probably with outdated information, but with the
+% same style) can be found here:
 % https://erroneousthoughts.org/media/OscarPereiraCV.pdf
 %
-% WARNING: as it uses custom fonts, this file is supposed to be compiled with
-% LuaTeX.
+% WARNING: as it uses custom fonts, this file is supposed to be
+% compiled with Lua(La)TeX.
 % 
-% NOTA BENE: this is an OUTDATED version, to illustrate the LaTeX structure only.
+% NOTA BENE: this is an OUTDATED version of my CV, to illustrate
+% the LaTeX structure only.
 %
 \documentclass[a4paper,10pt]{extarticle}
 
@@ -22,18 +23,18 @@
 \defaultfontfeatures[Charis SIL]{Script=latn}
 
 % Languages et al.
-\usepackage{polyglossia}
-\setmainlanguage{english}
-\setkeys{english}{variant=british}
-% \setmainlanguage{portuges}
-% END Languages et al.
+\usepackage[UKenglish]{babel}
 
 % This improves the quality of the PDF, but slows down the creation
 % time, so you might want to comment it until you have the final version.
 \usepackage{microtype}
 
 \usepackage{enumitem}
-\usepackage{fontawesome}
+% The fontawesome package requires (with XeLaTeX) setting the below path
+% manually. It is the folder that contains the file FontAwesome.otf.
+\defaultfontfeatures{
+    Path = /usr/share/texmf-dist/fonts/opentype/public/fontawesome/ }
+\usepackage{fontawesome}  % For the cute home, email, etc, symbols.
 \usepackage{url}
 \usepackage[usenames,dvipsnames]{xcolor}  % for MidnightBlue colour
 \usepackage[colorlinks=true, urlcolor=MidnightBlue]{hyperref}
@@ -115,14 +116,14 @@
 \end{topic}
 
 \begin{topic}{Technical Skills}
-  {\rhd\ \ \bfseries \scshape Programming Languages}  
+  {$\rhd$\ \ \bfseries \scshape Programming Languages}
   \begin{itemize}[leftmargin=*]
     \item{\bfseries Imperative}: \emph{proficient}: C, Perl; \emph{experienced}: C{}\verb!++!, Python;
       \emph{basic skills}: Java, Javascript/JQuery, Vim script.
     \item{\bfseries Functional}: \emph{basic skills}: Common Lisp.
     \item{\bfseries Markup}: \emph{proficient}: HTML, CSS, \LaTeX, Markdown; \emph{basic skills}: UML.
   \end{itemize}
-  {\rhd\ \ \bfseries \scshape Operating Systems} 
+  {$\rhd$\ \ \bfseries \scshape Operating Systems}
   \begin{itemize}[leftmargin=*]
 		\item{\bfseries GNU/Linux}: Began experimenting different distributions in 
 			2000; became a regular user circa 2005.
@@ -135,7 +136,7 @@
 			computer game.
   \end{itemize}
 	\newpage % obviously, comment this if unneeded
-  {\rhd\ \ \bfseries \scshape Miscellaneous Software}\\[1em]
+  {$\rhd$\ \ \bfseries \scshape Miscellaneous Software}\\[1em]
 	\begin{minipage}{0.5\textwidth}
 		\begin{itemize}
 			% see comment at header for \phantom...

@@ -14,11 +14,10 @@
 
 % --- Additional packages here ---
 % Languages et al.
-\usepackage{polyglossia}
-\setmainlanguage{english}
-\setkeys{english}{variant=british}
-% \setmainlanguage{portuges}
+\usepackage[UKenglish]{babel}
 % END languages set up
+
+\usepackage{graphicx}
 
 \usepackage[bottom]{footmisc}                               % make sure footnotes are placed on the bottom
 \usepackage{endnotes}                                       % comment this ***and the next line*** if not needed
@@ -35,10 +34,10 @@
 % --- END Page layout ---
 
 % --- Commands (new or redefine) ---
+\newcommand{\emd}{\textemdash}
+\newcommand{\fn}[1]{\footnote{#1}}
 % --- END commands ---
 % --- Includes ---
-\input{includes/inc_custom_tex}
-%\input{inc_mathematics}
 % --- END Includes ---
 
 % --- Letter specific info ---

@@ -1,8 +1,8 @@
 % --- Set up FONTS to use ---
 \usepackage[bitstream-charter]{mathdesign}
+\usepackage{fontspec}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
-\usepackage{fontspec}
 \setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn}
 \usepackage{microtype}
@@ -45,12 +45,9 @@
 % --- Bibliography ---
 %
 % --- --- Languages --- ---
-% Language must be set before biblatex is used, or error ensues.
-\usepackage{polyglossia}
-\setmainlanguage{english}
-\setkeys{english}{variant=british}
-% \setmainlanguage{portuges}
-\usepackage{csquotes}                                      % Suggested by polyglossia
+% Language with polyglossia must be set before biblatex is used, or error ensues.
+% But it's probably good advice with babel, also.
+\usepackage[UKenglish]{babel}
 % END --- --- Languages --- ---
 \usepackage[ % options to be optimised TODO
   style=verbose

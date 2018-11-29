@@ -71,11 +71,16 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   | grep -v $TYPE)
 
   # Setup the Makefile (requires GNU sed)
+  # Begin with setting what type of document we want (report, presentation, ...)
   sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
 
+  # For some documents, special tools must be used for compiling them.
+  # Additionally, standalone doesn't use a lot of aux files, which we can delete.
   if [[ "${TYPE}" == "llncs" ]]; then
     sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
     sed -i "/^BIBCMD=/c\BIBCMD=bibtex" Makefile
+  elif [[ "${TYPE}" == "presentation" ]]; then
+    sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
   elif [[ "${TYPE}" == "standalone" ]]; then
     rm -rf includes/
     rm sources.bib

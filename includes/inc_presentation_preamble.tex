@@ -1,17 +1,12 @@
 \usepackage[UKenglish]{babel}                              % replace UKenglish with portuguese or other lang
-\usepackage{fontspec}                                      % needed for non-ascii chars to display correctly
 
 \usepackage{sfmath}                                        % math in sans serif font
 \usepackage{tikz}                                          % to draw pictures!
 \usepackage{marvosym}                                      % for \Smiley, and LOTS of other things
 
-% Arev is a great font for presentations. However, it cannot display some
-% characters, namely € (euro), «, » and §. If these are really necessary, 
-% then comment the \usepackage line, and...
+% Arev is a great font for presentations. However, the
+% '€' character displays "kind of funny"...
 \usepackage{arev}
-% ... uncomment the two lines below.
-% \renewcommand{\rmdefault}{\sfdefault}
-% \renewcommand{\emph}[1]{\textbf{#1}}
 
 % For fancy title with \pagestyle{empty} (for no page num on title slide)
 \newcommand{\mytitle}[1]{%
@@ -44,6 +39,11 @@
 
 \newcommand{\topic}[1]{%
 	\Banner{#1}}
+
+% Set up bibliography.
+\usepackage[authoryear]{natbib}  % In presentations, [author, year] is more meaningful then [number].
+\renewcommand{\bibsection}{}     % In presentations, references don't need a section title.
+% END bibliographystyle setup.
 
 %---------------------
 % --- CUSTOM STUFF ---

@@ -3,7 +3,7 @@ My LaTeX templates
 
 These are the templates I use for most of my interactions with LaTeX. It's somewhat integrated with my Vim settings (see for example the shortcuts in the Makefile).
 
-The example *LaTeX* files are processed using *LuaLaTeX.*.
+The example *LaTeX* files are processed using *XeLaTeX.*.
 
 Bear in mind that PDF is a [vector format][2], so including raster images might lead to poor results. You can ameliorate the problem by trial and error, tweaking scale factors, image width, etc.
 
@@ -15,7 +15,7 @@ Usage
 ```bash
 $ git clone https://github.com/gauthma/LaTeX.git document_dir
 $ cd document_dir
-$ sh setup.sh [report, cv, letter, presentation, standalone]
+$ sh setup.sh [cv, letter, llncs, presentation, report, standalone]
 ```
 
 The `setup.sh` script will edit `Makefile` and set `NAME` to the *main file*'s name. It will also **remove the .git folder**, in addition to any undeeded files, depending on the value of its argument. E.g. if argument is `cv`, then it will remove `report.*`, `letter.*`, etc.
@@ -78,8 +78,6 @@ FUNCTION {fin.entry}
 
 The `PRESENTATION` skeleton (`presentation.tex`) depends on the `projector` class, found [here](http://www.shoup.net/projector/). Installing it is described in the [TeX Trickery](#tex-trickery) section. Also, when displaying presentations, bold is often more emphasizing than italics. Thus, the `\emph` command is redefined to put the text in bold; for italics there is the `\iemph` command.
 
-For math, include the file `inc_mathematics_presentation.tex`---comment out if not needed.
-
 ### The Standalone skeleton
 
 The file for this is named `standalone.tex`. I use it as a playground for graphics packages, like `xy` or `TikZ`. The PDF produced will be a "full-scale" picture. To include it say, on a presentation, do `\centering{\graphicbox{figures/standalone}}`.
@@ -87,21 +85,15 @@ The file for this is named `standalone.tex`. I use it as a playground for graphi
 Tweakings
 ---
 
-### One vs. two columns  
-
-The **inc_preamble.tex** file contains two comments that start with XXX. One is before the two `\documentclass` lines, and another is before the `\usepackage[...]{geometry}` lines. The first line of each pair of lines is to produce an article with *one* column; and the second of each set is to produce an article with *two* columns. Comment and uncomment accordingly.
-
-The rationale is that for just one column, we use a 12pt font, and 3.5cm lateral margins. For two columns, 10pt and 1.5 respectively.
-
 ### Draft mode
 
-The second from last line in the code for fonts loads the `microtype` package. This package improves the way spacing is computed, which usually results in an improved layout. However, it slows down, very noticeably, the compile time; the solution is the line after it, which indicates to `microtype` that the document is to be processed in draft mode---which disables all the layout improvements. When producing the final version, set `draft=false`.
+IN the code for fonts, the `microtype` package is loaded. This package improves the way spacing is computed, which usually results in an improved layout. However, it slows down, very noticeably, the compile time; the solution is the line after it, which indicates to `microtype` that the document is to be processed in draft mode---which disables all the layout improvements. When producing the final version, set `draft=false`.
 
 The above method only disables the `microtype` improvements (which already improves compilation time considerably). But to improve it even further, you can set *the whole document* in draft mode, by adding `draft` to the `documentclass` options. This, besides also disabling `microtype`, further disables all sorts of things, like images, cross-references, etc. If you use this latter option, there is no need to disable `microtype`---it is done automagically.
 
 ### The xcolor package
 
-The *documentclass* line contains two options (`usenames` and `dvipsnames`) that belong to the *xcolor* package, but setting those options only when loading it might cause conflicts with other packages that also automagically load *xcolor* (namely *tikz*). Having those options given to *documentclass* avoids the possibility of any such conflict.
+The *documentclass* line contains two options (`usenames` and `dvipsnames`) that belong to the *xcolor* package, but setting those options only when loading *xcolor* might cause conflicts with other packages that also automagically load that package (namely *tikz*). Having those options given to *documentclass* avoids the possibility of any such conflict.
 
 SyncTeX
 ---
@@ -183,6 +175,12 @@ $ kpsewhich -var-value=TEXMFHOME
 ```
 
 In my case it is in `/home/user/.texmf`[^1]. Create that folder if it does not exist. The exact location of things depends on what that thing is concretely (fonts, styles, bib styles, etc.). For our purposes, the projector class goes in `/home/user/.texmf/tex/latex/` and the Charis SIL font (which consist of a bunch of `\*.ttf` files) goes in `/home/user/.texmf/fonts/truetype/` (create the sub-folders as needed).
+
+`XeLaTeX` has a peculiarity regarding fonts, however: if installed per user, it expects them to be in the `~/.fonts` directory. Simple solution, though, just create a sym link:
+
+~~~ bash
+ln -s ~/.texmf/fonts ~/.fonts
+~~~
 
 More generally, the first thing to do, to discover where whatever you want to install should be installed, is using a tool named `kpsewhich`, which should get installed when you install LaTeX. It can be used to do a lot of things (`$ kpsewhich --help`), but the one we’re interested in here, location of styles, uses the `--show-path NAME` option. The list of allowed names is part of the output of the `--help-formats` option. So for instance, to discover where to place BiBTeX style files (`*.bst`), run:
 

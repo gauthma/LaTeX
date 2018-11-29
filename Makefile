@@ -14,7 +14,7 @@ NAME="report"
 ENDNAME="$(NAME)_FINAL"
 
 # See Note (2)
-TEXCMD=lualatex
+TEXCMD=xelatex
 TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1
 DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1
 BIBCMD=biber
@@ -64,7 +64,7 @@ get_compiler_pid :
 # (1) - `pidof` sets $? to 1 if no process of the given name is running, which
 # in turn causes `make` to spew a lengthy error message; the `echo` hack makes it
 # work properly.
-# (2) - For `llncs` uses pdflatex and bibtex:
+# (2) - For `llncs` and `presentation` uses pdflatex and bibtex:
 # TEXCMD=pdflatex
 # BIBCMD=bibtex
 # (3) - Removes the same file types that are ignored by git.
