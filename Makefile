@@ -49,9 +49,10 @@ final :
 	${MAKE} full
 	cp "$(NAME).pdf" "$(ENDNAME).pdf"
 
-# See Note (3)
 clean :
-	grep -v "\#\|^$$" .gitignore | while read in; do rm -f $$in; done
+	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb} *.synctex.gz
+	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo,xdy}
+	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot,brf} *-blx.bib
 
 # See Note (1)
 get_compiler_pid :
@@ -67,4 +68,3 @@ get_compiler_pid :
 # (2) - For `llncs` and `presentation` uses pdflatex and bibtex:
 # TEXCMD=pdflatex
 # BIBCMD=bibtex
-# (3) - Removes the same file types that are ignored by git.
