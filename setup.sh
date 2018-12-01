@@ -75,10 +75,10 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
 
   # For some documents, special tools must be used for compiling them.
-  # Additionally, standalone doesn't use a lot of aux files, which we can delete.
+  # Additionally, standalone doesn't need either inc_* or .bib files,
+  # which we can delete.
   if [[ "${TYPE}" == "llncs" ]]; then
     sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
-    sed -i "/^BIBCMD=/c\BIBCMD=bibtex" Makefile
   elif [[ "${TYPE}" == "presentation" ]]; then
     sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
   elif [[ "${TYPE}" == "standalone" ]]; then
