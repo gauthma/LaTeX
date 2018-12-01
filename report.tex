@@ -1,10 +1,6 @@
 \documentclass[a4paper,12pt,dvipsnames]{report}
 \input{includes/inc_report_preamble}
 
-%	--- BIBLIOGRAPHY (add filename WITH EXTENSION).
-\addbibresource{sources.bib}
-% --- END bibliography
-
 % --- Title page ---
 \title{
 Skeleton for \LaTeX\ articles  % main title
@@ -28,7 +24,10 @@ Skeleton for \LaTeX\ articles  % main title
 \chapter{Introduction}
 Science is cool!~\cite{Sagan}. But lots of people don't get it\ldots~\cite{Feynman74}.
 
-\printbibliography
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{plain}
+\bibliography{sources}
 \end{document}
 
 % vim: spell spelllang=en
