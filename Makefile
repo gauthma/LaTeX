@@ -20,10 +20,10 @@ DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1
 BIBCMD=bibtex
 
 all :
-	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
-
-debug :
 	$(TEXCMD) $(DEBUG_TEXCMDOPTS) $(NAME)
+
+nodebuginfo :
+	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
 full :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
