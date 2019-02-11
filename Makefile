@@ -9,9 +9,9 @@
 NAME="report"
 
 # The final name of the .pdf file (without extension). Defaults to original
-# name with "_FINAL" appended. In my setup, works "out of the box" with spaces,
+# name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
 # foreign chars, ...
-ENDNAME="$(NAME)_FINAL"
+ENDNAME="$(NAME).FINAL"
 
 # See Note (2)
 TEXCMD=xelatex
