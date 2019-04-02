@@ -59,33 +59,45 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -f \
   $(ls  report.* \
         cv.* \
-        letter.* letter_logo* \
+        letter.* docs/letter_logo* \
         llncs.* \
         presentation.* \
         standalone.* \
   | grep -v $TYPE)
+
   rm -f \
   $(ls  includes/inc_report_preamble.tex \
         includes/inc_llncs_preamble.tex \
         includes/inc_presentation_preamble.tex \
   | grep -v $TYPE)
 
+  rm -f $(ls  build/*.pdf | grep -v $TYPE)
+
   # Setup the Makefile (requires GNU sed)
   # Begin with setting what type of document we want (report, presentation, ...)
   sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
 
   # For some documents, special tools must be used for compiling them.
-  # Additionally, standalone doesn't need either inc_* or .bib files,
-  # which we can delete.
-  if [[ "${TYPE}" == "llncs" ]]; then
+  if [[ "${TYPE}" == "llncs" ]] ; then
     sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
   elif [[ "${TYPE}" == "presentation" ]]; then
     sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
-  elif [[ "${TYPE}" == "standalone" ]]; then
+  fi
+
+  # standalone doesn't need either inc_* or .bib files,
+  # which we can delete.
+  # Otherwise, symlink bib file to build dir (bibtex has to be run inside this dir).
+  if [[ "${TYPE}" == "standalone" ]] ; then
     rm -rf includes/
     rm sources.bib
+  else
+    ln -sr sources.bib build/
   fi
-  # Finally remove README and delete this script (no use for it after everything is set up)
-  rm README.md
+
+  # The actual pdf is in the build directory; instead of moving it, we symlink
+  # it up.
+  ln -sr build/"${TYPE}.pdf" .
+
+  # Finally delete this script (no use for it after everything is set up).
   rm -- "$0"
 fi
