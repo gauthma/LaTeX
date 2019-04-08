@@ -100,6 +100,9 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     ln -sr sources.bib build/
   fi
 
+  # Remove the README.md symlink; the file is the doc/ directory is needed.
+  rm README.md
+
   # The actual pdf is in the build directory; instead of moving it, we symlink
   # it up. The same must also be done for the synctex file.
   ln -sr build/"${doctype}.pdf" .

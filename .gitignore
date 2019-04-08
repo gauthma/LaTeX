@@ -6,6 +6,7 @@
 !Makefile
 !*.tex
 !*.bib
+!*.md
 !*.pdf
 
 # ...even if they are in subdirectories
