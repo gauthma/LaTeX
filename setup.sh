@@ -1,6 +1,12 @@
 #!/bin/bash
 
-TYPE="$1" 
+doctype="$1"
+
+# If the argument is actually a *.tex filename, then remove the extension to
+# get the type.
+if [[ "$doctype" == *.tex ]] ; then
+  doctype="${doctype%????}" # Removes the .tex extension.
+fi
 
 function usage()
 {
@@ -13,17 +19,17 @@ EOF
 }
 
 # full dir path of script
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fullpath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # current dir
-CURR_DIR="$(pwd)"
+curr_dir="$(pwd)"
 
 # make sure that pwd and script location are the same.
-if [ "$DIR" != "$CURR_DIR" ]; then
+if [ "$fullpath" != "$curr_dir" ]; then
 	usage
 	exit 1
 fi
 
-case "$TYPE" in
+case "$doctype" in
 	report)
 		;;
 	cv)
@@ -41,11 +47,11 @@ case "$TYPE" in
 		exit 0
 		;;
 	*)
-		if [[ -z $TYPE ]]; then
+		if [[ -z $doctype ]]; then
 			usage
 			exit 0
 		else
-			echo "Unknown type $TYPE"
+			echo "Unknown type $doctype"
 			exit 1
 		fi
 esac
@@ -59,33 +65,49 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -f \
   $(ls  report.* \
         cv.* \
-        letter.* letter_logo* \
+        letter.* docs/letter_logo* \
         llncs.* \
         presentation.* \
         standalone.* \
-  | grep -v $TYPE)
+  | grep -v $doctype)
+
   rm -f \
   $(ls  includes/inc_report_preamble.tex \
         includes/inc_llncs_preamble.tex \
         includes/inc_presentation_preamble.tex \
-  | grep -v $TYPE)
+  | grep -v $doctype)
+
+  rm -f $(ls  build/*.pdf | grep -v $doctype)
 
   # Setup the Makefile (requires GNU sed)
   # Begin with setting what type of document we want (report, presentation, ...)
-  sed -i "/^NAME=/c\NAME=\"$TYPE\"" Makefile
+  sed -i "/^NAME=/c\NAME=\"$doctype\"" Makefile
 
   # For some documents, special tools must be used for compiling them.
-  # Additionally, standalone doesn't need either inc_* or .bib files,
+  if [[ "${doctype}" == "llncs" ]] ; then
+    sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
+  elif [[ "${doctype}" == "presentation" ]]; then
+    sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
+  fi
+
+  # standalone doesn't need either inc_* or .bib files,
   # which we can delete.
-  if [[ "${TYPE}" == "llncs" ]]; then
-    sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
-  elif [[ "${TYPE}" == "presentation" ]]; then
-    sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
-  elif [[ "${TYPE}" == "standalone" ]]; then
+  # Otherwise, symlink bib file to build dir (bibtex has to be run inside this dir).
+  if [[ "${doctype}" == "standalone" ]] ; then
     rm -rf includes/
     rm sources.bib
+  else
+    ln -sr sources.bib build/
   fi
-  # Finally remove README and delete this script (no use for it after everything is set up)
+
+  # Remove the README.md symlink; the file is the doc/ directory is needed.
   rm README.md
+
+  # The actual pdf is in the build directory; instead of moving it, we symlink
+  # it up. The same must also be done for the synctex file.
+  ln -sr build/"${doctype}.pdf" .
+  ln -sr build/"${doctype}.synctex.gz" .
+
+  # Finally delete this script (no use for it after everything is set up).
   rm -- "$0"
 fi

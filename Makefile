@@ -13,10 +13,12 @@ NAME="report"
 # foreign chars, ...
 ENDNAME="$(NAME).FINAL"
 
-# See Note (2)
+BUILD_DIR="build"
+
+# See Note 2.
 TEXCMD=xelatex
-TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1
-DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1
+TEXCMDOPTS=--interaction=batchmode --shell-escape --synctex=1 --output-directory=$(BUILD_DIR)
+DEBUG_TEXCMDOPTS=--interaction=errorstopmode --shell-escape --synctex=1 --output-directory=$(BUILD_DIR)
 BIBCMD=bibtex
 
 all :
@@ -25,40 +27,46 @@ all :
 nodebuginfo :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
-full : clean
+# See Note 3.
+full : | clean
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
-	$(BIBCMD) $(NAME)
+	cd $(BUILD_DIR) && $(BIBCMD) $(NAME)
+	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
-# Runs in subdir created by Fullcopy target.
+# Runs in subdir created by Unabridged target.
 # Comments out all the \includeonly, if any
-# (so as to produce a Fullcopy).
-_Fullcopy_subdir :
+# (so as to produce a Unabridged copy).
+_Unabridged_subdir :
 	sed -e '/^\s*\\includeonly/ s/^/% /' -i $(NAME).tex
 	${MAKE} full
 
-# Copy contents of current dir to _FULLCOPY. Change to 
-# that dir (-C option) and run _Fullcopy_subdir.
-Fullcopy :
-	mkdir -p _FULLCOPY
-	cp -r `ls | grep -v _FULLCOPY` _FULLCOPY/
-	${MAKE} -C _FULLCOPY _Fullcopy_subdir
-	mv "_FULLCOPY/$(NAME).pdf" "Fullcopy.pdf"
+# Copy contents of current dir to _UNABRIDGED. Change to 
+# that dir (-C option) and run _Unabridged_subdir.
+Unabridged :
+	mkdir _UNABRIDGED
+	cp -r `ls | grep -v _UNABRIDGED` _UNABRIDGED/
+	${MAKE} -C _UNABRIDGED _Unabridged_subdir
+	mv _UNABRIDGED/build/$(NAME).pdf Unabridged.pdf
+	rm -rf _UNABRIDGED
 
+# This works, even when $(NAME).pdf is a symlink to the pdf in $(BUILD_DIR).
+# Run the compilation command an extra two times, just to be sure (cf. Note 3).
 final : | clean full
-	cp "$(NAME).pdf" "$(ENDNAME).pdf"
+	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
+	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
+	cp $(BUILD_DIR)/$(NAME).pdf "$(ENDNAME).pdf"
 
 clean :
-	rm -f *.{dvi,ps,aux,log,out,toc,gnuplot,table,vrb} *.synctex.gz
-	rm -f *.{bcf,bbl,blg,ent,run.xml,acn,acr,alg,glg,glo,xdy}
-	rm -f *.{gls,glsdefs,ind,idx,ilg,ist,lol,lof,lot,brf} *-blx.bib
+	rm -rf $(BUILD_DIR)/*
+	ln -sr sources.bib $(BUILD_DIR)
 
-# See Note (1)
+# See Note 1.
 get_compiler_pid :
 	pidof $(TEXCMD) || echo -n ""
 
-.PHONY : all nodebuginfo full Fullcopy final clean get_compiler_pid
+.PHONY : all clean final full get_compiler_pid nodebuginfo Unabridged _Unabridged_subdir
 
 # NOTES
 #
@@ -68,3 +76,8 @@ get_compiler_pid :
 # (2) - For `llncs` and `presentation` uses pdflatex:
 # TEXCMD=pdflatex
 # BIBCMD=bibtex
+# (3) - When running bibtex, we don't need to cd back (-), because each command
+# runs in its own shell.
+#     - Also, after bibtex, we run latex *3* times (instead of the usual 2)
+#     because that is sometimes needed to ensure bibliographic backreferences
+#     are correct.

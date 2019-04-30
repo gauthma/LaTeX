@@ -24,21 +24,23 @@ The `setup.sh` script will edit `Makefile` and set `NAME` to the *main file*'s n
 
 Do work with LaTeX skeletons provided, compile using adequate `Makefile` target and enjoy profit!! Beware: in the makefile, the command lines *must* start with a *TAB* (not some number of spaces!!). The workings of the `Makefile` targets are as follows:
 
-- `all`: default target; run `LaTeX` compiling command once, without debug output. 
+- `all`: default target; run `LaTeX` compiling command once, with debug output. 
 
-- `debug`: run `LaTeX` compiling command once, *with* debug output. 
+- `nodebuginfo`: run `LaTeX` compiling command once, *without* debug output. 
 
 - `full`: run `LaTeX` command, then `BibTeX` command, then `LaTeX` command twice more. This is to put properly all references, TOC, etc.
 
-- `Fullcopy` (`_Fullcopy_subdir` is an auxilliary target for this one): create a "full copy" of the current document, named `Fullcopy.pdf`. This is useful when working with large documents, `\include[ing]only` a part of them; this target allows to keep an updated copy of the full version, should it be required for consultation (happens to me with some frequency).
+- `Unabridged` (`_Unabridged_subdir` is an auxilliary target for this one): create a "full copy" of the current document, named `Fullcopy.pdf`. This is useful when working with large documents, `\include[ing]only` a part of them; this target allows to keep an updated copy of the full version, should it be required for consultation (happens to me with some frequency).
 
 - `final`: runs the `clean` target (see below) and them makes a `full` build. If you need the final PDF document to have a different name, then you can use the `ENDNAME` variable, which the last command in this target sets as its name.
 
-- `clean`: removes the files matching the patterns in the `.gitignore` file.
+- `clean`: removes everything in the `build/` directory.
 
 - `get_compiler_pid`: used in the `vim` code that builds the `LaTeX` command on writing the `.tex` file (see [myvim](https://github.com/gauthma/myvim)).
 
 The files starting with `inc_` are files that are supposed to be *included* in another file, and *not* compiled on their own. This includes the report preamble, as it was getting too long...
+
+Note that all targets on this `Makefile` are `.PHONY`, as for annoying `TeX`nical reasons, one has often to rebuild stuff, when the dependencies of said stuff have not changed...
 
 ### The Letter skeleton
 
