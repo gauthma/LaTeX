@@ -9,9 +9,9 @@
 NAME="report"
 
 # The final name of the .pdf file (without extension). Defaults to original
-# name with "_FINAL" appended. In my setup, works "out of the box" with spaces,
-# foreigh chars, ...
-ENDNAME="$(NAME)_FINAL"
+# name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
+# foreign chars, ...
+ENDNAME="$(NAME).FINAL"
 
 # See Note (2)
 TEXCMD=xelatex
@@ -25,7 +25,7 @@ all :
 nodebuginfo :
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 
-full :
+full : clean
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
 	$(BIBCMD) $(NAME)
 	$(TEXCMD) $(TEXCMDOPTS) $(NAME)
@@ -38,15 +38,15 @@ _Fullcopy_subdir :
 	sed -e '/^\s*\\includeonly/ s/^/% /' -i $(NAME).tex
 	${MAKE} full
 
+# Copy contents of current dir to _FULLCOPY. Change to 
+# that dir (-C option) and run _Fullcopy_subdir.
 Fullcopy :
 	mkdir -p _FULLCOPY
 	cp -r `ls | grep -v _FULLCOPY` _FULLCOPY/
 	${MAKE} -C _FULLCOPY _Fullcopy_subdir
 	mv "_FULLCOPY/$(NAME).pdf" "Fullcopy.pdf"
 
-final :
-	${MAKE} clean
-	${MAKE} full
+final : | clean full
 	cp "$(NAME).pdf" "$(ENDNAME).pdf"
 
 clean :
@@ -58,7 +58,7 @@ clean :
 get_compiler_pid :
 	pidof $(TEXCMD) || echo -n ""
 
-.PHONY : all debug full Fullcopy final clean get_compiler_pid
+.PHONY : all nodebuginfo full Fullcopy final clean get_compiler_pid
 
 # NOTES
 #
