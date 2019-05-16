@@ -90,18 +90,20 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     sed -i "/^TEXCMD=/c\TEXCMD=pdflatex" Makefile
   fi
 
-  # standalone doesn't need either inc_* or .bib files,
-  # which we can delete.
-  # Otherwise, symlink bib file to build dir (bibtex has to be run inside this dir).
-  if [[ "${doctype}" == "standalone" ]] ; then
-    rm -rf includes/
+  # For the types that DON'T come with references, comment the bibtex line
+  # in Makefile and delete the sources file. Otherwise, symlink bib file to
+  # build dir (bibtex has to be run inside this dir).
+  if [[ "${doctype}" != "report" && "${doctype}" != "llncs" && "${doctype}" != "presentation" ]] ; then
+    sed -i "/\$(BIBCMD)/ s/^#*/#/" Makefile
     rm sources.bib
   else
     ln -sr sources.bib build/
   fi
 
-  # Remove the README.md symlink; the file is the doc/ directory is needed.
-  rm README.md
+  # standalone doesn't need inc_* files, which we can delete.
+  if [[ "${doctype}" == "standalone" ]] ; then
+    rm -rf includes/
+  fi
 
   # The actual pdf is in the build directory; instead of moving it, we symlink
   # it up. The same must also be done for the synctex file.
