@@ -11,16 +11,17 @@
 
 % --- Style, etc. ---
 % To avoid an extra line saying ``Abstract''. LoL.
+\usepackage{fancyhdr}                          % For a nice header, as described after \begin{document}.
+\usepackage{url}                               % for making urls clickable
+\usepackage{graphicx}                          % for graphics inclusion, ...
+\usepackage[font=small,labelfont=bf]{caption}  % proper formatting for caption text
+% \usepackage{indentfirst}                     % needed when writing in Portuguese (first paragraph is always indented)
 \renewenvironment{abstract}
   {\list{}{
     \leftmargin=2.5cm
     \rightmargin\leftmargin}%
     \item[\textbf{Abstract.}]\relax}
   {\endlist}
-\usepackage{url}                               % for making urls clickable
-\usepackage{graphicx}                          % for graphics inclusion, ...
-\usepackage[font=small,labelfont=bf]{caption}  % proper formatting for caption text
-% \usepackage{indentfirst}                     % needed when writing in Portuguese (first paragraph is always indented)
 % --- END style etc. ---
 
 % --- Page LAYOUT ---

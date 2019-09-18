@@ -3,11 +3,11 @@
 
 # But not these files...
 !.gitignore
-!Makefile
-!*.tex
 !*.bib
 !*.md
 !*.pdf
+!*.sh
+!*.tex
 
 # ...even if they are in subdirectories
 !*/

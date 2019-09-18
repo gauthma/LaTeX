@@ -3,7 +3,13 @@
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
 
+# $name is one of: report, presentation, letter, llncs, cv, or standalone.
 name="report"
+
+# The final name of the .pdf file (without extension). Defaults to original
+# name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
+# foreign chars, ...
+finalname="${name}.FINAL"
 
 build_dir="build"
 unabridged_dir="_UNABRIDGED"
@@ -19,15 +25,21 @@ got_bib=true
 # Can be useful when showing bib entries in say, a presentation.
 function bibliography() {
   if [[ "$got_bib" = true ]] ; then
-    cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd -
+    cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
+  else
+    echo "The \$got_bib var is set to false, so I assume there is no bibliography to build."
   fi
 }
 
 # Please do note that this WIPES OUT THE PDF!
 # And the ENTIRE unabridged_dir!
 function clean() {
-	echo "rm -rf ${build_dir}/* ${unabridged_dir}/*"
-	rm -rf ${build_dir}/* ${unabridged_dir}/*
+	echo "rm -rf ${build_dir}/*"
+	rm -rf "${build_dir}"/*
+  if [[ "${name}" == "report" ]]; then
+    echo "rm -rf ${unabridged_dir}/*"
+    rm -rf "${unabridged_dir}"/*
+  fi
 	echo "ln -sr sources.bib ${build_dir}"
 	ln -sr sources.bib ${build_dir}
 }
@@ -38,6 +50,11 @@ function debugbuild() {
   return $?
 }
 
+function finalfullrun() {
+  normalfullrun
+	cp "${unabridged_dir}"/"${build_dir}"/"${name}.pdf" "${finalname}.pdf"
+}
+
 # A full LaTeX build run: run once, then run bib (if it is set), then run three
 # more times (usually two a are enough, but in some thorny cases three are
 # required, so...). If using bib is not set, just run twice.
@@ -45,7 +62,7 @@ function fullrun() {
   clean
 	${texcmd} ${texcmdopts} ${name}
   if [[ "$got_bib" = true ]] ; then
-    cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd -
+    cd "${build_dir}" && ${bibcmd} ${name} && cd ..
     ${texcmd} ${texcmdopts} ${name}
     ${texcmd} ${texcmdopts} ${name}
   fi
@@ -86,7 +103,7 @@ function normalbuild() {
     echo -e "* Now continuing with unabridged (normal, non-full) build..."
     echo -e "************************************************************\n"
 
-    cd "${unabridged_dir}" && run && cd -
+    cd "${unabridged_dir}" && run && cd ..
   fi
 }
 
@@ -97,8 +114,8 @@ function normalfullrun() {
     exit 1
   fi
 
-  # If run was successful, and we are dealing with report, then update
-  # unabridged copy.
+  # If run was successful (LaTeX compiler should halt on errors), and we are
+  # dealing with report, then update unabridged copy.
   if [[ "${name}" == "report" ]]; then
     update_unabridged_tex_files
 
@@ -106,7 +123,7 @@ function normalfullrun() {
     echo -e "* Now continuing with unabridged (normal, non-full) build..."
     echo -e "************************************************************\n"
 
-    cd "${unabridged_dir}" && fullrun && cd -
+    cd "${unabridged_dir}" && fullrun && cd ..
   fi
 }
 
@@ -140,12 +157,10 @@ elif [[ $# -eq 1 && "$1" == "bib" ]] ; then
   bibliography
 elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
   clean
+elif [[ $# -eq 1 && "$1" == "final" ]] ; then
+  finalfullrun
 elif [[ $# -eq 1 && "$1" == "full" ]] ; then
-  if [[ "${name}" == "report" ||  "${name}" == "llncs" ]]; then
-    normalfullrun
-  else
-    echo "full: this option is for reports and llncs only!"
-  fi
+  normalfullrun
 elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
   debugbuild
 elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
