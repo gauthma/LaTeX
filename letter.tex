@@ -18,8 +18,6 @@
 \usepackage{graphicx}
 
 \usepackage[bottom]{footmisc}                               % make sure footnotes are placed on the bottom
-\usepackage{endnotes}                                       % comment this ***and the next line*** if not needed
-\renewcommand{\theendnote}{\Roman{endnote}}                 % Endnotes in Roman numerals (arabic is for footnotes)
 \usepackage[absolute]{textpos}                              % For the positioning of the logo
 % --- END additional packages ---
 
@@ -110,7 +108,7 @@
 	augue. Pellentesque facilisis, erat sed pellentesque rutrum, orci turpis 
 	dictum mi, sit amet rutrum nibh quam in velit. Vestibulum semper, est eget 
 	blandit pellentesque, nisi elit venenatis diam, id vestibulum velit leo quis 
-	orci.\endnote{Some endnote-ing text.} 
+	orci.\fn{Some footnote text.} 
 
 	In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis 
 	quis tortor malesuada pretium. Pellentesque auctor neque nec urna. Proin 
@@ -132,17 +130,6 @@
 %
 % LETTER CONTENT ENDED
 %
-
-% --- show endnotes ---
-% Comment if not using the endnotes package.
-\vspace{1cm}
-\begingroup
-\def\enotesize{\small}
-\def\enoteheading{\Large \textsc{Notes}}
-\theendnotes
-\endgroup
-% --- end endnotes ---
-
 \end{letter}
 \end{document}
 

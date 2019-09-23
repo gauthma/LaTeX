@@ -16,7 +16,7 @@ unabridged_dir="_UNABRIDGED"
 
 texcmd="xelatex"
 texcmdopts="-halt-on-error --interaction=batchmode --shell-escape --output-directory=${build_dir}"
-debug_texcmdopts="-halt-on-error --interaction=errorstopmode --shell-escape --output-directory=${build_dir}"
+debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir}"
 bibcmd="bibtex"
 
 # IMPORTANT: to disable bibliography, set this to false.
@@ -120,7 +120,7 @@ function normalfullrun() {
     update_unabridged_tex_files
 
     echo -e "\n************************************************************"
-    echo -e "* Now continuing with unabridged (normal, non-full) build..."
+    echo -e "* Now continuing with unabridged (FULL) build..."
     echo -e "************************************************************\n"
 
     cd "${unabridged_dir}" && fullrun && cd ..
@@ -157,12 +157,12 @@ elif [[ $# -eq 1 && "$1" == "bib" ]] ; then
   bibliography
 elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
   clean
+elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
+  debugbuild
 elif [[ $# -eq 1 && "$1" == "final" ]] ; then
   finalfullrun
 elif [[ $# -eq 1 && "$1" == "full" ]] ; then
   normalfullrun
-elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
-  debugbuild
 elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
   get_compiler_pid
 elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then

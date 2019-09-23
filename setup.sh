@@ -35,7 +35,7 @@ if [ "$fullpath" != "$curr_dir" ]; then
 fi
 
 case "$doctype" in
-	report)
+	bare)
 		;;
 	cv)
 		;;
@@ -44,6 +44,8 @@ case "$doctype" in
 	llncs)
 		;;
 	presentation)
+		;;
+	report)
 		;;
 	standalone)
 		;;
@@ -87,12 +89,14 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
 
-  # Setup the Makefile (requires GNU sed)
+  # Setup CompileTeX.sh (requires GNU sed)
   # Begin with setting what type of document we want (report, presentation, ...)
   sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh
 
   # For some documents, special actions are required.
-  if [[ "${doctype}" == "llncs" ]] ; then
+  if [[ "${doctype}" == "cv" ]] ; then
+    sed -i "/^texcmd=/c\texcmd=lualatex" CompileTeX.sh
+  elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" ]] ; then
     sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
   elif [[ "${doctype}" == "presentation" ]]; then
     sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
@@ -103,18 +107,20 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   fi
 
   # For the types that DON'T come with references, comment the got_bib line
-  # in CompileTeX.sh and delete the sources file. Otherwise, symlink bib file to
-  # build dir (bibtex command has to be run inside this dir).
-  if [[ "${doctype}" != "report" && "${doctype}" != "llncs" && "${doctype}" != "presentation" ]] ; then
+  # in CompileTeX.sh and delete the sources file. Also, the types that don't
+  # come with references happen to be the same that have no includes, so delete
+  # the include folder.
+  #
+  # Otherwise, symlink bib file to build dir (bibtex command has to be run
+  # inside this dir).
+
+  if [[ "${doctype}" != "llncs" && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
     sed -i "/^got_bib=true/c\got_bib=false" CompileTeX.sh
     rm sources.bib
+
+    rm -rf includes/
   else
     ln -sr sources.bib "${build_dir}"/
-  fi
-
-  # standalone doesn't need inc_* files, which we can delete.
-  if [[ "${doctype}" == "standalone" ]] ; then
-    rm -rf includes/
   fi
 
   # The actual pdf is in the build directory; instead of moving it, we symlink

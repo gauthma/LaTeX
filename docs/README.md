@@ -1,9 +1,7 @@
 My LaTeX templates 
 ===
 
-These are the templates I use for most of my interactions with LaTeX. It's somewhat integrated with my Vim settings (see for example the shortcuts in the Makefile).
-
-The example *LaTeX* files are processed using *XeLaTeX.*.
+These are the templates I use for most of my interactions with LaTeX. The example *LaTeX* files are processed using *XeLaTeX*, except for `cv` (*LuaLaTeX*, to ease the use of pretty fonts), and `presentation`, which for annoying TeXncial reasons, requires `pdflatex`.
 
 Bear in mind that PDF is a [vector format][2], so including raster images might lead to poor results. You can ameliorate the problem by trial and error, tweaking scale factors, image width, etc.
 
@@ -12,41 +10,51 @@ All of these templates depend on a... *sizable* number of packages. However, all
 Usage 
 ---
 
+In the first two of the next three commands, `your_document_dir` must not exist; it should be the name of the new folder which will contain your document.
+
 ```bash
-$ git clone https://github.com/gauthma/LaTeX.git document_dir
-$ cd document_dir
+$ git clone https://github.com/gauthma/LaTeX.git your_document_dir
+$ cd your_document_dir
 $ sh setup.sh [cv, letter, llncs, presentation, report, standalone]
 ```
 
-The `setup.sh` script will edit `Makefile` and set `NAME` to the *main file*'s name. It will also **remove the .git folder**, in addition to any undeeded files, depending on the value of its argument. E.g. if argument is `cv`, then it will remove `report.*`, `letter.*`, etc.
+In the last command, if you tab completion (as the argument has the same name of the `\*.tex` file, minus extension), either the final dot or the whole extension will also be "completed"; this is ok, the script will filter it (i.e. work correctly even with the ending and/or extension).
 
-**Warning**: the script requires **GNU sed** to edit the `Makefile`; if you don't have it, then comment that line and edit the `Makefile` manually.
+The `setup.sh` script will patch `CompileTeX.sh` and set `name` to the *main file*'s name. It will also **remove the .git folder**, in addition to any undeeded files, depending on the value of its argument. E.g. if argument is `cv`, then it will remove `report.*`, `letter.*`, etc.
 
-Do work with LaTeX skeletons provided, compile using adequate `Makefile` target and enjoy profit!! Beware: in the makefile, the command lines *must* start with a *TAB* (not some number of spaces!!). The workings of the `Makefile` targets are as follows:
+**Warning**: the script requires **GNU sed** to edit the `CompileTeX.sh`; if you don't have it, then comment that line and edit the `CompileTeX.sh` manually.
 
-- `all`: default target; run `LaTeX` compiling command once, with debug output. 
+Do work with LaTeX skeletons provided, compile using adequate `CompileTeX.sh` target and enjoy profit!! `CompileTeX.sh` offers the following options:
 
-- `nodebuginfo`: run `LaTeX` compiling command once, *without* debug output. 
+- `no argument`: run `LaTeX` compiling command once, without debug output. 
+
+- `debug`: run `LaTeX` compiling command once, *with* debug output. 
 
 - `full`: run `LaTeX` command, then `BibTeX` command, then `LaTeX` command twice more. This is to put properly all references, TOC, etc.
 
-- `Unabridged` (`_Unabridged_subdir` is an auxilliary target for this one): create a "full copy" of the current document, named `Fullcopy.pdf`. This is useful when working with large documents, `\include[ing]only` a part of them; this target allows to keep an updated copy of the full version, should it be required for consultation (happens to me with some frequency).
-
-- `final`: runs the `clean` target (see below) and them makes a `full` build. If you need the final PDF document to have a different name, then you can use the `ENDNAME` variable, which the last command in this target sets as its name.
+- `final`: `clean`s everything up, and them makes a `full` build. If you need the final PDF document to have a different name, then you can use the `endname` variable, which the last command in this function sets as its name.
 
 - `clean`: removes everything in the `build/` directory.
 
 - `get_compiler_pid`: used in the `vim` code that builds the `LaTeX` command on writing the `.tex` file (see [myvim](https://github.com/gauthma/myvim)).
 
-The files starting with `inc_` are files that are supposed to be *included* in another file, and *not* compiled on their own. This includes the report preamble, as it was getting too long...
+- `killall_tex`: used to kill a running compile process (only used from within `vim`).
 
-Note that all targets on this `Makefile` are `.PHONY`, as for annoying `TeX`nical reasons, one has often to rebuild stuff, when the dependencies of said stuff have not changed...
+The files starting with `inc_` (all in the `includes/` directory) are files that are supposed to be *included* in another file, and *not* compiled on their own. Next follows a brief description of available types.
 
-### The Letter skeleton
+### Bare
 
-It's pretty straightforward, except for one detail: if you don't use footnotes (i.e. don't have any `\endnote{blah blah}` in the text), then you must comment out the `\theendnotes` command, otherwise compiling the document you get an error saying that the `.ent` file was not found.
+For simple notes, it consists it article class, with nothing other than a numberless section.
 
-### The llncs skeleton
+### CV
+
+The template on which my CV is based.
+
+### Letter
+
+It's pretty straightforward, for letters you are actually going to (snail!) mail.
+
+### llncs
 
 Like an article, using Springer's `llncs` style (including bibliography), which is assumed installed. Useful because it is designed to run with `pdflatex` and `bibtex`, which is what is expected when submitting papers to conferences or journals (you usually have to submit the `.tex` sources and check the PDF that the submission site generates)---and they almost always assume those sources compile with `pdflatex`.
 
@@ -76,80 +84,30 @@ FUNCTION {fin.entry}
 }
 ~~~
 
-### The Presention skeleton
+### Presention
 
-The `PRESENTATION` skeleton (`presentation.tex`) depends on the `projector` class, found [here](http://www.shoup.net/projector/). Installing it is described in the [TeX Trickery](#tex-trickery) section. Also, when displaying presentations, bold is often more emphasizing than italics. Thus, the `\emph` command is redefined to put the text in bold; for italics there is the `\iemph` command.
+This skeleton (`presentation.tex`) depends on the `projector` class, found [here](http://www.shoup.net/projector/). Installing it is described in the [TeX Trickery](#tex-trickery) section. Also, when displaying presentations, bold is often more emphasizing than italics. Thus, the `\emph` command is redefined to put the text in bold; for italics there is the `\iemph` command.
 
-### The Standalone skeleton
+### Report
 
-The file for this is named `standalone.tex`. I use it as a playground for graphics packages, like `xy` or `TikZ`. The PDF produced will be a "full-scale" picture. To include it say, on a presentation, do `\centering{\graphicbox{figures/standalone}}`.
+For my longer notes, typically about some subject I am studying. As this can get rather large, there are two copies: one is the working copy, which might contain only some sections and/or chapters, and an unabridged copy, kept in a separeted folder, by default named `_UNABRIDGED`. Whenever the working copy is compiled, so is the unabridged one --- but if compiling on the command line, a big warning is given, so you ignore the rest of the process and get to work on your document. If compiling the working document fails, the unabridged copy is not build, as there is no point in doing so.
+
+### Standalone
+
+I use this as a playground for graphics packages, like `xy` or `TikZ`. The PDF produced will be a "full-scale" picture. To include it say, on a presentation, do `\centering{\graphicbox{figures/standalone}}`.
 
 Tweakings
 ---
 
 ### Draft mode
 
-IN the code for fonts, the `microtype` package is loaded. This package improves the way spacing is computed, which usually results in an improved layout. However, it slows down, very noticeably, the compile time; the solution is the line after it, which indicates to `microtype` that the document is to be processed in draft mode---which disables all the layout improvements. When producing the final version, set `draft=false`.
+In the code for fonts, the `microtype` package is loaded. This package improves the way spacing is computed, which usually results in an improved layout. However, it slows down, very noticeably, the compile time; the solution is the line after it, which indicates to `microtype` that the document is to be processed in draft mode---which disables all the layout improvements. When producing the final version, set `draft=false`.
 
 The above method only disables the `microtype` improvements (which already improves compilation time considerably). But to improve it even further, you can set *the whole document* in draft mode, by adding `draft` to the `documentclass` options. This, besides also disabling `microtype`, further disables all sorts of things, like images, cross-references, etc. If you use this latter option, there is no need to disable `microtype`---it is done automagically.
 
 ### The xcolor package
 
 The *documentclass* line contains two options (`usenames` and `dvipsnames`) that belong to the *xcolor* package, but setting those options only when loading *xcolor* might cause conflicts with other packages that also automagically load that package (namely *tikz*). Having those options given to *documentclass* avoids the possibility of any such conflict.
-
-SyncTeX
----
-
-This is a technology that allows you to go from a specific place in a TeX source file, to the corresponding place in the PDF file (**forward search**), or the other way round (**backward search**). The `vim` plugin I use for LaTeX management---the awesome TeX-9---is synctex enabled, but sadly only for *graphical* `vim` (`gvim`) and `evince`. The setup I elaborate below will get us synctex for *terminal* `vim` and `okular` (it still requires TeX-9, though). And of course, your document must have been compiled with `--synctex=1`, or have synctex enabled in some other manner.
-
-### Forward direction
-
-Dump the following in `~/.vim/ftplugin/tex.vim` (and change the mapping to your liking):
-
-~~~ vim
-function! SyncTexForward()
-	let cmd = "silent !okular --unique ".tex_nine#GetOutputFile()."\\#src:".line(".")."%:p &> /dev/null &"
-	exec cmd
-	redraw!
-	redrawstatus!
-endfunction
-nmap <Leader>f :call SyncTexForward()<CR>
-~~~
-
-That's it; triggering that map in a specific place in the source file should cause `okular` to go to the corresponding location in the PDF file.
-
-### Backward direction
-
-The secret is to, when editing TeX file, invoke `vim` with the `--servername` option (traditionally this is done just for graphical environment, but it can be used in the terminal as well). To do this, first create an alias in `~/.bashrc` that directs vim to a script, that we shall aptly name `vim.sh` (don't forget to re-source that file, `. ~/.bashrc`).
-
-~~~ bash
-alias vim='sh /path/to/vim.sh'
-~~~
-
-That script shall contain the following:
-
-~~~ bash
-#!/bin/bash
-
-ARGS=("$@") # Needed to iterate over arguments with spaces.
-
-# Add --servername option (for synctex) when opening .tex files.
-for f in "${ARGS[@]}" ; do 
-	if [[ $f == *.tex ]] ; then
-		vim --servername VIM "$@"
-		exit 0
-	fi
-done
-
-# Call vim as usual when opening other files.
-vim "$@"
-~~~
-
-Lastly, in `okular`'s preferences, set the **Editor** to 
-
-`vim --servername VIM --remote +%l %f`
-
-Now, **in browse mode only** (`Ctrl+1`), hitting `Shift` and left clicking in a word should move the cursor in `vim` to the relevant place. If you're using TeX-9's `mainfile:` modeline, `vim` will also open the relevant file, if necessary. How awesome is that?!
 
 ArchLinux (AL) packages 
 ---
