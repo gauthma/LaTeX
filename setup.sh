@@ -72,6 +72,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
   rm -f \
   $(ls  report.* \
+        bare.* \
         cv.* \
         letter.* docs/letter_logo* \
         llncs.* \
