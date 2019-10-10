@@ -12,6 +12,7 @@ name="report"
 finalname="${name}.FINAL"
 
 build_dir="build"
+docs_dir="docs"
 unabridged_dir="_UNABRIDGED"
 
 texcmd="xelatex"
@@ -34,25 +35,25 @@ function bibliography() {
 # Please do note that this WIPES OUT THE PDF!
 # And the ENTIRE unabridged_dir!
 function clean() {
-	echo "rm -rf ${build_dir}/*"
-	rm -rf "${build_dir}"/*
+  echo "rm -rf ${build_dir}/*"
+  rm -rf "${build_dir}"/*
   if [[ "${name}" == "report" ]]; then
     echo "rm -rf ${unabridged_dir}/*"
     rm -rf "${unabridged_dir}"/*
   fi
-	echo "ln -sr sources.bib ${build_dir}"
-	ln -sr sources.bib ${build_dir}
+  echo "ln -sr sources.bib ${build_dir}"
+  ln -sr sources.bib ${build_dir}
 }
 
 # A normal (single) LaTeX compile run.
 function debugbuild() {
-	${texcmd} ${debug_texcmdopts} ${name}
+  ${texcmd} ${debug_texcmdopts} ${name}
   return $?
 }
 
 function finalfullrun() {
   normalfullrun
-	cp "${unabridged_dir}"/"${build_dir}"/"${name}.pdf" "${finalname}.pdf"
+  cp "${unabridged_dir}"/"${build_dir}"/"${name}.pdf" "${finalname}.pdf"
 }
 
 # A full LaTeX build run: run once, then run bib (if it is set), then run three
@@ -60,13 +61,13 @@ function finalfullrun() {
 # required, so...). If using bib is not set, just run twice.
 function fullrun() {
   clean
-	${texcmd} ${texcmdopts} ${name}
+  ${texcmd} ${texcmdopts} ${name}
   if [[ "$got_bib" = true ]] ; then
     cd "${build_dir}" && ${bibcmd} ${name} && cd ..
     ${texcmd} ${texcmdopts} ${name}
     ${texcmd} ${texcmdopts} ${name}
   fi
-	${texcmd} ${texcmdopts} ${name}
+  ${texcmd} ${texcmdopts} ${name}
   return $?
 }
 
@@ -120,7 +121,7 @@ function normalfullrun() {
     update_unabridged_tex_files
 
     echo -e "\n************************************************************"
-    echo -e "* Now continuing with unabridged (FULL) build..."
+    echo -e "* Now continuing with unabridged (normal, non-full) build..."
     echo -e "************************************************************\n"
 
     cd "${unabridged_dir}" && fullrun && cd ..
@@ -129,15 +130,18 @@ function normalfullrun() {
 
 # A normal (single) LaTeX compile run.
 function run() {
-	${texcmd} ${texcmdopts} ${name}
+  ${texcmd} ${texcmdopts} ${name}
   return $?
 }
 
-# Copy all stuff into $unabridged_dir, and comment all \includeonly lines, to
-# produce an unabridged copy.
+# Copy all stuff (except $docs_dir and the $unabridged_dir itself) into
+# $unabridged_dir, and comment all \includeonly lines, to produce an unabridged
+# copy. After copying, remove Unabridged.pdf symlink inside $unabridged_dir, as
+# it is not needed.
 function update_unabridged_tex_files() {
-	cp -r `ls | grep -v "${unabridged_dir}"` "${unabridged_dir}"
-	sed -e '/^\s*\\includeonly/ s/^/% /' -i "${unabridged_dir}"/"${name}.tex"
+  cp -r $(ls | grep -v "${unabridged_dir}\|${docs_dir}") "${unabridged_dir}"
+  rm "${unabridged_dir}"/Unabridged.pdf
+  sed -e '/^\s*\\includeonly/ s/^/% /' -i "${unabridged_dir}"/"${name}.tex"
 }
 
 
