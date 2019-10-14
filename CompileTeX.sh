@@ -76,7 +76,7 @@ function fullrun() {
   ${texcmd} ${texcmdopts} ${name}
   if [[ "$got_bib" = true ]] ; then
     bibliography
-    exit_status=$?
+    local exit_status=$?
     if [[ "$exit_status" -eq 0 ]]; then
       ${texcmd} ${texcmdopts} ${name}
       ${texcmd} ${texcmdopts} ${name}
@@ -159,34 +159,52 @@ function update_unabridged_tex_files() {
   sed -e '/^\s*\\includeonly/ s/^/% /' -i "${unabridged_dir}"/"${name}.tex"
 }
 
+function symlinks_rebuild() {
+  rm -f "${name}.pdf"
+  rm -f "Unabridged.pdf"
+  rm -f "${build_dir}/sources.bib"
 
-# Check that we are in the dir containing the main file.
-if ! [[ -f "${name}.tex" ]]; then
-  echo "Could not find main file ${name}.tex. Exiting..."
-  exit 1
-fi
+  ln -sr "${build_dir}/${name}.pdf" .
+  ln -sr "${unabridged_dir}/${build_dir}/${name}.pdf" "Unabridged.pdf"
+  ln -sr sources.bib "${build_dir}"/
+}
 
-# If no arguments given, do a normal build;
-# - argument is debug: do debug build;
-# - argument is get_compiler_pid: run that function;
-# - argument is killall_tex: run that function.
-if [[ $# -eq 0 ]] ; then
-  normalbuild
-elif [[ $# -eq 1 && "$1" == "bib" ]] ; then
-  bibliography
-elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
-  clean
-elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
-  debugbuild
-elif [[ $# -eq 1 && "$1" == "final" ]] ; then
-  finalfullrun
-elif [[ $# -eq 1 && "$1" == "full" ]] ; then
-  normalfullrun
-elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
-  get_compiler_pid
-elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
-  killall_tex
-fi
+#
+# *** Main function ***
+#
+function main() {
+  # Check that we are in the dir containing the main file.
+  if ! [[ -f "${name}.tex" ]]; then
+    echo "Could not find main file ${name}.tex. Exiting..."
+    exit 1
+  fi
+
+  # If no arguments given, do a normal build;
+  # - argument is debug: do debug build;
+  # - argument is get_compiler_pid: run that function;
+  # - argument is killall_tex: run that function.
+  if [[ $# -eq 0 ]] ; then
+    normalbuild
+  elif [[ $# -eq 1 && "$1" == "bib" ]] ; then
+    bibliography
+  elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
+    clean
+  elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
+    debugbuild
+  elif [[ $# -eq 1 && "$1" == "final" ]] ; then
+    finalfullrun
+  elif [[ $# -eq 1 && "$1" == "full" ]] ; then
+    normalfullrun
+  elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
+    get_compiler_pid
+  elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
+    killall_tex
+  elif [[ $# -eq 1 && "$1" == "symlinks" ]] ; then
+    symlinks_rebuild
+  fi
+}
+
+main "$@"
 
 #####
 # Notes:
