@@ -26,10 +26,22 @@ got_bib=true
 # Can be useful when showing bib entries in say, a presentation.
 function bibliography() {
   if [[ "$got_bib" = true ]] ; then
-    cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
+
+    # First see if there are actually any \cite commands in the .tex files. The
+    # -F option to grep is to interpret the pattern as a fixed string.
+    # If there is no such command, then do not build bibliography (and tell
+    # that to the user).
+    grep_for_cite=$(grep -rF "\cite" *.tex)
+    if [[ -n "$grep_for_cite" ]]; then
+      cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
+      return 0
+    else
+      echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite commands, so not building bibliography."
+    fi
   else
-    echo "The \$got_bib var is set to false, so I assume there is no bibliography to build."
+    echo "$0: The \$got_bib var is set to false, so I assume there is no bibliography to build."
   fi
+  return 1
 }
 
 # Please do note that this WIPES OUT THE PDF!
@@ -63,9 +75,12 @@ function fullrun() {
   clean
   ${texcmd} ${texcmdopts} ${name}
   if [[ "$got_bib" = true ]] ; then
-    cd "${build_dir}" && ${bibcmd} ${name} && cd ..
-    ${texcmd} ${texcmdopts} ${name}
-    ${texcmd} ${texcmdopts} ${name}
+    bibliography
+    exit_status=$?
+    if [[ "$exit_status" -eq 0 ]]; then
+      ${texcmd} ${texcmdopts} ${name}
+      ${texcmd} ${texcmdopts} ${name}
+    fi
   fi
   ${texcmd} ${texcmdopts} ${name}
   return $?
