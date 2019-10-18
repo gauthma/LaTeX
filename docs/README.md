@@ -92,7 +92,7 @@ This skeleton (`presentation.tex`) depends on the `projector` class, found [here
 
 ### Report
 
-For my longer notes, typically about some subject I am studying. As this can get rather large, there are two copies: one is the working copy, which might contain only some sections and/or chapters, and an unabridged copy, kept in a separated folder, by default named `_UNABRIDGED`. Whenever the working copy is compiled, so is the unabridged one --- but if compiling on the command line, a big warning is given, so you ignore the rest of the process and get to work on your document. If compiling the working document fails, the unabridged copy is not built, as there is no point in doing so.
+For my longer notes, typically about some subject I am studying. As this can get rather large, there are two copies: one is the working copy, which might contain only some sections and/or chapters, and an unabridged copy, kept in a separated folder, by default named `_UNABRIDGED`. Whenever the working copy is compiled, so is the unabridged one---but if compiling on the command line, a big warning is given, and the process goes to background (and output is suppressed)---so that you can ignore the rest of the compilation and get back to work on your document. If compiling the working document fails, the unabridged copy is not built, as there is no point in doing so.
 
 ### Standalone
 
