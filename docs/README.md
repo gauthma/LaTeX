@@ -1,16 +1,16 @@
 My LaTeX templates 
 ===
 
-These are the templates I use for most of my interactions with LaTeX. The example *LaTeX* files are processed using *XeLaTeX*, except for `cv` (*LuaLaTeX*, to ease the use of pretty fonts), and `presentation`, which for annoying TeXncial reasons, requires `pdflatex`.
+These are the templates I use for most of my interactions with LaTeX. The example *LaTeX* files are processed using *XeLaTeX*, except for `cv` (*LuaLaTeX*, to ease the use of pretty fonts), and `presentation`, which for annoying TeXnical reasons, requires `pdflatex`.
 
 Bear in mind that PDF is a [vector format][2], so including raster images might lead to poor results. You can ameliorate the problem by trial and error, tweaking scale factors, image width, etc.
 
-All of these templates depend on a... *sizable* number of packages. However, all of these should be available in TeXLive. If such is not the case, the reader can always install them on a local TeX tree (see the [TeX Trickery](#tex-trickery) section).
+All of these templates depend on a... *sizable* number of packages. However, all of these should be available in the TeXLive package (in Archlinux, at least, they are). If such is not the case, the reader can always install them on a local TeX tree (see the [TeX Trickery](#tex-trickery) section).
 
 Usage 
 ---
 
-In the first two of the next three commands, `your_document_dir` must not exist; it should be the name of the new folder which will contain your document.
+In the first command below, `your_document_dir` must not exist; it should be the name of the new folder which will contain your document.
 
 ```bash
 $ git clone https://github.com/gauthma/LaTeX.git your_document_dir
@@ -18,9 +18,9 @@ $ cd your_document_dir
 $ sh setup.sh [cv, letter, llncs, presentation, report, standalone]
 ```
 
-In the last command, if you tab completion (as the argument has the same name of the `\*.tex` file, minus extension), either the final dot or the whole extension will also be "completed"; this is ok, the script will filter it (i.e. work correctly even with the ending and/or extension).
+In the last command, if you tab-complete (as the argument has the same name of the `\*.tex` file, minus extension), either the final dot or the whole extension will also be "completed"; this is ok, the script will filter it (i.e. work correctly even with the ending dot and/or extension).
 
-The `setup.sh` script will patch `CompileTeX.sh` and set `name` to the *main file*'s name. It will also **remove the .git folder**, in addition to any undeeded files, depending on the value of its argument. E.g. if argument is `cv`, then it will remove `report.*`, `letter.*`, etc.
+The `setup.sh` script will patch `CompileTeX.sh` and set `name` to the *main file*'s name. It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument. E.g. if argument is `cv`, then it will remove `report.*`, `letter.*`, etc.
 
 **Warning**: the script requires **GNU sed** to edit the `CompileTeX.sh`; if you don't have it, then comment that line and edit the `CompileTeX.sh` manually.
 
@@ -40,11 +40,13 @@ Do work with LaTeX skeletons provided, compile using adequate `CompileTeX.sh` ta
 
 - `killall_tex`: used to kill a running compile process (only used from within `vim`).
 
+**NOTA BENE:** for the `report` class, both normal (no argument) and `full` compiling also trigger the compilation of the **unabridged copy**; see below.
+
 The files starting with `inc_` (all in the `includes/` directory) are files that are supposed to be *included* in another file, and *not* compiled on their own. Next follows a brief description of available types.
 
 ### Bare
 
-For simple notes, it consists it article class, with nothing other than a numberless section.
+For simple notes; it consists of the article class, with nothing other than a numberless section.
 
 ### CV
 
@@ -70,7 +72,7 @@ FUNCTION {fin.entry}
 }
 ~~~
 
-Replace it with the below code, recompile your BibTeX/LaTeX, and now you should have proper(ly ended) sentences in your bibliography.
+Replace it with the below code, recompile your (Bib/La)TeX, and now you should have proper(ly ended) sentences in your bibliography.
 
 ~~~ {.text .numberLines}
 FUNCTION {fin.entry}
@@ -84,13 +86,13 @@ FUNCTION {fin.entry}
 }
 ~~~
 
-### Presention
+### Presentation
 
 This skeleton (`presentation.tex`) depends on the `projector` class, found [here](http://www.shoup.net/projector/). Installing it is described in the [TeX Trickery](#tex-trickery) section. Also, when displaying presentations, bold is often more emphasizing than italics. Thus, the `\emph` command is redefined to put the text in bold; for italics there is the `\iemph` command.
 
 ### Report
 
-For my longer notes, typically about some subject I am studying. As this can get rather large, there are two copies: one is the working copy, which might contain only some sections and/or chapters, and an unabridged copy, kept in a separeted folder, by default named `_UNABRIDGED`. Whenever the working copy is compiled, so is the unabridged one --- but if compiling on the command line, a big warning is given, so you ignore the rest of the process and get to work on your document. If compiling the working document fails, the unabridged copy is not build, as there is no point in doing so.
+For my longer notes, typically about some subject I am studying. As this can get rather large, there are two copies: one is the working copy, which might contain only some sections and/or chapters, and an unabridged copy, kept in a separated folder, by default named `_UNABRIDGED`. Whenever the working copy is compiled, so is the unabridged one --- but if compiling on the command line, a big warning is given, so you ignore the rest of the process and get to work on your document. If compiling the working document fails, the unabridged copy is not built, as there is no point in doing so.
 
 ### Standalone
 
@@ -112,7 +114,7 @@ The *documentclass* line contains two options (`usenames` and `dvipsnames`) that
 ArchLinux (AL) packages 
 ---
 
-The __endnotes__ package can be found in the AL package: *texlive-latexextra*. The Charis SIL font can be found in an AUR package, but seems not be working. So for now the best approach seems to be to get the font's sources from [here](http://software.sil.org/charis/download/) and install them as described in the [TeX Trickery](#tex-trickery) section.
+The Charis SIL font can be found in an AUR package, but seems not be working. So for now the best approach seems to be to get the font's sources from [here](http://software.sil.org/charis/download/) and install them as described in the [TeX Trickery](#tex-trickery) section.
 
 LaTeX Trickery
 ---
@@ -123,7 +125,7 @@ LaTeX Trickery
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal} 
 ```
 
-The last two lines are to use the default mathcal font, instead of the one with bitstream-charter, which is [harder to read][1].
+The last two lines are to use the default `mathcal` font, instead of the one with `bitstream-charter`, which is [harder to read][1].
 
 TeX Trickery
 ---

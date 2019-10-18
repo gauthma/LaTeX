@@ -11,6 +11,9 @@ name="report"
 # foreign chars, ...
 finalname="${name}.FINAL"
 
+# Name of the .bib file (sans extension).
+sourcesname="sources"
+
 build_dir="build"
 docs_dir="docs"
 unabridged_dir="_UNABRIDGED"
@@ -44,17 +47,20 @@ function bibliography() {
   return 1
 }
 
-# Please do note that this WIPES OUT THE PDF!
-# And the ENTIRE unabridged_dir!
+# Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
 function clean() {
-  echo "rm -rf ${build_dir}/*"
-  rm -rf "${build_dir}"/*
-  if [[ "${name}" == "report" ]]; then
-    echo "rm -rf ${unabridged_dir}/*"
-    rm -rf "${unabridged_dir}"/*
-  fi
-  echo "ln -sr sources.bib ${build_dir}"
-  ln -sr sources.bib ${build_dir}
+  echo "Wiping contents of build/ (except PDF files)"
+  cd "${build_dir}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+
+  echo "Wiping contents of ${unabridged_dir}"
+  rm -rf "${unabridged_dir}"/*
+
+  # Rebuilding structure of $build_dir/.
+  # NOTA BENE: if any .tex files are in their own custom directories, those
+  # dirs must also exist in $build_dir, with the same hierarchy. See README.md
+  # for more details.
+  echo "ln -sr ${sourcesname}.bib ${build_dir}"
+  ln -sr ${sourcesname}.bib ${build_dir}
 }
 
 # A normal (single) LaTeX compile run.
@@ -115,11 +121,11 @@ function normalbuild() {
   if [[ "${name}" == "report" ]]; then
     update_unabridged_tex_files
 
-    echo -e "\n************************************************************"
-    echo -e "* Now continuing with unabridged (normal, non-full) build..."
-    echo -e "************************************************************\n"
+    echo -e "\n*************************************************************************"
+    echo -e "* Now continuing with (background) unabridged (normal, non-full) build..."
+    echo -e "*************************************************************************\n"
 
-    cd "${unabridged_dir}" && run && cd ..
+    cd "${unabridged_dir}" && run &> /dev/null && cd .. &
   fi
 }
 
@@ -135,11 +141,11 @@ function normalfullrun() {
   if [[ "${name}" == "report" ]]; then
     update_unabridged_tex_files
 
-    echo -e "\n************************************************************"
-    echo -e "* Now continuing with unabridged (normal, non-full) build..."
-    echo -e "************************************************************\n"
+    echo -e "\n*************************************************************************"
+    echo -e "* Now continuing with (background) unabridged (normal, non-full) build..."
+    echo -e "*************************************************************************\n"
 
-    cd "${unabridged_dir}" && fullrun && cd ..
+    cd "${unabridged_dir}" && fullrun &> /dev/null && cd .. & 
   fi
 }
 
@@ -155,18 +161,18 @@ function run() {
 # it is not needed.
 function update_unabridged_tex_files() {
   cp -r $(ls | grep -v "${unabridged_dir}\|${docs_dir}") "${unabridged_dir}"
-  rm "${unabridged_dir}"/Unabridged.pdf
+  rm -f "${unabridged_dir}"/Unabridged.pdf
   sed -e '/^\s*\\includeonly/ s/^/% /' -i "${unabridged_dir}"/"${name}.tex"
 }
 
 function symlinks_rebuild() {
   rm -f "${name}.pdf"
   rm -f "Unabridged.pdf"
-  rm -f "${build_dir}/sources.bib"
+  rm -f "${build_dir}/${sourcesname}.bib"
 
   ln -sr "${build_dir}/${name}.pdf" .
   ln -sr "${unabridged_dir}/${build_dir}/${name}.pdf" "Unabridged.pdf"
-  ln -sr sources.bib "${build_dir}"/
+  ln -sr ${sourcesname}.bib "${build_dir}"/
 }
 
 #
