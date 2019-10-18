@@ -145,7 +145,7 @@ function normalfullrun() {
     echo -e "* Now continuing with (background) unabridged (normal, non-full) build..."
     echo -e "*************************************************************************\n"
 
-    cd "${unabridged_dir}" && fullrun &> /dev/null && cd .. & 
+    cd "${unabridged_dir}" && fullrun &> /dev/null && cd .. &
   fi
 }
 
