@@ -71,7 +71,12 @@ function debugbuild() {
 
 function finalfullrun() {
   normalfullrun
-  cp "${unabridged_dir}"/"${build_dir}"/"${name}.pdf" "${finalname}.pdf"
+
+  if [[ "${name}" == "report" ]]; then
+    cp "${unabridged_dir}"/"${build_dir}"/"${name}.pdf" "${finalname}.pdf"
+  else
+    cp "${build_dir}"/"${name}.pdf" "${finalname}.pdf"
+  fi
 }
 
 # A full LaTeX build run: run once, then run bib (if it is set), then run three
