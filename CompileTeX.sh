@@ -170,7 +170,8 @@ function update_unabridged_tex_files() {
   sed -e '/^\s*\\includeonly/ s/^/% /' -i "${unabridged_dir}"/"${name}.tex"
 }
 
-function symlinks_rebuild() {
+function unabridged_dir_and_symlinks_rebuild() {
+  mkdir -p "${unabridged_dir}"
   rm -f "${name}.pdf"
   rm -f "Unabridged.pdf"
   rm -f "${build_dir}/${sourcesname}.bib"
@@ -211,7 +212,7 @@ function main() {
   elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
     killall_tex
   elif [[ $# -eq 1 && "$1" == "symlinks" ]] ; then
-    symlinks_rebuild
+    unabridged_dir_and_symlinks_rebuild
   fi
 }
 
