@@ -147,7 +147,7 @@ function normalfullrun() {
     update_unabridged_tex_files
 
     echo -e "\n*************************************************************************"
-    echo -e "* Now continuing with (background) unabridged (normal, non-full) build..."
+    echo -e "* Now continuing with (background) unabridged (normal, full) build..."
     echo -e "*************************************************************************\n"
 
     cd "${unabridged_dir}" && fullrun &> /dev/null && cd .. &
