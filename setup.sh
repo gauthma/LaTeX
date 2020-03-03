@@ -16,7 +16,7 @@ fi
 function usage()
 {
 	cat <<EOF
-Usage: $ sh $0 [report, cv, letter, llncs, presentation, standalone]
+Usage: $ sh $0 [report, cv, essay, llncs, presentation, standalone]
 
 To call script pwd must be same as script location.
 
@@ -39,7 +39,7 @@ case "$doctype" in
 		;;
 	cv)
 		;;
-	letter)
+	essay)
 		;;
 	llncs)
 		;;
@@ -71,9 +71,9 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -rf .git
 
   rm -f \
-  $(ls  report.* \
+  $(ls  cv.* \
         bare.* \
-        cv.* \
+        essay.* \
         llncs.* \
         presentation.* \
         standalone.* \
@@ -112,7 +112,8 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 #
 # Otherwise, symlink bib file to build dir (bibtex command has to be run inside
 # this dir).
-  if [[ "${doctype}" != "llncs" && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
+  if [[ "${doctype}" != "essay" && "${doctype}" != "llncs" \
+    && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
     sed -i "/^got_bib=true/c\got_bib=false" CompileTeX.sh
     rm sources.bib
 
