@@ -74,7 +74,6 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   $(ls  report.* \
         bare.* \
         cv.* \
-        letter.* docs/letter_logo* \
         llncs.* \
         presentation.* \
         standalone.* \
@@ -83,9 +82,9 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -f "${doctype}.pdf" # If this exists, it's a symlink (actual pdf is in build/).
 
   rm -f \
-  $(ls  includes/inc_report_preamble.tex \
-        includes/inc_llncs_preamble.tex \
-        includes/inc_presentation_preamble.tex \
+  $(ls  includes/report_preamble.tex \
+        includes/llncs_preamble.tex \
+        includes/presentation_preamble.tex \
   | grep -v $doctype)
 
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
@@ -97,9 +96,8 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 # For some documents, special actions are required.
   if [[ "${doctype}" == "cv" ]] ; then
     sed -i "/^texcmd=/c\texcmd=lualatex" CompileTeX.sh
-  elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" ]] ; then
-    sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
-  elif [[ "${doctype}" == "presentation" ]]; then
+  elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" \
+    || "${doctype}" == "presentation" ]] ; then
     sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
     mkdir "${unabridged_dir}"
