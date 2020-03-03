@@ -35,20 +35,20 @@ got_bib=true
 function bibliography() {
   if [[ "$got_bib" = true ]] ; then
 
-    # First see if there are actually any \cite commands in the .tex files. The
-    # -F option to grep is to interpret the pattern as a fixed string.
+# First see if there are actually any \cite commands in the .tex files. The -F
+# option to grep is to interpret the pattern as a fixed string.
     grep_for_cite=$(grep -rF "\cite" *.tex)
     if [[ -n "$grep_for_cite" ]]; then
       cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
       if [[ $? -eq 0 ]]; then # if no errors building bib, then...
         run && run
 
-        # The compile run after bib update failed.
+# The compile run after bib update failed.
         if [[ $? -ne 0 ]]; then
           echo "Compile of *.tex file was not successful!"
           exit 1
-        # If the two compile runs after a bib update did not fail, then update
-        # bib && double run in unabridged_dir.
+# If the two compile runs after a bib update did not fail, then update bib &&
+# double run in unabridged_dir.
         else
           if [[ "${name}" == "report" ]]; then
             update_unabridged_tex_files
@@ -64,8 +64,8 @@ function bibliography() {
         fi
       fi
       return 0
-    # If there is no such command, then do not build bibliography (and tell
-    # that to the user).
+# If there is no \cite command, then do not build bibliography (and tell that
+# to the user).
     else
       echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite commands, so not building bibliography."
     fi
@@ -83,10 +83,9 @@ function clean() {
   echo "Wiping contents of ${unabridged_dir}"
   rm -rf "${unabridged_dir}"/*
 
-  # Rebuilding structure of $build_dir/.
-  # NOTA BENE: if any .tex files are in their own custom directories, those
-  # dirs must also exist in $build_dir, with the same hierarchy. See README.md
-  # for more details.
+# Rebuilding structure of $build_dir/. NOTA BENE: if any .tex files are in
+# their own custom directories, those dirs must also exist in $build_dir, with
+# the same hierarchy. See README.md for more details.
   echo "ln -sr ${sourcesname}.bib ${build_dir}"
   ln -sr ${sourcesname}.bib ${build_dir}
 }
@@ -144,8 +143,8 @@ function normalbuild() {
     exit 1
   fi
 
-  # If run was successful, and we are dealing with report, then update
-  # unabridged copy.
+# If run was successful, and we are dealing with report, then update unabridged
+# copy.
   if [[ "${name}" == "report" ]]; then
     update_unabridged_tex_files
 
@@ -164,8 +163,8 @@ function normalfullrun() {
     exit 1
   fi
 
-  # If run was successful (LaTeX compiler should halt on errors), and we are
-  # dealing with report, then update unabridged copy.
+# If run was successful (LaTeX compiler should halt on errors), and we are
+# dealing with report, then update unabridged copy.
   if [[ "${name}" == "report" ]]; then
     update_unabridged_tex_files
 
@@ -202,7 +201,7 @@ function unabridged_dir_and_symlinks_rebuild() {
   ln -sr "${build_dir}/${name}.pdf" .
   ln -sr ${sourcesname}.bib "${build_dir}"/
 
-  # Only report type has unabridged copy.
+# Only report type has unabridged copy.
   if [[ "${name}" == "report" ]]; then
     ln -sr "${unabridged_dir}/${build_dir}/${name}.pdf" "Unabridged.pdf"
   fi
@@ -212,16 +211,16 @@ function unabridged_dir_and_symlinks_rebuild() {
 # *** Main function ***
 #
 function main() {
-  # Check that we are in the dir containing the main file.
+# Check that we are in the dir containing the main file.
   if ! [[ -f "${name}.tex" ]]; then
     echo "Could not find main file ${name}.tex. Exiting..."
     exit 1
   fi
 
-  # If no arguments given, do a normal build;
-  # - argument is debug: do debug build;
-  # - argument is get_compiler_pid: run that function;
-  # - argument is killall_tex: run that function.
+# If no arguments given, do a normal build;
+# - argument is debug: do debug build;
+# - argument is get_compiler_pid: run that function;
+# - argument is killall_tex: run that function.
   if [[ $# -eq 0 ]] ; then
     normalbuild
   elif [[ $# -eq 1 && "$1" == "bib" ]] ; then
