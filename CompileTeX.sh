@@ -3,7 +3,12 @@
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
 
-# $name is one of: report, presentation, letter, llncs, cv, or standalone.
+# Two functions, run and fullrun, do a simple run, and a run with bibliography
+# building, respectively. Most of the remaining functions build on these two,
+# to compile both the report and its unabridged version (only in the case of
+# reports), and to check for errors and give feedback properly, and so on.
+
+# $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
 
 # The final name of the .pdf file (without extension). Defaults to original
@@ -32,12 +37,35 @@ function bibliography() {
 
     # First see if there are actually any \cite commands in the .tex files. The
     # -F option to grep is to interpret the pattern as a fixed string.
-    # If there is no such command, then do not build bibliography (and tell
-    # that to the user).
     grep_for_cite=$(grep -rF "\cite" *.tex)
     if [[ -n "$grep_for_cite" ]]; then
       cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
+      if [[ $? -eq 0 ]]; then # if no errors building bib, then...
+        run && run
+
+        # The compile run after bib update failed.
+        if [[ $? -ne 0 ]]; then
+          echo "Compile of *.tex file was not successful!"
+          exit 1
+        # If the two compile runs after a bib update did not fail, then update
+        # bib && double run in unabridged_dir.
+        else
+          if [[ "${name}" == "report" ]]; then
+            update_unabridged_tex_files
+
+            echo -e "\n*************************************************************************"
+            echo -e "* Now continuing with (background) unabridged (bibliography) build..."
+            echo -e "*************************************************************************\n"
+
+            cd "${unabridged_dir}" && pwd && ${bibcmd} ${name} && cd ..
+            cd "${unabridged_dir}" && run &> /dev/null && run &> /dev/null && cd .. &
+          fi
+
+        fi
+      fi
       return 0
+    # If there is no such command, then do not build bibliography (and tell
+    # that to the user).
     else
       echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite commands, so not building bibliography."
     fi
@@ -84,16 +112,11 @@ function finalfullrun() {
 # required, so...). If using bib is not set, just run twice.
 function fullrun() {
   clean
-  ${texcmd} ${texcmdopts} ${name}
+  run
   if [[ "$got_bib" = true ]] ; then
     bibliography
-    local exit_status=$?
-    if [[ "$exit_status" -eq 0 ]]; then
-      ${texcmd} ${texcmdopts} ${name}
-      ${texcmd} ${texcmdopts} ${name}
-    fi
   fi
-  ${texcmd} ${texcmdopts} ${name}
+  run
   return $?
 }
 
@@ -177,8 +200,12 @@ function unabridged_dir_and_symlinks_rebuild() {
   rm -f "${build_dir}/${sourcesname}.bib"
 
   ln -sr "${build_dir}/${name}.pdf" .
-  ln -sr "${unabridged_dir}/${build_dir}/${name}.pdf" "Unabridged.pdf"
   ln -sr ${sourcesname}.bib "${build_dir}"/
+
+  # Only report type has unabridged copy.
+  if [[ "${name}" == "report" ]]; then
+    ln -sr "${unabridged_dir}/${build_dir}/${name}.pdf" "Unabridged.pdf"
+  fi
 }
 
 #
