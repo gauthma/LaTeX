@@ -1,0 +1,33 @@
+\documentclass[a4paper,12pt,dvipsnames]{article}
+\input{includes/essay_preamble}
+
+% To have centred titles.
+\usepackage{sectsty}
+\allsectionsfont{\centering}
+
+% Hide section numbers.
+\setcounter{secnumdepth}{0}
+
+\title{
+Write, or wrong?
+}
+\author{
+  {Óscar Pereira}\fn{\texttt{\{https://, oscar@\}randomwalk.eu}.}
+}
+\date{\today\fn{Revised in XXX}}
+% --- END PREAMBLE ---
+
+\begin{document}
+
+\maketitle
+% \tableofcontents
+\section{Introduction}
+  Something less technical about Feynman~\cite{Feynman74} and Sagan~\cite{Sagan}.
+
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{plain}
+\bibliography{sources}
+\end{document}
+
+% vim: spell spelllang=en
