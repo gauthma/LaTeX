@@ -90,11 +90,11 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
 
-  # Setup CompileTeX.sh (requires GNU sed)
-  # Begin with setting what type of document we want (report, presentation, ...)
+# Setup CompileTeX.sh (requires GNU sed) Begin with setting what type of
+# document we want (report, presentation, ...)
   sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh
 
-  # For some documents, special actions are required.
+# For some documents, special actions are required.
   if [[ "${doctype}" == "cv" ]] ; then
     sed -i "/^texcmd=/c\texcmd=lualatex" CompileTeX.sh
   elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" ]] ; then
@@ -107,14 +107,13 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     ln -sr "${unabridged_dir}/${build_dir}/${doctype}.pdf" "Unabridged.pdf"
   fi
 
-  # For the types that DON'T come with references, comment the got_bib line
-  # in CompileTeX.sh and delete the sources file. Also, the types that don't
-  # come with references happen to be the same that have no includes, so delete
-  # the include folder.
-  #
-  # Otherwise, symlink bib file to build dir (bibtex command has to be run
-  # inside this dir).
-
+# For the types that DON'T come with references, comment the got_bib line in
+# CompileTeX.sh and delete the sources file. Also, the types that don't come
+# with references happen to be the same that have no includes, so delete the
+# include folder.
+#
+# Otherwise, symlink bib file to build dir (bibtex command has to be run inside
+# this dir).
   if [[ "${doctype}" != "llncs" && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
     sed -i "/^got_bib=true/c\got_bib=false" CompileTeX.sh
     rm sources.bib
@@ -124,10 +123,10 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     ln -sr sources.bib "${build_dir}"/
   fi
 
-  # The actual pdf is in the build directory; instead of moving it, we symlink
-  # it up. The same must also be done for the unabridged file (cf. Mafefile).
+# The actual pdf is in the build directory; instead of moving it, we symlink it
+# up. The same must also be done for the unabridged file (cf. Mafefile).
   ln -sr "${build_dir}/${doctype}.pdf" .
 
-  # Finally delete this script (no use for it after everything is set up).
+# Finally delete this script (no use for it after everything is set up).
   rm -- "$0"
 fi
