@@ -1,3 +1,11 @@
+\usepackage[font=small,
+            labelfont=bf]{caption} % Proper formatting for caption text.
+\usepackage{graphicx} % For graphics inclusion.
+\usepackage{url} % For making urls clickable.
+
+% Basically increase text width.
+\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+
 % Set up FONTS to use.
 \usepackage[bitstream-charter]{mathdesign}
 \usepackage{fontspec}
@@ -6,22 +14,12 @@
 \setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn}
 
-% To avoid an extra line saying ``Abstract''. LoL.
-\renewenvironment{abstract}
-  {\list{}{
-    \leftmargin=2.5cm
-    \rightmargin\leftmargin}%
-    \item[\textbf{Abstract.}]\relax}
-  {\endlist}
-
-\usepackage[font=small,
-            labelfont=bf]{caption} % Proper formatting for caption text.
-\usepackage{fancyhdr} % For nice headers.
-\usepackage{graphicx} % For graphics inclusion.
-\usepackage{url} % For making urls clickable.
-
-% Basically increase text width.
-\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+% To indicate current chapter name and number in the header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
+\fancyhead[R]{}
+\fancyhead[L]{\chaptername\ \thechapter\ --\ \leftmark \hfill \thepage}
 
 % -------------------------------------------------------
 % -------------------------------------------------------
@@ -29,14 +27,23 @@
 % -------------------------------------------------------
 % -------------------------------------------------------
 
+%
 % Packages.
+%
 
+%
 % (Re)new commands. (Except those that are part of a specific setup).
+%
 \newcommand{\emd}{\textemdash}
 \newcommand{\fn}[1]{\footnote{#1}}
+
+% For § symbol. Some TeX compilers might complain if it is entered literally,
+% so use this command instead.
 \newcommand{\ts}{\textsection}
 
+%
 % All other custom stuff.
+%
 
 % -------------------------------------------------------
 % -------------------------------------------------------
