@@ -82,9 +82,10 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -f "${doctype}.pdf" # If this exists, it's a symlink (actual pdf is in build/).
 
   rm -f \
-  $(ls  includes/report_preamble.tex \
+  $(ls  includes/essay_preamble.tex \
         includes/llncs_preamble.tex \
         includes/presentation_preamble.tex \
+        includes/report_preamble.tex \
   | grep -v $doctype)
 
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
