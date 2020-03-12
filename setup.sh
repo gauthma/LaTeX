@@ -76,6 +76,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
         essay.* \
         llncs.* \
         presentation.* \
+        report.* \
         standalone.* \
   | grep -v $doctype)
 
