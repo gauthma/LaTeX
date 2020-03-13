@@ -98,8 +98,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 # For some documents, special actions are required.
   if [[ "${doctype}" == "cv" ]] ; then
     sed -i "/^texcmd=/c\texcmd=lualatex" CompileTeX.sh
-  elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" \
-    || "${doctype}" == "presentation" ]] ; then
+  elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" ]] ; then
     sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
     mkdir "${unabridged_dir}"
