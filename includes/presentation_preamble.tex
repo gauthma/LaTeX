@@ -1,53 +1,86 @@
-\usepackage[UKenglish]{babel}                              % replace UKenglish with portuguese or other lang
+% Fonts.
+\usepackage{times}
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
 
-\usepackage{sfmath}                                        % math in sans serif font
-\usepackage{tikz}                                          % to draw pictures!
-\usepackage{marvosym}                                      % for \Smiley, and LOTS of other things
+% Language: replace UKenglish with portuguese or other lang.
+\usepackage[UKenglish]{babel}
 
-% Arev is a great font for presentations. However, the
-% '€' character displays "kind of funny"...
-\usepackage{arev}
-
-% For fancy title with \pagestyle{empty} (for no page num on title slide)
-\newcommand{\mytitle}[1]{%
-	\par\noindent\colorbox{blue!60}%
-	{\parbox{\dimexpr\textwidth-2\fboxsep\relax}%
-	{\setlength{\baselineskip}{1.5\baselineskip}%
-		\centering\textcolor{white}{\textbf{#1}}}}}
+\usepackage{sfmath} % Math in sans serif font.
+\usepackage{tikz} % To draw pictures!
+\usepackage{textpos} % To draw in absolute positions.
+\usepackage{marvosym} % For \Smiley, and LOTS of other things
 
 % In slides, emphasis means italic AND bold face.
 \renewcommand{\emph}[1]{\textbf{\textit{#1}}}
-% Align with \fadeTo (easier for vim-motions when changing numbers)
-\newcommand{\fadeFr}[1]{\fadeFrom{#1}}
 
-\style{slide.size=130}                                     % use big fonts and images
-\style{foot.text.bot.right=\theslidenum/\lastslide}        % slide numbers are ugly... but necessary
-\linespread{1.5}                                           % for lines bigger than slide width, 1.5 space
+% For bibliography: in presentations, [author, year] is more meaningful then
+% [number].
+\usepackage[authoryear]{natbib} 
 
-% Different kinds of (symbol) bullets
-\newlength{\bulletIndentLen}
-\setlength{\bulletIndentLen}{0.5em}
-\newcommand{\bulletA}{\hspace{\bulletIndentLen}$\ast$ }
-\newcommand{\bulletB}{\hspace{\bulletIndentLen}$\bullet$ }
-\newcommand{\bulletD}{\hspace{\bulletIndentLen}$\diamond$ }
-\newcommand{\bulletT}{\hspace{\bulletIndentLen}$\triangleright$ }
+% Gets rid of bottom navigation symbols.
+\setbeamertemplate{navigation symbols}{}
 
-% Numbered bullet:
-% \bulletN{<number>} text...
-\newcommand{\bulletN}[2]{%
-	\hspace{0.5em}$#1.$ #2}
+% Show page numbers.
+\setbeamertemplate{footline}[frame number]
 
-\newcommand{\topic}[1]{%
-	\Banner{#1}}
+% Setup theme, colours, and transparency use.
+\mode<presentation>
+{
+  \usetheme{default}
+  \usecolortheme{whale}
 
-% Set up bibliography.
-\usepackage[authoryear]{natbib}  % In presentations, [author, year] is more meaningful then [number].
-\renewcommand{\bibsection}{}     % In presentations, references don't need a section title.
-% END bibliographystyle setup.
+  % for transparencies
+  \setbeamercovered{transparent}
+}
+% Setup authorship. This is placed in the preamble because it is not supposed
+% to change much...
+% NOTA BENE: Use the \inst{?} command only if the authors have different
+% affiliation.
+\author
+{Óscar Pereira\inst{1} \and John Doe\inst{2}}
+\institute
+{
+  \inst{1}%
+  Some Institution\\
+  \texttt{\{https://, oscar@\}randomwalk.eu}
+  \and
+  \inst{2}%
+  Some other Institution
+}
 
-%---------------------
-% --- CUSTOM STUFF ---
-%---------------------
-%-------------------------
-% --- END CUSTOM STUFF ---
-%-------------------------
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% -------------------------------------------------------
+% -------------------------------------------------------
+% ------------------- CUSTOM STUFF ----------------------
+% -------------------------------------------------------
+% -------------------------------------------------------
+
+%
+% Packages.
+%
+
+%
+% (Re)new commands. (Except those that are part of a specific setup).
+%
+\newcommand{\emd}{\textemdash}
+
+% For § symbol. Some TeX compilers might complain if it is entered literally,
+% so use this command instead.
+\newcommand{\ts}{\textsection}
+
+%
+% All other custom stuff.
+%
+
+% -------------------------------------------------------
+% -------------------------------------------------------
+% ------------------- END CUSTOM STUFF ------------------
+% -------------------------------------------------------
+% -------------------------------------------------------

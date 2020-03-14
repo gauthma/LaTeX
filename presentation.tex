@@ -1,88 +1,86 @@
-\documentclass[16pt]{projector}
-
+\documentclass{beamer}
 \input{includes/presentation_preamble}
 
+\title
+{A Presentation Template}
+
+\subtitle
+{With a Subtitle, if Needed}
+
+\date
+{March 2020}
+
 \begin{document}
-% \overlaysoff % uncomment when you need to prepare the printed version
 
-%
-% -- Put title slide here (outside of slide environment) --
-% -- to avoid it having a page number.                   --
-%
-\thispagestyle{empty}
-\begin{center}
-  \vspace*{-0.5em}
-	\mytitle{\Large How I'm going to bore you\\for a couple of minutes}
-	\vfill
-	R.\ MaDillo\\
-	\texttt{blah@TeX-mess.org}
-	\vfill
-	December 25, 2016
-	\vfill
-\end{center}
-%
-% -- END title slide --
-%
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
 
-\begin{slide}
-	\Stripe{Slide \#1}
-	\vfill
-	\topic{Topic A}
-	\vfill
-	{
-		\fadeTo{1}{85}
-		\fadeFr{3}{85}
-    \bulletN{19} Science is cool!~\citep{Sagan}
-	}
-	\vfill
-	{
-		\fadeTo{2}{85}
-		\fadeFr{4}{85}
-		\bulletB Unfortunately \emph{a big great many lot} of people\\
-    \hspace{1.5em}do not seem to get it\dots~\citep{Feynman74}
-  }
-	\vfill
-	\topic{Topic B}
-	{
-		\fadeTo{3}{85}
-		\bulletD Another dummy topic 
-	}
-	\vfill
-\end{slide}
-\begin{slide*}
-	\Stripe{Verbathings}
-	\vfill
-	\bulletB Not verbatim text, vs.\ \verb+verbatim text+
-	\vfill
-	\bulletB The \verb+verbatim+ \emph{environment} also works:
-	\vfill
-	\begin{verbatim}
+\begin{frame}{On Science}
+  \vfill
+  \begin{itemize}
+    \item<1-> Science is \emph{cool!} \citep{Sagan}
+      \vfill
+    \item<2-> Unfortunately \emph{a big great many lot} of people do not seem to get it\dots \citep{Feynman74}
+      \vfill
+    \item<3-> And now some \emph{math:}
+      \vfill
+      \begin{theorem}[Euler's identity] % Note the ( and ) in the optional name
+        \begin{equation}
+          e^{i\pi}+1=0
+        \end{equation}
+      \end{theorem}
+  \end{itemize}
+  \vfill
+\end{frame}
+
+\begin{frame}[fragile]{Verbathings}
+  \begin{itemize}
+    \item Not verbatim text, vs.\ \verb+verbatim text+
+    \item The \verb+verbatim+ \emph{environment} also works:
+      \begin{verbatim}
 Lorem ipsur blah blah...
-	\end{verbatim}
-	\vfill
-\end{slide*}
-\begin{slide}
-  \Stripe{References}
+      \end{verbatim}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Summary}
+  \begin{itemize}
+  \item
+    The \alert{first main message} of your talk in one or two lines.
+  \item
+    The \alert{second main message} of your talk in one or two lines.
+  \item
+    Perhaps a \alert{third message}, but not more than that.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{References}
   \vfill
   \bibliography{sources}
   \bibliographystyle{plainnat}
   \vfill
-\end{slide}
-\begin{slide}
-	\Stripe{Thank you for listening!}
-	\vfill
-  \putbox{0.20\textwidth}{0.4\textheight}{\LARGE \textit{Questions}}
-  \putbox{0.56\textwidth}{0.3\textheight}{%
-		\begin{tikzpicture}[ultra thick,scale=0.5]
+\end{frame}
+
+\begin{frame}[plain]{Thank you for listening!}
+  \begin{textblock*}{0.1\textwidth}(0.2\textwidth, 0.25\textheight)
+    \LARGE \textit{Questions}
+  \end{textblock*}
+  \begin{centering}
+    \hfill\hfill
+		\begin{tikzpicture}[ultra thick,scale=0.7]
 			\draw[line width=3.5,line cap=round] (1.5,0) .. controls ++(0,4) and 
 			++(0,-2) .. (4,4)
 			to[out=90,in=0] (2,6)
 			to[out=180,in=90] 
 			(0,4);
-    \end{tikzpicture}}
-	\vfill
-	\putbox{0.60\textwidth}{0.20\textheight}{\Huge \Smiley}
-\end{slide}
-\end{document}
+    \end{tikzpicture}
+    \hfill
+  \end{centering}
 
-% vim: spell spelllang=en
+  \begin{textblock*}{0.1\textwidth}(0.55\textwidth, 0.02\textheight)
+    \Huge \Smiley
+  \end{textblock*}
+\end{frame}
+
+\end{document}
