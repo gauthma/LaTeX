@@ -1,7 +1,7 @@
 My LaTeX templates 
 ===
 
-These are the templates I use for most of my interactions with LaTeX. The example *LaTeX* files are processed using *XeLaTeX*, except for `cv` (*LuaLaTeX*, to ease the use of pretty fonts), and `presentation`, which for annoying TeXnical reasons, requires `pdflatex`.
+These are the templates I use for most of my interactions with LaTeX. The example *LaTeX* files are processed using *XeLaTeX*, except for `cv`, which uses *LuaLaTeX*, to simplify usign pretty fonts.
 
 Bear in mind that PDF is a [vector format][2], so including raster images might lead to poor results. You can ameliorate the problem by trial and error, tweaking scale factors, image width, etc.
 
@@ -15,12 +15,12 @@ In the first command below, `your_document_dir` must not exist; it should be the
 ```bash
 $ git clone https://github.com/gauthma/LaTeX.git your_document_dir
 $ cd your_document_dir
-$ sh setup.sh [cv, letter, llncs, presentation, report, standalone]
+$ sh setup.sh [bare, cv, essay, llncs, presentation, report, standalone]
 ```
 
 In the last command, if you tab-complete (as the argument has the same name of the `\*.tex` file, minus extension), either the final dot or the whole extension will also be "completed"; this is ok, the script will filter it (i.e. work correctly even with the ending dot and/or extension).
 
-The `setup.sh` script will patch `CompileTeX.sh` and set `name` to the *main file*'s name. It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument. E.g. if argument is `cv`, then it will remove `report.*`, `letter.*`, etc.
+The `setup.sh` script will patch `CompileTeX.sh` and set `name` to the *main file*'s name. It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument. E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc.
 
 **Warning**: the script requires **GNU sed** to edit the `CompileTeX.sh`; if you don't have it, then comment that line and edit the `CompileTeX.sh` manually.
 
@@ -28,9 +28,11 @@ Do work with LaTeX skeletons provided, compile using adequate `CompileTeX.sh` ta
 
 - `no argument`: run `LaTeX` compiling command once, without debug output. 
 
+- `bib`: check the document for `\cite` commands. If there are any, then build the bibliography, and then do two normal `LaTeX` compile runs.
+
 - `debug`: run `LaTeX` compiling command once, *with* debug output. 
 
-- `full`: run `LaTeX` command, then `BibTeX` command, then `LaTeX` command twice more. This is to put properly all references, TOC, etc.
+- `full`: run `LaTeX` command, then run compile script with `bib` option (see above), then run `LaTeX` command once more. This is to put properly all references, TOC, etc.
 
 - `final`: `clean`s everything up, and them makes a `full` build. If you need the final PDF document to have a different name, then you can use the `endname` variable, which the last command in this function sets as its name.
 
@@ -42,7 +44,7 @@ Do work with LaTeX skeletons provided, compile using adequate `CompileTeX.sh` ta
 
 **NOTA BENE:** for the `report` class, both normal (no argument) and `full` compiling also trigger the compilation of the **unabridged copy**; see below.
 
-The files starting with `inc_` (all in the `includes/` directory) are files that are supposed to be *included* in another file, and *not* compiled on their own. Next follows a brief description of available types.
+The files in the `includes/` directory are files that are supposed to be *included* in another file, and *not* compiled on their own. Next follows a brief description of available types.
 
 ### Bare
 
@@ -51,10 +53,6 @@ For simple notes; it consists of the article class, with nothing other than a nu
 ### CV
 
 The template on which my CV is based.
-
-### Letter
-
-It's pretty straightforward, for letters you are actually going to (snail!) mail.
 
 ### llncs
 
@@ -88,7 +86,7 @@ FUNCTION {fin.entry}
 
 ### Presentation
 
-This skeleton (`presentation.tex`) depends on the `projector` class, found [here](http://www.shoup.net/projector/). Installing it is described in the [TeX Trickery](#tex-trickery) section. Also, when displaying presentations, bold is often more emphasizing than italics. Thus, the `\emph` command is redefined to put the text in bold; for italics there is the `\iemph` command.
+This skeleton (`presentation.tex`) depends on the `beamer` class (it should be a part of `TeX-live`). Also, when displaying presentations, bold is often more emphasizing than italics. Thus, the `\emph` command is redefined to put the text in bold; for italics there is the `\iemph` command.
 
 ### Report
 
@@ -101,15 +99,9 @@ I use this as a playground for graphics packages, like `xy` or `TikZ`. The PDF p
 Tweakings
 ---
 
-### Draft mode
-
-In the code for fonts, the `microtype` package is loaded. This package improves the way spacing is computed, which usually results in an improved layout. However, it slows down, very noticeably, the compile time; the solution is the line after it, which indicates to `microtype` that the document is to be processed in draft mode---which disables all the layout improvements. When producing the final version, set `draft=false`.
-
-The above method only disables the `microtype` improvements (which already improves compilation time considerably). But to improve it even further, you can set *the whole document* in draft mode, by adding `draft` to the `documentclass` options. This, besides also disabling `microtype`, further disables all sorts of things, like images, cross-references, etc. If you use this latter option, there is no need to disable `microtype`---it is done automagically.
-
 ### The xcolor package
 
-The *documentclass* line contains two options (`usenames` and `dvipsnames`) that belong to the *xcolor* package, but setting those options only when loading *xcolor* might cause conflicts with other packages that also automagically load that package (namely *tikz*). Having those options given to *documentclass* avoids the possibility of any such conflict.
+The `documentclass` line contains two options (`usenames` and `dvipsnames`) that belong to the `xcolor` package, but setting those options only when loading `xcolor` might cause conflicts with other packages that also automagically load that package (namely `tikz`). Having those options given to `documentclass` avoids the possibility of any such conflict.
 
 ArchLinux (AL) packages 
 ---
