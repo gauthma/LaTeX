@@ -36,14 +36,15 @@ function bibliography() {
   if [[ "$got_bib" = true ]] ; then
 
 # First see if there are actually any \cite commands in the .tex files. The -F
-# option to grep is to interpret the pattern as a fixed string.
+# option to grep is to interpret the pattern as a fixed string. If there are,
+# then run $bibcmd, and after that do two TeX compile runs.
     grep_for_cite=$(grep -rF "\cite" *.tex)
     if [[ -n "$grep_for_cite" ]]; then
       cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
       if [[ $? -eq 0 ]]; then # if no errors building bib, then...
         run && run
 
-# The compile run after bib update failed.
+# If the compile run after bib update failed, notify the user and quit.
         if [[ $? -ne 0 ]]; then
           echo "Compile of *.tex file was not successful!"
           exit 1
