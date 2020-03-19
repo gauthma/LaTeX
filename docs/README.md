@@ -101,7 +101,7 @@ Tweakings
 
 ### The xcolor package
 
-The `documentclass` line contains two options (`usenames` and `dvipsnames`) that belong to the `xcolor` package, but setting those options only when loading `xcolor` might cause conflicts with other packages that also automagically load that package (namely `tikz`). Having those options given to `documentclass` avoids the possibility of any such conflict.
+The `documentclass` line contains one option, `dvipsnames*`, that belongs to the `xcolor` package, but setting it only when loading `xcolor` might cause conflicts with other packages that also automagically load that package (namely `tikz`). Having that option given to `documentclass` avoids the possibility of any such conflict. (What this particular option does, incidently, is to load a set colours larger then the basic set, which contains the colour MidnightBlue, used for hyperrefs. The starred version loads colour on demand, i.e. required a `\providecolors` command.)
 
 ArchLinux (AL) packages 
 ---
