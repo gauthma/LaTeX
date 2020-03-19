@@ -3,10 +3,11 @@
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
 
-# Two functions, run and fullrun, do a simple run, and a run with bibliography
-# building, respectively. Most of the remaining functions build on these two,
-# to compile both the report and its unabridged version (only in the case of
-# reports), and to check for errors and give feedback properly, and so on.
+# Two functions, run and fullrun, do a simple run, and a clean run with
+# bibliography building and three singles afterwords, respectively. Most of the
+# remaining functions build on these two, to compile both the report and its
+# unabridged version (only in the case of reports), and to check for errors and
+# give feedback properly, and so on.
 
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
@@ -37,12 +38,20 @@ function bibliography() {
 
 # First see if there are actually any \cite commands in the .tex files. The -F
 # option to grep is to interpret the pattern as a fixed string. If there are,
-# then run $bibcmd, and after that do two TeX compile runs.
+# then do a compile run, then run $bibcmd, and after that do three TeX compile
+# runs.
     grep_for_cite=$(grep -rF "\cite" *.tex)
     if [[ -n "$grep_for_cite" ]]; then
+      run
+# If the compile run failed, notify the user and quit.
+      if [[ $? -ne 0 ]]; then
+        echo "Compile of *.tex file was not successful!"
+        exit 1
+      fi
+# Otherwise, build the bibliography, and if no errors building bib, then do three more normal runs. The reason for *three* runs, instead of the usual two, is that an extra run is required for backreferences in bib entries to be constructed.
       cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
-      if [[ $? -eq 0 ]]; then # if no errors building bib, then...
-        run && run
+      if [[ $? -eq 0 ]]; then
+        run && run & run
 
 # If the compile run after bib update failed, notify the user and quit.
         if [[ $? -ne 0 ]]; then
@@ -107,9 +116,9 @@ function finalfullrun() {
   fi
 }
 
-# A full LaTeX build run: run once, then run bib (if it is set), then run three
-# more times (usually two a are enough, but in some thorny cases three are
-# required, so...). If using bib is not set, just run twice.
+# A full LaTeX build run: clean run once, then run bib (if it is set), then run
+# three more times (usually two a are enough, but in some thorny cases three
+# are required, so...). If using bib is not set, just run twice.
 function fullrun() {
   clean
   run
