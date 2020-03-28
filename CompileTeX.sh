@@ -30,60 +30,7 @@ debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=
 bibcmd="bibtex"
 
 # IMPORTANT: to disable bibliography, set this to false.
-got_bib=true
-
-# Can be useful when showing bib entries in say, a presentation.
-function bibliography() {
-  if [[ "$got_bib" = true ]] ; then
-
-# First see if there are actually any \cite commands in the .tex files. The -F
-# option to grep is to interpret the pattern as a fixed string. If there are,
-# then do a compile run, then run $bibcmd, and after that do three TeX compile
-# runs.
-    grep_for_cite=$(grep -rF "\cite" *.tex)
-    if [[ -n "$grep_for_cite" ]]; then
-      run
-# If the compile run failed, notify the user and quit.
-      if [[ $? -ne 0 ]]; then
-        echo "Compile of *.tex file was not successful!"
-        exit 1
-      fi
-# Otherwise, build the bibliography, and if no errors building bib, then do three more normal runs. The reason for *three* runs, instead of the usual two, is that an extra run is required for backreferences in bib entries to be constructed.
-      cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
-      if [[ $? -eq 0 ]]; then
-        run && run & run
-
-# If the compile run after bib update failed, notify the user and quit.
-        if [[ $? -ne 0 ]]; then
-          echo "Compile of *.tex file was not successful!"
-          exit 1
-# If the two compile runs after a bib update did not fail, then update bib &&
-# double run in unabridged_dir.
-        else
-          if [[ "${name}" == "report" ]]; then
-            update_unabridged_tex_files
-
-            echo -e "\n*************************************************************************"
-            echo -e "* Now continuing with (background) unabridged (bibliography) build..."
-            echo -e "*************************************************************************\n"
-
-            cd "${unabridged_dir}" && pwd && ${bibcmd} ${name} && cd ..
-            cd "${unabridged_dir}" && run &> /dev/null && run &> /dev/null && cd .. &
-          fi
-
-        fi
-      fi
-      return 0
-# If there is no \cite command, then do not build bibliography (and tell that
-# to the user).
-    else
-      echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite commands, so not building bibliography."
-    fi
-  else
-    echo "$0: The \$got_bib var is set to false, so I assume there is no bibliography to build."
-  fi
-  return 1
-}
+got_bib="true"
 
 # Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
 function clean() {
@@ -107,7 +54,7 @@ function debugbuild() {
 }
 
 function finalfullrun() {
-  normalfullrun
+  fullrun
 
   if [[ "${name}" == "report" ]]; then
     cp "${unabridged_dir}"/"${build_dir}"/"${name}.pdf" "${finalname}.pdf"
@@ -117,17 +64,96 @@ function finalfullrun() {
 }
 
 # A full LaTeX build run: clean run once, then run bib (if it is set), then run
-# three more times (usually two a are enough, but in some thorny cases three
-# are required, so...). If using bib is not set, just run twice.
+# three more times (usually two are enough, but in some thorny cases three are
+# required, so...). If using bib is not set, just run three times.
 function fullrun() {
+
+# This variable is used to know what to do when building the unabridged copy.
+# If set to 0, then, after then first simple run, just do two simple runs (as
+# if there was no bibliography). Otherwise, if set to 1, then (after the first
+# run), run $bibcmd, and to three more simple runs. Accordingly, this is set to
+# 1 after successfully building the bibliography, in the main (possibly
+# abridged) copy.
+  local what_to_do_after_first_TeX_run=0
+
   clean
+
+# First (after cleaning, that is), do a simple run.
   run
-  if [[ "$got_bib" = true ]] ; then
-    bibliography
+# If the compile run failed, notify the user and quit.
+  if [[ $? -ne 0 ]]; then
+    echo "Compile of *.tex file was not successful!"
+    exit 1
   fi
-  run
-  return $?
+
+# If the previous run succeeded, and we have no bibliography, then just run
+# twice more and exit.
+  if [[ "$got_bib" == "false" ]] ; then
+    echo "$0: The \$got_bib var is set to false, so I assume there is no bibliography to build."
+      echo "$0: I will just do two more normal runs."
+    run && run
+
+# If $got_bib is not false see if there are actually any \cite commands in the
+# .tex files. The -F option to grep is to interpret the pattern as a fixed
+# string. If there are, then run $bibcmd, and after that do three TeX compile
+# runs. The reason for *three* runs, instead of the usual two, is that an extra
+# run is required for backreferences in bib entries to be constructed (e.g.
+# "Cited in page ...").
+  else # , so...
+    grep_for_cite=$(grep -rF "\cite" *.tex) # XXX need to also discover \nocite!
+    if [[ -n "$grep_for_cite" ]]; then # We have \cite or \nocite commands!
+      cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
+      if [[ $? -eq 0 ]]; then
+        run && run && run
+# If the compile run after bib update failed, notify the user and quit.
+        if [[ $? -ne 0 ]]; then
+          echo "Compile of *.tex file was not successful!"
+          exit 1
+        fi
+      fi
+
+# We have successfully built bibliography, and done three simple runs after that. So set this variable to 1, to know to do the same when building unabridged copy.
+      what_to_do_after_first_TeX_run=1
+
+# If there is no \cite command, then do not build bibliography (and tell that
+# to the user).
+    else
+      echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite commands, so not building bibliography."
+      echo "$0: I will just do two more normal runs."
+      run && run
+    fi
+  fi
+
+# Now we deal with unabridged copy, if there is one.
+# If the three compile runs after a bib update did not fail, then update bib &&
+# double run in unabridged_dir.
+  if [[ "${name}" == "report" ]]; then
+    update_unabridged_tex_files
+
+    echo -e "\n*************************************************************************"
+    echo -e "* Now continuing with (background) unabridged (bibliography) build..."
+    echo -e "*************************************************************************\n"
+
+# Just as above, first, do a single run.
+    cd "${unabridged_dir}" && run &> /dev/null && cd ..
+
+# If when building main copy, we successfully built bibliography then do the
+# same here.
+    if [[ $what_to_do_after_first_TeX_run == 1 ]] ; then
+      cd "${unabridged_dir}"/"${build_dir}" && ${bibcmd} ${name} &> /dev/null \
+        && cd ../..
+      cd "${unabridged_dir}" && run &> /dev/null && run &> /dev/null && \
+        run &> /dev/null && cd .. &
+
+# If when building main copy, we did NOT build bibliography (i.e. we just ended
+# doing three simple runs), then here just do the same.
+    else
+      cd "${unabridged_dir}" && run &> /dev/null && run &> /dev/null && cd ..
+    fi
+  fi
+  # Script execution should never reach this point.
 }
+
 
 # Get the pid of the running $texcmd process (if any). This is needed to avoid
 # starting (from within vim) a new compilation, if one is already running.
@@ -163,26 +189,6 @@ function normalbuild() {
     echo -e "*************************************************************************\n"
 
     cd "${unabridged_dir}" && run &> /dev/null && cd .. &
-  fi
-}
-
-function normalfullrun() {
-  fullrun # run() returns the $? of the LaTeX command. See Note (1).
-  if [[ $? -ne 0 ]]; then
-    echo "Compile of *.tex file was not successful!"
-    exit 1
-  fi
-
-# If run was successful (LaTeX compiler should halt on errors), and we are
-# dealing with report, then update unabridged copy.
-  if [[ "${name}" == "report" ]]; then
-    update_unabridged_tex_files
-
-    echo -e "\n*************************************************************************"
-    echo -e "* Now continuing with (background) unabridged (normal, full) build..."
-    echo -e "*************************************************************************\n"
-
-    cd "${unabridged_dir}" && fullrun &> /dev/null && cd .. &
   fi
 }
 
@@ -233,8 +239,6 @@ function main() {
 # - argument is killall_tex: run that function.
   if [[ $# -eq 0 ]] ; then
     normalbuild
-  elif [[ $# -eq 1 && "$1" == "bib" ]] ; then
-    bibliography
   elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
     clean
   elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
@@ -242,7 +246,7 @@ function main() {
   elif [[ $# -eq 1 && "$1" == "final" ]] ; then
     finalfullrun
   elif [[ $# -eq 1 && "$1" == "full" ]] ; then
-    normalfullrun
+    fullrun
   elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
     get_compiler_pid
   elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
