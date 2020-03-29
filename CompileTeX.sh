@@ -63,9 +63,9 @@ function finalfullrun() {
   fi
 }
 
-# A full LaTeX build run: clean run once, then run bib (if it is set), then run
-# three more times (usually two are enough, but in some thorny cases three are
-# required, so...). If using bib is not set, just run three times.
+# A full LaTeX build run: clean and run once, then run bib (if it is set), then
+# run three more times (usually two are enough, but in some thorny cases three
+# are required, so...). If using bib is not set, just run three times.
 function fullrun() {
 
 # This variable is used to know what to do when building the unabridged copy.
@@ -131,7 +131,7 @@ function fullrun() {
     update_unabridged_tex_files
 
     echo -e "\n*************************************************************************"
-    echo -e "* Now continuing with (background) unabridged (bibliography) build..."
+    echo -e "* Now continuing with (background) unabridged (full) build..."
     echo -e "*************************************************************************\n"
 
 # Just as above, first, do a single run.
