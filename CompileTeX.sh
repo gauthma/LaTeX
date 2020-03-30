@@ -34,7 +34,7 @@ got_bib="true"
 
 # Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
 function clean() {
-  echo "Wiping contents of build/ (except PDF files)"
+  echo "Wiping contents of ${build_dir} (except PDF files)"
   cd "${build_dir}" && rm -rf $(ls | grep -v ".pdf") && cd ..
 
   echo "Wiping contents of ${unabridged_dir}"
