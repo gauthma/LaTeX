@@ -40,11 +40,13 @@ function clean() {
   echo "Wiping contents of ${unabridged_dir}"
   rm -rf "${unabridged_dir}"/*
 
-# Rebuilding structure of $build_dir/. NOTA BENE: if any .tex files are in
-# their own custom directories, those dirs must also exist in $build_dir, with
-# the same hierarchy. See README.md for more details.
+# Rebuilding structure of $build_dir/.
   echo "ln -sr ${sourcesname}.bib ${build_dir}"
   ln -sr ${sourcesname}.bib ${build_dir}
+
+# NOTA BENE: if any .tex files are in their own custom directories, those dirs
+# must also exist in $build_dir, with the same hierarchy. See README.md for
+# more details.
 }
 
 # A normal (single) LaTeX compile run.
@@ -69,11 +71,11 @@ function finalfullrun() {
 function fullrun() {
 
 # This variable is used to know what to do when building the unabridged copy.
-# If set to 0, then, after then first simple run, just do two simple runs (as
-# if there was no bibliography). Otherwise, if set to 1, then (after the first
-# run), run $bibcmd, and to three more simple runs. Accordingly, this is set to
-# 1 after successfully building the bibliography, in the main (possibly
-# abridged) copy.
+# If set to 0, then, after then first simple run (which is always done), just
+# do two more simple runs (as if there was no bibliography). Otherwise, if set
+# to 1, then (after the first run), run $bibcmd, and to three more simple runs.
+# Accordingly, this is set to 1 after successfully building the bibliography,
+# in the main (possibly abridged) copy.
   local what_to_do_after_first_TeX_run=0
 
   clean
@@ -93,14 +95,14 @@ function fullrun() {
       echo "$0: I will just do two more normal runs."
     run && run
 
-# If $got_bib is not false see if there are actually any \cite commands in the
-# .tex files. The -F option to grep is to interpret the pattern as a fixed
-# string. If there are, then run $bibcmd, and after that do three TeX compile
-# runs. The reason for *three* runs, instead of the usual two, is that an extra
-# run is required for backreferences in bib entries to be constructed (e.g.
-# "Cited in page ...").
+# If $got_bib is not false see if there are actually any \cite or \nocite
+# commands in the .tex files. The -E option to grep is to interpret the pattern
+# as an extended regular expression. If there are, then run $bibcmd, and after
+# that do three TeX compile runs. The reason for *three* runs, instead of the
+# usual two, is that an extra run is required for backreferences in bib entries
+# to be constructed (e.g. "Cited in page ...").
   else # , so...
-    grep_for_cite=$(grep -rF "\cite" *.tex) # XXX need to also discover \nocite!
+    grep_for_cite=$(grep -rE '\\(no)?cite' *.tex)
     if [[ -n "$grep_for_cite" ]]; then # We have \cite or \nocite commands!
       cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
       if [[ $? -eq 0 ]]; then
