@@ -37,8 +37,10 @@ function clean() {
   echo "Wiping contents of ${build_dir} (except PDF files)"
   cd "${build_dir}" && rm -rf $(ls | grep -v ".pdf") && cd ..
 
-  echo "Wiping contents of ${unabridged_dir}"
-  rm -rf "${unabridged_dir}"/*
+  if [[ -d  ${unabridged_dir} ]] ; then
+    echo "Wiping contents of ${unabridged_dir}"
+    rm -rf "${unabridged_dir}"/*
+  fi
 
 # Rebuilding structure of $build_dir/.
   echo "ln -sr ${sourcesname}.bib ${build_dir}"
