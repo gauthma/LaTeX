@@ -70,14 +70,14 @@
 %
 \usepackage{xcolor} % For MidnightBlue colour!
 \providecolors{MidnightBlue}
-\usepackage[pagebackref=true,
-            bookmarks=true,
+\usepackage[bookmarks=true,
+            citecolor=MidnightBlue,
             colorlinks=true,
             hyperfootnotes=false,
             linkcolor=MidnightBlue,
-            urlcolor=MidnightBlue,
-            citecolor=MidnightBlue,
-            linktocpage=true]{hyperref}
+            linktocpage=true,
+            pagebackref=true,
+            urlcolor=MidnightBlue]{hyperref}
 \renewcommand*{\backref}[1]{}
 \renewcommand*{\backrefalt}[4]{%
   \ifcase #1 Not cited.%
