@@ -139,7 +139,7 @@ function fullrun() {
     echo -e "*************************************************************************\n"
 
 # Just as above, first, do a single run.
-    cd "${unabridged_dir}" && run &> /dev/null && cd ..
+    cd "${unabridged_dir}" && run &> /dev/null && cd .. &
 
 # If when building main copy, we successfully built bibliography then do the
 # same here.
