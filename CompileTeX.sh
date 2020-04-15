@@ -122,7 +122,7 @@ function fullrun() {
 # If there is no \cite command, then do not build bibliography (and tell that
 # to the user).
     else
-      echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite commands, so not building bibliography."
+      echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite or \\nocite commands, so not building bibliography."
       echo "$0: I will just do two more normal runs."
       run && run
     fi
