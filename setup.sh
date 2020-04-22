@@ -102,8 +102,14 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
     mkdir "${unabridged_dir}"
-    cp -r ${build_dir} ${unabridged_dir}
+    mkdir "${unabridged_dir}/${build_dir}"
+
+    cp "${build_dir}/${doctype}.pdf" "${unabridged_dir}/${build_dir}/${doctype}.pdf"
     ln -sr "${unabridged_dir}/${build_dir}/${doctype}.pdf" "Unabridged.pdf"
+    ln -sr "${unabridged_dir}/${build_dir}/${doctype}.pdf" "${unabridged_dir}/${doctype}.pdf"
+
+    cp "sources.bib" "${unabridged_dir}/"
+    ln -sr "${unabridged_dir}/sources.bib" "${unabridged_dir}/${build_dir}"/
   fi
 
 # For the types that DON'T come with references, comment the got_bib line in
@@ -124,7 +130,8 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   fi
 
 # The actual pdf is in the build directory; instead of moving it, we symlink it
-# up. The same must also be done for the unabridged file (cf. Mafefile).
+# up. The same was already done for unabridged_dir (see above, special actions
+# for filetypes).
   ln -sr "${build_dir}/${doctype}.pdf" .
 
 # Finally delete this script (no use for it after everything is set up).
