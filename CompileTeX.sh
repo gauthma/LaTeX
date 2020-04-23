@@ -11,6 +11,7 @@
 
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
+name_unabridged="Unabridged"
 
 # The final name of the .pdf file (without extension). Defaults to original
 # name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
@@ -20,13 +21,12 @@ finalname="${name}.FINAL"
 # Name of the .bib file (sans extension).
 sourcesname="sources"
 
-build_dir="build"
-docs_dir="docs"
-unabridged_dir="_UNABRIDGED"
+build_dir_regular="build"
+build_dir_unabridged="build_UNABRIDGED"
 
 texcmd="xelatex"
-texcmdopts="-halt-on-error --interaction=batchmode --shell-escape --output-directory=${build_dir}"
-debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir}"
+texcmdopts="-halt-on-error --interaction=batchmode --shell-escape"
+debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir_regular}"
 bibcmd="bibtex"
 
 # IMPORTANT: to disable bibliography, set this to false.
@@ -34,17 +34,14 @@ got_bib="true"
 
 # Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
 function clean() {
-  echo "Wiping contents of ${build_dir} (except PDF files)"
-  cd "${build_dir}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+  echo "Wiping contents of ${build_dir_regular} (except PDF files)"
+  cd "${build_dir_regular}" && rm -rf $(ls | grep -v ".pdf") && cd ..
 
-  if [[ -d  ${unabridged_dir} ]] ; then
-    echo "Wiping contents of ${unabridged_dir}"
-    rm -rf "${unabridged_dir}"/*
-  fi
+  echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
+  cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
 
 # Rebuilding structure of $build_dir/.
-  echo "ln -sr ${sourcesname}.bib ${build_dir}"
-  ln -sr ${sourcesname}.bib ${build_dir}
+  unabridged_dir_and_symlinks_rebuild
 
 # NOTA BENE: if any .tex files are in their own custom directories, those dirs
 # must also exist in $build_dir, with the same hierarchy. See README.md for
@@ -61,7 +58,7 @@ function finalfullrun() {
   fullrun
 
   if [[ "${name}" == "report" ]]; then
-    cp "${unabridged_dir}"/"${build_dir}"/"${name}.pdf" "${finalname}.pdf"
+    cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
   else
     cp "${build_dir}"/"${name}.pdf" "${finalname}.pdf"
   fi
@@ -83,7 +80,7 @@ function fullrun() {
   clean
 
 # First (after cleaning, that is), do a simple run.
-  run
+  run "$name" "$build_dir_regular"
 # If the compile run failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
     echo "Compile of *.tex file was not successful!"
@@ -95,7 +92,8 @@ function fullrun() {
   if [[ "$got_bib" == "false" ]] ; then
     echo "$0: The \$got_bib var is set to false, so I assume there is no bibliography to build."
       echo "$0: I will just do two more normal runs."
-    run && run
+    run "$name" "$build_dir_regular" && \
+      run "$name" "$build_dir_regular"
 
 # If $got_bib is not false see if there are actually any \cite or \nocite
 # commands in the .tex files. The -E option to grep is to interpret the pattern
@@ -106,9 +104,11 @@ function fullrun() {
   else # , so...
     grep_for_cite=$(grep -rE '\\(no)?cite' *.tex)
     if [[ -n "$grep_for_cite" ]]; then # We have \cite or \nocite commands!
-      cd "${build_dir}" && pwd && ${bibcmd} ${name} && cd ..
+      cd "${build_dir_regular}" && pwd && ${bibcmd} ${name} && cd ..
       if [[ $? -eq 0 ]]; then
-        run && run && run
+        run "$name" "$build_dir_regular" && \
+          run "$name" "$build_dir_regular" && \
+          run "$name" "$build_dir_regular"
 # If the compile run after bib update failed, notify the user and quit.
         if [[ $? -ne 0 ]]; then
           echo "Compile of *.tex file was not successful!"
@@ -124,13 +124,14 @@ function fullrun() {
     else
       echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite or \\nocite commands, so not building bibliography."
       echo "$0: I will just do two more normal runs."
-      run && run
+      run "$name" "$build_dir_regular" && \
+        run "$name" "$build_dir_regular"
     fi
   fi
 
-# Now we deal with unabridged copy, if there is one.
-# If the three compile runs after a bib update did not fail, then update bib &&
-# double run in unabridged_dir.
+# Now we deal with unabridged copy, if there is one. If the three compile runs
+# after a bib update did not fail, then update bib && double run in
+# unabridged_dir.
   if [[ "${name}" == "report" ]]; then
     update_unabridged_tex_files
 
@@ -139,20 +140,21 @@ function fullrun() {
     echo -e "*************************************************************************\n"
 
 # Just as above, first, do a single run.
-    cd "${unabridged_dir}" && run &> /dev/null && cd .. &
+    run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null &
 
 # If when building main copy, we successfully built bibliography then do the
 # same here.
     if [[ $what_to_do_after_first_TeX_run == 1 ]] ; then
-      cd "${unabridged_dir}"/"${build_dir}" && ${bibcmd} ${name} &> /dev/null \
-        && cd ../..
-      cd "${unabridged_dir}" && run &> /dev/null && run &> /dev/null && \
-        run &> /dev/null && cd .. &
+      cd "${build_dir_unabridged}" && ${bibcmd} ${name} &> /dev/null && cd .. &
+      run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
+        run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
+        run "${name}" "$build_dir_unabridged" &> /dev/null &
 
 # If when building main copy, we did NOT build bibliography (i.e. we just ended
 # doing three simple runs), then here just do the same.
     else
-      cd "${unabridged_dir}" && run &> /dev/null && run &> /dev/null && cd ..
+      run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
+        run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null &
     fi
   fi
   # Script execution should never reach this point.
@@ -174,10 +176,9 @@ function killall_tex() {
 # on the unabridged copy.
 #
 # First do a simple run. Then, if it was successful, and if we are dealing with
-# report, copy the files to $unabridged_dir. Lastly, do the normal run in the
-# $unabridged_dir.
+# report, build unabridged copy.
 function normalbuild() {
-  run # run() returns the $? of the LaTeX command. See Note (1).
+  run "$name" "$build_dir_regular" # run() returns the $? of the LaTeX command. See Note (1).
   if [[ $? -ne 0 ]]; then
     echo "Compile of *.tex file was not successful!"
     exit 1
@@ -192,38 +193,38 @@ function normalbuild() {
     echo -e "* Now continuing with (background) unabridged (normal, non-full) build..."
     echo -e "*************************************************************************\n"
 
-    cd "${unabridged_dir}" && run &> /dev/null && cd .. &
+    run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null &
   fi
 }
 
 # A normal (single) LaTeX compile run.
 function run() {
-  ${texcmd} ${texcmdopts} ${name}
+  ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
   return $?
 }
 
-# Copy all stuff (except $docs_dir and the $unabridged_dir itself) into
-# $unabridged_dir, and comment all \includeonly lines, to produce an unabridged
-# copy. After copying, remove Unabridged.pdf symlink inside $unabridged_dir, as
-# it is not needed.
+# Copy main .tex file as $name_unabridged, patch it to comment all \includeonly's, and then build unabridged copy in $build_dir_unabridged.
 function update_unabridged_tex_files() {
-  cp -r $(ls | grep -v "${unabridged_dir}\|${docs_dir}") "${unabridged_dir}"
-  rm -f "${unabridged_dir}"/Unabridged.pdf
-  sed -e '/^\s*\\includeonly/ s/^/% /' -i "${unabridged_dir}"/"${name}.tex"
+  cp "${name}.tex" "${name_unabridged}.tex"
+
+  sed -e '/^\s*\\includeonly/ s/^/% /' -i "${name_unabridged}.tex"
 }
 
 function unabridged_dir_and_symlinks_rebuild() {
-  mkdir -p "${unabridged_dir}"
+# First deal with regular build dir.
   rm -f "${name}.pdf"
-  rm -f "Unabridged.pdf"
-  rm -f "${build_dir}/${sourcesname}.bib"
+  rm -f "${build_dir_regular}/${sourcesname}.bib"
 
-  ln -sr "${build_dir}/${name}.pdf" .
-  ln -sr ${sourcesname}.bib "${build_dir}"/
+  ln -sr "${build_dir_regular}/${name}.pdf" .
+  ln -sr ${sourcesname}.bib "${build_dir_regular}"/
 
-# Only report type has unabridged copy.
+# And then with unabridged build dir (only for reports).
   if [[ "${name}" == "report" ]]; then
-    ln -sr "${unabridged_dir}/${build_dir}/${name}.pdf" "Unabridged.pdf"
+    rm -f "${name_unabridged}.pdf"
+    rm -f "${build_dir_unabridged}/${sourcesname}.bib"
+
+    ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" .
+    ln -sr ${sourcesname}.bib "${build_dir_unabridged}"/
   fi
 }
 
