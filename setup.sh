@@ -1,7 +1,8 @@
 #!/bin/bash
 
 build_dir="build"
-unabridged_dir="_UNABRIDGED"
+build_dir_unabridged="build_UNABRIDGED"
+name_unabridged="Unabridged"
 
 doctype="$1"
 
@@ -91,6 +92,10 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
 
+# The actual pdf is in the build directory; instead of moving it, we symlink it
+# up.
+  ln -sr "${build_dir}/${doctype}.pdf" .
+
 # Setup CompileTeX.sh (requires GNU sed) Begin with setting what type of
 # document we want (report, presentation, ...)
   sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh
@@ -101,15 +106,15 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" ]] ; then
     sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
-    mkdir "${unabridged_dir}"
-    mkdir "${unabridged_dir}/${build_dir}"
 
-    cp "${build_dir}/${doctype}.pdf" "${unabridged_dir}/${build_dir}/${doctype}.pdf"
-    ln -sr "${unabridged_dir}/${build_dir}/${doctype}.pdf" "Unabridged.pdf"
-    ln -sr "${unabridged_dir}/${build_dir}/${doctype}.pdf" "${unabridged_dir}/${doctype}.pdf"
+# If document type is report, then set up the directory where we will build the
+# unabridged copy.
+    mkdir "${build_dir_unabridged}"
 
-    cp "sources.bib" "${unabridged_dir}/"
-    ln -sr "${unabridged_dir}/sources.bib" "${unabridged_dir}/${build_dir}"/
+    cp "${build_dir}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
+    ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" "Unabridged.pdf"
+
+    ln -sr "sources.bib" "${build_dir_unabridged}"/
   fi
 
 # For the types that DON'T come with references, comment the got_bib line in
@@ -128,11 +133,6 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   else
     ln -sr sources.bib "${build_dir}"/
   fi
-
-# The actual pdf is in the build directory; instead of moving it, we symlink it
-# up. The same was already done for unabridged_dir (see above, special actions
-# for filetypes).
-  ln -sr "${build_dir}/${doctype}.pdf" .
 
 # Finally delete this script (no use for it after everything is set up).
   rm -- "$0"
