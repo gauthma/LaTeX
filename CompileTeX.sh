@@ -11,7 +11,6 @@
 
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
-name_unabridged="Unabridged"
 
 # The final name of the .pdf file (without extension). Defaults to original
 # name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
@@ -21,8 +20,8 @@ finalname="${name}.FINAL"
 # Name of the .bib file (sans extension).
 sourcesname="sources"
 
+# Build dir for the regular (possibly abridged) copy.
 build_dir_regular="build"
-build_dir_unabridged="build_UNABRIDGED"
 
 texcmd="xelatex"
 texcmdopts="-halt-on-error --interaction=batchmode --shell-escape"
@@ -31,6 +30,11 @@ bibcmd="bibtex"
 
 # IMPORTANT: to disable bibliography, set this to false.
 got_bib="true"
+
+# Data for unabridged copy.
+got_unabridged="false"
+name_unabridged="Unabridged"
+build_dir_unabridged="build_UNABRIDGED"
 
 # Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
 function clean() {
@@ -57,7 +61,7 @@ function debugbuild() {
 function finalfullrun() {
   fullrun
 
-  if [[ "${name}" == "report" ]]; then
+  if [[ "${got_unabridged}" == "true" ]]; then
     cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
   else
     cp "${build_dir}"/"${name}.pdf" "${finalname}.pdf"
@@ -132,7 +136,7 @@ function fullrun() {
 # Now we deal with unabridged copy, if there is one. If the three compile runs
 # after a bib update did not fail, then update bib && double run in
 # unabridged_dir.
-  if [[ "${name}" == "report" ]]; then
+  if [[ "${got_unabridged}" == "true" ]]; then
     update_unabridged_tex_files
 
     echo -e "\n*************************************************************************"
@@ -186,7 +190,7 @@ function normalbuild() {
 
 # If run was successful, and we are dealing with report, then update unabridged
 # copy.
-  if [[ "${name}" == "report" ]]; then
+  if [[ "${got_unabridged}" == "true" ]]; then
     update_unabridged_tex_files
 
     echo -e "\n*************************************************************************"
@@ -219,7 +223,7 @@ function unabridged_dir_and_symlinks_rebuild() {
   ln -sr ${sourcesname}.bib "${build_dir_regular}"/
 
 # And then with unabridged build dir (only for reports).
-  if [[ "${name}" == "report" ]]; then
+  if [[ "${got_unabridged}" == "true" ]]; then
     rm -f "${name_unabridged}.pdf"
     rm -f "${build_dir_unabridged}/${sourcesname}.bib"
 

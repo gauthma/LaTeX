@@ -24,7 +24,7 @@ To call script pwd must be same as script location.
 EOF
 }
 
-# full dir path of script
+# Full dir path of script.
 fullpath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # current dir
 curr_dir="$(pwd)"
@@ -102,13 +102,14 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
 # For some documents, special actions are required.
   if [[ "${doctype}" == "cv" ]] ; then
-    sed -i "/^texcmd=/c\texcmd=lualatex" CompileTeX.sh
+    sed -i "/^texcmd=/c\texcmd=\"lualatex\"" CompileTeX.sh
   elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" ]] ; then
-    sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
+    sed -i "/^texcmd=/c\texcmd=\"pdflatex\"" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
+# If document type is report, then first set $got_unabridged variable to true.
+    sed -i "/^got_unabridged=\"false\"/c\got_unabridged=\"true\"" CompileTeX.sh
 
-# If document type is report, then set up the directory where we will build the
-# unabridged copy.
+# Next set up the directory where we will build the unabridged copy.
     mkdir "${build_dir_unabridged}"
 
     cp "${build_dir}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
@@ -126,7 +127,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 # this dir).
   if [[ "${doctype}" != "essay" && "${doctype}" != "llncs" \
     && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
-    sed -i "/^got_bib=true/c\got_bib=false" CompileTeX.sh
+    sed -i "/^got_bib=\"true\"/c\got_bib=\"false\"" CompileTeX.sh
     rm sources.bib
 
     rm -rf includes/
