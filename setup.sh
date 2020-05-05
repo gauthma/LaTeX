@@ -1,7 +1,8 @@
 #!/bin/bash
 
 build_dir="build"
-unabridged_dir="_UNABRIDGED"
+build_dir_unabridged="build_UNABRIDGED"
+name_unabridged="Unabridged"
 
 doctype="$1"
 
@@ -23,7 +24,7 @@ To call script pwd must be same as script location.
 EOF
 }
 
-# full dir path of script
+# Full dir path of script.
 fullpath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # current dir
 curr_dir="$(pwd)"
@@ -91,25 +92,30 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
 
+# The actual pdf is in the build directory; instead of moving it, we symlink it
+# up.
+  ln -sr "${build_dir}/${doctype}.pdf" .
+
 # Setup CompileTeX.sh (requires GNU sed) Begin with setting what type of
 # document we want (report, presentation, ...)
   sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh
 
 # For some documents, special actions are required.
   if [[ "${doctype}" == "cv" ]] ; then
-    sed -i "/^texcmd=/c\texcmd=lualatex" CompileTeX.sh
+    sed -i "/^texcmd=/c\texcmd=\"lualatex\"" CompileTeX.sh
   elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" ]] ; then
-    sed -i "/^texcmd=/c\texcmd=pdflatex" CompileTeX.sh
+    sed -i "/^texcmd=/c\texcmd=\"pdflatex\"" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
-    mkdir "${unabridged_dir}"
-    mkdir "${unabridged_dir}/${build_dir}"
+# If document type is report, then first set $got_unabridged variable to true.
+    sed -i "/^got_unabridged=\"false\"/c\got_unabridged=\"true\"" CompileTeX.sh
 
-    cp "${build_dir}/${doctype}.pdf" "${unabridged_dir}/${build_dir}/${doctype}.pdf"
-    ln -sr "${unabridged_dir}/${build_dir}/${doctype}.pdf" "Unabridged.pdf"
-    ln -sr "${unabridged_dir}/${build_dir}/${doctype}.pdf" "${unabridged_dir}/${doctype}.pdf"
+# Next set up the directory where we will build the unabridged copy.
+    mkdir "${build_dir_unabridged}"
 
-    cp "sources.bib" "${unabridged_dir}/"
-    ln -sr "${unabridged_dir}/sources.bib" "${unabridged_dir}/${build_dir}"/
+    cp "${build_dir}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
+    ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" "Unabridged.pdf"
+
+    ln -sr "sources.bib" "${build_dir_unabridged}"/
   fi
 
 # For the types that DON'T come with references, comment the got_bib line in
@@ -121,18 +127,13 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 # this dir).
   if [[ "${doctype}" != "essay" && "${doctype}" != "llncs" \
     && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
-    sed -i "/^got_bib=true/c\got_bib=false" CompileTeX.sh
+    sed -i "/^got_bib=\"true\"/c\got_bib=\"false\"" CompileTeX.sh
     rm sources.bib
 
     rm -rf includes/
   else
     ln -sr sources.bib "${build_dir}"/
   fi
-
-# The actual pdf is in the build directory; instead of moving it, we symlink it
-# up. The same was already done for unabridged_dir (see above, special actions
-# for filetypes).
-  ln -sr "${build_dir}/${doctype}.pdf" .
 
 # Finally delete this script (no use for it after everything is set up).
   rm -- "$0"
