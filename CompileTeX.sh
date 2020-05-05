@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
