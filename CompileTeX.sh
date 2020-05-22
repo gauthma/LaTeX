@@ -44,12 +44,12 @@ function clean() {
   echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
   cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
 
-# Rebuilding structure of $build_dir/.
+# Rebuilding structure of $build_dir/. Begin with symlinks.
   unabridged_dir_and_symlinks_rebuild
 
 # NOTA BENE: if any .tex files are in their own custom directories, those dirs
 # must also exist in $build_dir, with the same hierarchy. See README.md for
-# more details.
+# more details. Can be handled with rsync. Put code below, if/when needed.
 }
 
 # A normal (single) LaTeX compile run.
@@ -72,15 +72,6 @@ function finalfullrun() {
 # run three more times (usually two are enough, but in some thorny cases three
 # are required, so...). If using bib is not set, just run three times.
 function fullrun() {
-
-# This variable is used to know what to do when building the unabridged copy.
-# If set to 0, then, after then first simple run (which is always done), just
-# do two more simple runs (as if there was no bibliography). Otherwise, if set
-# to 1, then (after the first run), run $bibcmd, and to three more simple runs.
-# Accordingly, this is set to 1 after successfully building the bibliography,
-# in the main (possibly abridged) copy.
-  local what_to_do_after_first_TeX_run=0
-
   clean
 
 # First (after cleaning, that is), do a simple run.
@@ -99,15 +90,10 @@ function fullrun() {
     run "$name" "$build_dir_regular" && \
       run "$name" "$build_dir_regular"
 
-# If $got_bib is not false see if there are actually any \cite or \nocite
-# commands in the .tex files. The -E option to grep is to interpret the pattern
-# as an extended regular expression. If there are, then run $bibcmd, and after
-# that do three TeX compile runs. The reason for *three* runs, instead of the
-# usual two, is that an extra run is required for backreferences in bib entries
-# to be constructed (e.g. "Cited in page ...").
-  else # , so...
-    grep_for_cite=$(grep -rE '\\(no)?cite' *.tex)
-    if [[ -n "$grep_for_cite" ]]; then # We have \cite or \nocite commands!
+# If $got_bib is true, then build bib and do three runs. The reason for *three*
+# runs, instead of the usual two, is that an extra run is required for
+# backreferences in bib entries to be constructed (e.g. "Cited in page ...").
+  else
       cd "${build_dir_regular}" && pwd && ${bibcmd} ${name} && cd ..
       if [[ $? -eq 0 ]]; then
         run "$name" "$build_dir_regular" && \
@@ -119,22 +105,10 @@ function fullrun() {
           exit 1
         fi
       fi
-
-# We have successfully built bibliography, and done three simple runs after that. So set this variable to 1, to know to do the same when building unabridged copy.
-      what_to_do_after_first_TeX_run=1
-
-# If there is no \cite command, then do not build bibliography (and tell that
-# to the user).
-    else
-      echo "$0: The \$got_bib var is set to true, but I cannot find any \\cite or \\nocite commands, so not building bibliography."
-      echo "$0: I will just do two more normal runs."
-      run "$name" "$build_dir_regular" && \
-        run "$name" "$build_dir_regular"
-    fi
   fi
 
 # Now we deal with unabridged copy, if there is one. If the three compile runs
-# after a bib update did not fail, then update bib && double run in
+# after a bib update did not fail, then update bib && triple run in
 # unabridged_dir.
   if [[ "${got_unabridged}" == "true" ]]; then
     update_unabridged_tex_files
@@ -146,16 +120,14 @@ function fullrun() {
 # Just as above, first, do a single run.
     run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null &
 
-# If when building main copy, we successfully built bibliography then do the
-# same here.
-    if [[ $what_to_do_after_first_TeX_run == 1 ]] ; then
+# Then build bibliography, if requested.
+    if [[ "$got_bib" == "true" ]] ; then
       cd "${build_dir_unabridged}" && ${bibcmd} ${name} &> /dev/null && cd .. &
       run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
         run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
         run "${name}" "$build_dir_unabridged" &> /dev/null &
 
-# If when building main copy, we did NOT build bibliography (i.e. we just ended
-# doing three simple runs), then here just do the same.
+# Otherwise, just do three simple runs.
     else
       run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
         run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null &
