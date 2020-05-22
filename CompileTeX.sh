@@ -262,6 +262,9 @@ function main() {
     killall_tex
   elif [[ $# -eq 1 && "$1" == "symlinks" ]] ; then
     unabridged_dir_and_symlinks_rebuild
+  else
+    echo "Unknown option(s): $@"
+    exit 1
   fi
 }
 
