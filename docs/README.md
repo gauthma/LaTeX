@@ -111,6 +111,9 @@ The Charis SIL font can be found in an AUR package, but seems not be working. So
 LaTeX Trickery
 ---
 
+Required Packages
+-----
+
 ```tex
 \usepackage[bitstream-charter]{mathdesign}
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
@@ -118,6 +121,18 @@ LaTeX Trickery
 ```
 
 The last two lines are to use the default `mathcal` font, instead of the one with `bitstream-charter`, which is [harder to read][1].
+
+Multiple Input Files
+-----
+
+To do my LaTeX editing, I use `vim`, with the (soon to forked) `tex_nine` plugin. With this plugin, when splitting the input, you can put the following at the start (or end) of your file, to have plugin features like completion and whatnot, still work in the non-main `.tex` files (assuming your main file is named `main.tex`):
+
+~~~ {.numberLines}
+% mainfile: ../main.tex
+% vim: spell spelllang=en
+~~~
+
+Only the first line is required for plugin functionality; the other one is for syntax highlighting, which is always nice to have.
 
 TeX Trickery
 ---
