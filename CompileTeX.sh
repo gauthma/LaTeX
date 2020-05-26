@@ -41,8 +41,10 @@ function clean() {
   echo "Wiping contents of ${build_dir_regular} (except PDF files)"
   cd "${build_dir_regular}" && rm -rf $(ls | grep -v ".pdf") && cd ..
 
-  echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
-  cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+  if [[ "${got_unabridged}" == "true" ]]; then
+    echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
+    cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+  fi
 
 # Rebuilding structure of $build_dir/. Begin with symlinks.
   unabridged_dir_and_symlinks_rebuild
@@ -64,7 +66,7 @@ function finalfullrun() {
   if [[ "${got_unabridged}" == "true" ]]; then
     cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
   else
-    cp "${build_dir}"/"${name}.pdf" "${finalname}.pdf"
+    cp "${build_dir_regular}"/"${name}.pdf" "${finalname}.pdf"
   fi
 }
 
