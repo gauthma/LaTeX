@@ -38,15 +38,25 @@ build_dir_unabridged="build_UNABRIDGED"
 
 # Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
 function clean() {
-  echo "Wiping contents of ${build_dir_regular} (except PDF files)"
-  cd "${build_dir_regular}" && rm -rf $(ls | grep -v ".pdf") && cd ..
-
-  if [[ "${got_unabridged}" == "true" ]]; then
-    echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
-    cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+  if [[ -d "$build_dir_regular" ]]; then
+    echo "Wiping contents of ${build_dir_regular} (except PDF files)"
+    cd "${build_dir_regular}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+  else
+    echo "Creating directory ${build_dir_regular}"
+    mkdir $build_dir_regular
   fi
 
-# Rebuilding structure of $build_dir/. Begin with symlinks.
+  if [[ "${got_unabridged}" == "true" ]]; then
+    if [[ -d "$build_dir_regular" ]]; then
+      echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
+      cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+    else
+      echo "Creating directory ${build_dir_unabridged}"
+      mkdir $build_dir_unabridged
+    fi
+  fi
+
+# Rebuilding structure of build_dirs. Begin with symlinks.
   unabridged_dir_and_symlinks_rebuild
 
 # NOTA BENE: if any .tex files are in their own custom directories, those dirs
@@ -189,6 +199,11 @@ function update_unabridged_tex_files() {
 }
 
 function unabridged_dir_and_symlinks_rebuild() {
+  if [[ ! -d "$build_dir_regular" ]]; then
+    echo "Build dir does not exist! Run clean() to fix it."
+    return 1
+  fi
+
 # First deal with regular build dir.
   rm -f "${name}.pdf"
   rm -f "${build_dir_regular}/${sourcesname}.bib"
@@ -198,6 +213,11 @@ function unabridged_dir_and_symlinks_rebuild() {
 
 # And then with unabridged build dir (only for reports).
   if [[ "${got_unabridged}" == "true" ]]; then
+    if [[ ! -d "$build_dir_unabridged" ]]; then
+      echo "Unabridged build dir does not exist! Run clean() to fix it."
+      return 1
+    fi
+
     rm -f "${name_unabridged}.pdf"
     rm -f "${build_dir_unabridged}/${sourcesname}.bib"
 
