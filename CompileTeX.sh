@@ -9,6 +9,11 @@
 # unabridged version (only in the case of reports), and to check for errors and
 # give feedback properly, and so on.
 
+# IMPORTANT: to disable bibliography, set this to false.
+got_bib="true"
+# IMPORTANT: to disable building the index, set this to false.
+got_idx="true"
+
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
 
@@ -27,9 +32,7 @@ texcmd="xelatex"
 texcmdopts="-halt-on-error --interaction=batchmode --shell-escape"
 debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir_regular}"
 bibcmd="bibtex"
-
-# IMPORTANT: to disable bibliography, set this to false.
-got_bib="true"
+indexcmd="makeindex"
 
 # Data for unabridged copy.
 got_unabridged="false"
@@ -88,6 +91,9 @@ function fullrun() {
 
 # First (after cleaning, that is), do a simple run.
   run "$name" "$build_dir_regular"
+  if [[ "$got_idx" == "true" ]] ; then
+    cd "${build_dir_regular}" && pwd && ${indexcmd} ${name} && cd ..
+  fi
 # If the compile run failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
     echo "Compile of *.tex file was not successful!"
@@ -130,19 +136,22 @@ function fullrun() {
     echo -e "*************************************************************************\n"
 
 # Just as above, first, do a single run.
-    run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null &
+    run "${name_unabridged}" "$build_dir_unabridged"
+    if [[ "$got_idx" == "true" ]] ; then
+      cd "${build_dir_unabridged}" && pwd && ${indexcmd} ${name_unabridged} && cd ..
+    fi
 
 # Then build bibliography, if requested.
     if [[ "$got_bib" == "true" ]] ; then
-      cd "${build_dir_unabridged}" && ${bibcmd} ${name} &> /dev/null && cd .. &
-      run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
-        run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
-        run "${name}" "$build_dir_unabridged" &> /dev/null &
+      cd "${build_dir_unabridged}" && pwd && ${bibcmd} ${name_unabridged} && cd ..
+      run "${name_unabridged}" "$build_dir_unabridged" && \
+        run "${name_unabridged}" "$build_dir_unabridged" && \
+        run "${name_unabridged}" "$build_dir_unabridged"
 
 # Otherwise, just do three simple runs.
     else
-      run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null && \
-        run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null &
+      run "${name_unabridged}" "$build_dir_unabridged" && \
+        run "${name_unabridged}" "$build_dir_unabridged"
     fi
   fi
   # Script execution should never reach this point.
@@ -172,7 +181,7 @@ function normalbuild() {
     exit 1
   fi
 
-# If run was successful, and we are dealing with report, then update unabridged
+# If run was successful, and we have an unabridged copy, then update unabridged
 # copy.
   if [[ "${got_unabridged}" == "true" ]]; then
     update_unabridged_tex_files
@@ -181,7 +190,7 @@ function normalbuild() {
     echo -e "* Now continuing with (background) unabridged (normal, non-full) build..."
     echo -e "*************************************************************************\n"
 
-    run "${name_unabridged}" "$build_dir_unabridged" &> /dev/null &
+    run "${name_unabridged}" "$build_dir_unabridged"
   fi
 }
 
