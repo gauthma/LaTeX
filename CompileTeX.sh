@@ -29,7 +29,7 @@ sourcesname="sources"
 build_dir_regular="build"
 
 texcmd="xelatex"
-texcmdopts="-halt-on-error --interaction=batchmode --shell-escape"
+texcmdopts="-halt-on-error --interaction=batchmode --shell-escape --synctex=1"
 debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir_regular}"
 bibcmd="bibtex"
 indexcmd="makeindex"
@@ -218,6 +218,7 @@ function unabridged_dir_and_symlinks_rebuild() {
   rm -f "${build_dir_regular}/${sourcesname}.bib"
 
   ln -sr "${build_dir_regular}/${name}.pdf" .
+  ln -sr "${build_dir_regular}/${name}.synctex.gz" .
   ln -sr ${sourcesname}.bib "${build_dir_regular}"/
 
 # And then with unabridged build dir (only for reports).
@@ -231,6 +232,7 @@ function unabridged_dir_and_symlinks_rebuild() {
     rm -f "${build_dir_unabridged}/${sourcesname}.bib"
 
     ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" .
+    ln -sr "${build_dir_unabridged}/${name_unabridged}.synctex.gz" .
     ln -sr ${sourcesname}.bib "${build_dir_unabridged}"/
   fi
 }
