@@ -12,7 +12,7 @@
 # IMPORTANT: to disable bibliography, set this to false.
 got_bib="true"
 # IMPORTANT: to disable building the index, set this to false.
-got_idx="true"
+got_idx="false"
 
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
@@ -41,6 +41,12 @@ build_dir_unabridged="build_UNABRIDGED"
 
 # Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
 function clean() {
+
+  echo -e "\nWARNING: if you are using \\includeonly, then after cleaning the build dir,
+  it is VERY RECOMMENDED to do a full build, WITHOUT \\includeonly. Otherwise 
+  things like bibliography might not build properly!\n"
+  read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
+
   if [[ -d "$build_dir_regular" ]]; then
     echo "Wiping contents of ${build_dir_regular} (except PDF files)"
     cd "${build_dir_regular}" && rm -rf $(ls | grep -v ".pdf") && cd ..
@@ -83,21 +89,31 @@ function finalfullrun() {
   fi
 }
 
-# A full LaTeX build run: clean and run once, then run bib (if it is set), then
-# run three more times (usually two are enough, but in some thorny cases three
-# are required, so...). If using bib is not set, just run three times.
+# A full LaTeX build run: run once (and build index, if it is set), then run
+# bib (if it is set), then run three more times (usually two are enough, but in
+# some thorny cases three are required, so...). If using bib is not set, just
+# run three times.
 function fullrun() {
-  clean
 
-# First (after cleaning, that is), do a simple run.
+# First, do a simple run.
   run "$name" "$build_dir_regular"
-  if [[ "$got_idx" == "true" ]] ; then
-    cd "${build_dir_regular}" && pwd && ${indexcmd} ${name} && cd ..
-  fi
 # If the compile run failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
     echo "Compile of *.tex file was not successful!"
     exit 1
+  fi
+
+# If the compile run succeeded, then build the index.
+  if [[ "$got_idx" == "true" ]] ; then
+    cd "${build_dir_regular}" && pwd
+    ${indexcmd} ${name}
+# If the building the index failed, notify the user and quit.
+    if [[ $? -ne 0 ]]; then
+      echo "Building of the index (regular copy) was not successful!"
+      exit 1
+    fi
+# Otherwise leave the regular build dir.
+    cd ..
   fi
 
 # If the previous run succeeded, and we have no bibliography, then just run
@@ -112,17 +128,22 @@ function fullrun() {
 # runs, instead of the usual two, is that an extra run is required for
 # backreferences in bib entries to be constructed (e.g. "Cited in page ...").
   else
-      cd "${build_dir_regular}" && pwd && ${bibcmd} ${name} && cd ..
-      if [[ $? -eq 0 ]]; then
+    cd "${build_dir_regular}" && pwd
+    ${bibcmd} ${name}
+    if [[ $? -eq 0 ]]; then
+      cd ..
+      run "$name" "$build_dir_regular" && \
         run "$name" "$build_dir_regular" && \
-          run "$name" "$build_dir_regular" && \
-          run "$name" "$build_dir_regular"
+        run "$name" "$build_dir_regular"
 # If the compile run after bib update failed, notify the user and quit.
-        if [[ $? -ne 0 ]]; then
-          echo "Compile of *.tex file was not successful!"
-          exit 1
-        fi
+      if [[ $? -ne 0 ]]; then
+        echo "Compile of *.tex file was not successful!"
+        exit 1
       fi
+    else
+      echo "Building bibliography (regular copy) file was not successful!"
+      exit 1
+    fi
   fi
 
 # Now we deal with unabridged copy, if there is one. If the three compile runs
@@ -215,6 +236,7 @@ function unabridged_dir_and_symlinks_rebuild() {
 
 # First deal with regular build dir.
   rm -f "${name}.pdf"
+  rm -f "${name}.synctex.gz"
   rm -f "${build_dir_regular}/${sourcesname}.bib"
 
   ln -sr "${build_dir_regular}/${name}.pdf" .
@@ -229,6 +251,7 @@ function unabridged_dir_and_symlinks_rebuild() {
     fi
 
     rm -f "${name_unabridged}.pdf"
+    rm -f "${name_unabridged}.synctex.gz"
     rm -f "${build_dir_unabridged}/${sourcesname}.bib"
 
     ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" .
