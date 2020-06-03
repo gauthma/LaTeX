@@ -3,7 +3,7 @@
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
 
-# Two functions, run and fullrun, do a simple run, and a clean run with
+# Two functions, compile and big_build, do a simple compile, and a clean compile with
 # bibliography building and three singles afterwords, respectively. Most of the
 # remaining functions build on these two, to compile both the report and its
 # unabridged version (only in the case of reports), and to check for errors and
@@ -42,8 +42,8 @@ build_dir_unabridged="build_UNABRIDGED"
 # Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
 function clean() {
 
-  echo -e "\nWARNING: if you are using \\includeonly, then after cleaning the build dir,
-  it is VERY RECOMMENDED to do a full build, WITHOUT \\includeonly. Otherwise 
+  echo -e "\nWARNING: after cleaning the build dir, it is VERY RECOMMENDED
+  to do a big build, WITHOUT \\includeonly. Otherwise
   things like bibliography might not build properly!\n"
   read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
 
@@ -73,14 +73,14 @@ function clean() {
 # more details. Can be handled with rsync. Put code below, if/when needed.
 }
 
-# A normal (single) LaTeX compile run.
+# A normal (single) LaTeX compile.
 function debugbuild() {
   ${texcmd} ${debug_texcmdopts} ${name}
   return $?
 }
 
-function finalfullrun() {
-  fullrun
+function final_document() {
+  big_build
 
   if [[ "${got_unabridged}" == "true" ]]; then
     cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
@@ -89,21 +89,21 @@ function finalfullrun() {
   fi
 }
 
-# A full LaTeX build run: run once (and build index, if it is set), then run
-# bib (if it is set), then run three more times (usually two are enough, but in
+# A big LaTeX compile: compile once (and build index, if it is set), then compile
+# bib (if it is set), then compile three more times (usually two are enough, but in
 # some thorny cases three are required, so...). If using bib is not set, just
-# run three times.
-function fullrun() {
+# compile three times.
+function big_build() {
 
-# First, do a simple run.
-  run "$name" "$build_dir_regular"
-# If the compile run failed, notify the user and quit.
+# First, do a small compile.
+  compile "$name" "$build_dir_regular"
+# If the compile failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
-    echo "Compile of *.tex file was not successful!"
+    echo "Compile of ${name}.tex file was not successful!"
     exit 1
   fi
 
-# If the compile run succeeded, then build the index.
+# If the compile succeeded, then build the index.
   if [[ "$got_idx" == "true" ]] ; then
     cd "${build_dir_regular}" && pwd
     ${indexcmd} ${name}
@@ -116,28 +116,33 @@ function fullrun() {
     cd ..
   fi
 
-# If the previous run succeeded, and we have no bibliography, then just run
+# If the previous compile succeeded, and we have no bibliography, then just compile
 # twice more and exit.
   if [[ "$got_bib" == "false" ]] ; then
     echo "$0: The \$got_bib var is set to false, so I assume there is no bibliography to build."
-      echo "$0: I will just do two more normal runs."
-    run "$name" "$build_dir_regular" && \
-      run "$name" "$build_dir_regular"
+      echo "$0: I will just do two more normal compiles."
+    compile "$name" "$build_dir_regular" && \
+      compile "$name" "$build_dir_regular"
+# If one of the compile runs failed, notify the user and quit.
+    if [[ $? -ne 0 ]]; then
+      echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
+      exit 1
+    fi
 
-# If $got_bib is true, then build bib and do three runs. The reason for *three*
-# runs, instead of the usual two, is that an extra run is required for
+# If $got_bib is true, then build bib and do three compiles. The reason for *three*
+# compiles, instead of the usual two, is that an extra compile is required for
 # backreferences in bib entries to be constructed (e.g. "Cited in page ...").
   else
     cd "${build_dir_regular}" && pwd
     ${bibcmd} ${name}
     if [[ $? -eq 0 ]]; then
       cd ..
-      run "$name" "$build_dir_regular" && \
-        run "$name" "$build_dir_regular" && \
-        run "$name" "$build_dir_regular"
-# If the compile run after bib update failed, notify the user and quit.
+      compile "$name" "$build_dir_regular" && \
+        compile "$name" "$build_dir_regular" && \
+        compile "$name" "$build_dir_regular"
+# If the compile compile after bib update failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
-        echo "Compile of *.tex file was not successful!"
+        echo "Compile of ${name}.tex file was not successful!"
         exit 1
       fi
     else
@@ -146,8 +151,8 @@ function fullrun() {
     fi
   fi
 
-# Now we deal with unabridged copy, if there is one. If the three compile runs
-# after a bib update did not fail, then update bib && triple run in
+# Now we deal with unabridged copy, if there is one. If the three compiles
+# after a bib update did not fail, then update bib && triple compile in
 # unabridged_dir.
   if [[ "${got_unabridged}" == "true" ]]; then
     update_unabridged_tex_files
@@ -156,25 +161,58 @@ function fullrun() {
     echo -e "* Now continuing with (background) unabridged (full) build..."
     echo -e "*************************************************************************\n"
 
-# Just as above, first, do a single run.
-    run "${name_unabridged}" "$build_dir_unabridged"
+# Just as above, first, do a single compile.
+    compile "${name_unabridged}" "$build_dir_unabridged"
+# If the compile failed, notify the user and quit.
+    if [[ $? -ne 0 ]]; then
+      echo "Compile of ${name_unabridged}.tex file was not successful!"
+      exit 1
+    fi
+
+# If the compile succeeded, then build the index.
     if [[ "$got_idx" == "true" ]] ; then
-      cd "${build_dir_unabridged}" && pwd && ${indexcmd} ${name_unabridged} && cd ..
+      cd "${build_dir_unabridged}" && pwd
+      ${indexcmd} ${name_unabridged}
+# If the building the index failed, notify the user and quit.
+      if [[ $? -ne 0 ]]; then
+        echo "Building of the index (unabridged copy) was not successful!"
+        exit 1
+      fi
+# Otherwise leave the regular build dir.
+      cd ..
     fi
 
 # Then build bibliography, if requested.
     if [[ "$got_bib" == "true" ]] ; then
-      cd "${build_dir_unabridged}" && pwd && ${bibcmd} ${name_unabridged} && cd ..
-      run "${name_unabridged}" "$build_dir_unabridged" && \
-        run "${name_unabridged}" "$build_dir_unabridged" && \
-        run "${name_unabridged}" "$build_dir_unabridged"
-
-# Otherwise, just do three simple runs.
+      cd "${build_dir_unabridged}" && pwd
+      ${bibcmd} ${name_unabridged}
+# If bibliography builds properly, then do more three runs.
+      if [[ $? -eq 0 ]]; then
+        cd ..
+        compile "${name_unabridged}" "$build_dir_unabridged" && \
+          compile "${name_unabridged}" "$build_dir_unabridged" && \
+          compile "${name_unabridged}" "$build_dir_unabridged"
+# If the compile compile after bib update failed, notify the user and quit.
+        if [[ $? -ne 0 ]]; then
+          echo "Compile of ${name_unabridged}.tex file was not successful!"
+          exit 1
+        fi
+# Bibliography did NOT build property; notify user and quit.
+      else
+        echo "Building bibliography (unabridged copy) file was not successful!"
+        exit 1
+      fi
+# If no bibliography requested, just do two small compile runs.
     else
-      run "${name_unabridged}" "$build_dir_unabridged" && \
-        run "${name_unabridged}" "$build_dir_unabridged"
-    fi
-  fi
+      compile "${name_unabridged}" "$build_dir_unabridged" && \
+        compile "${name_unabridged}" "$build_dir_unabridged"
+# If one of the compile runs failed, notify the user and quit.
+      if [[ $? -ne 0 ]]; then
+        echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
+        exit 1
+      fi
+    fi # If $got_bib is true.
+  fi # If got unabridged copy.
   # Script execution should never reach this point.
 }
 
@@ -190,19 +228,19 @@ function killall_tex() {
   killall ${texcmd}
 }
 
-# Do a normal run. If we are dealing with a report, also do a single run build
+# Do a normal compile. If we are dealing with a report, also do a single compile build
 # on the unabridged copy.
 #
-# First do a simple run. Then, if it was successful, and if we are dealing with
+# First do a simple compile. Then, if it was successful, and if we are dealing with
 # report, build unabridged copy.
-function normalbuild() {
-  run "$name" "$build_dir_regular" # run() returns the $? of the LaTeX command. See Note (1).
+function small_build() {
+  compile "$name" "$build_dir_regular" # compile() returns the $? of the LaTeX command. See Note (1).
   if [[ $? -ne 0 ]]; then
     echo "Compile of *.tex file was not successful!"
     exit 1
   fi
 
-# If run was successful, and we have an unabridged copy, then update unabridged
+# If compile was successful, and we have an unabridged copy, then update unabridged
 # copy.
   if [[ "${got_unabridged}" == "true" ]]; then
     update_unabridged_tex_files
@@ -211,17 +249,20 @@ function normalbuild() {
     echo -e "* Now continuing with (background) unabridged (normal, non-full) build..."
     echo -e "*************************************************************************\n"
 
-    run "${name_unabridged}" "$build_dir_unabridged"
+    compile "${name_unabridged}" "$build_dir_unabridged"
   fi
 }
 
-# A normal (single) LaTeX compile run.
-function run() {
+# A normal (single) LaTeX compile.
+function compile() {
   ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
-  return $?
+  local ret=$?
+  echo "" # Print a newline (SyncTeX doesn't).
+  return $ret
 }
 
-# Copy main .tex file as $name_unabridged, patch it to comment all \includeonly's, and then build unabridged copy in $build_dir_unabridged.
+# Copy main .tex file as $name_unabridged, patch it to comment all
+# \includeonly's, and then build unabridged copy in $build_dir_unabridged.
 function update_unabridged_tex_files() {
   cp "${name}.tex" "${name_unabridged}.tex"
 
@@ -272,18 +313,18 @@ function main() {
 
 # If no arguments given, do a normal build;
 # - argument is debug: do debug build;
-# - argument is get_compiler_pid: run that function;
-# - argument is killall_tex: run that function.
+# - argument is get_compiler_pid: compile that function;
+# - argument is killall_tex: compile that function.
   if [[ $# -eq 0 ]] ; then
-    normalbuild
+    small_build
   elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
     clean
   elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
     debugbuild
   elif [[ $# -eq 1 && "$1" == "final" ]] ; then
-    finalfullrun
-  elif [[ $# -eq 1 && "$1" == "full" ]] ; then
-    fullrun
+    final_document
+  elif [[ $# -eq 1 && "$1" == "big" ]] ; then
+    big_build
   elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
     get_compiler_pid
   elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
@@ -301,6 +342,6 @@ main "$@"
 #####
 # Notes:
 # - (1) After an unsuccessful compilation, and after fixing the mistake that
-#   caused it, a normal run, in batchmode with halt on errors, will still lead
-#   to a natbib error. It goes away after doing another normal run. But perhaps
+#   caused it, a normal compile, in batchmode with halt on errors, will still lead
+#   to a natbib error. It goes away after doing another normal compile. But perhaps
 #   the best strategy is to do debug mode in case of errors...
