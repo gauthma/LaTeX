@@ -3,7 +3,7 @@
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
 
-# Two functions, compile and big_build, do a simple compile, and a clean compile with
+# Two functions, compile and big_build, do a simple compile, and a compile with
 # bibliography building and three singles afterwords, respectively. Most of the
 # remaining functions build on these two, to compile both the report and its
 # unabridged version (only in the case of reports), and to check for errors and
