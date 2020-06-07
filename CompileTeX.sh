@@ -43,8 +43,8 @@ build_dir_unabridged="build_UNABRIDGED"
 function clean() {
 
   echo -e "\nWARNING: after cleaning the build dir, it is VERY RECOMMENDED
-  to do a big build, WITHOUT \\includeonly. Otherwise
-  things like bibliography might not build properly!\n"
+  to do a big build, WITHOUT \\includeonly (use FULL option to this
+  script). Otherwise things like bibliography might not build properly!\n"
   read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
 
   if [[ -d "$build_dir_regular" ]]; then
@@ -216,6 +216,39 @@ function big_build() {
   # Script execution should never reach this point.
 }
 
+# This function comments the \includeonly line, if it exists, in $name.tex (it
+# makes a backup copy first), and then does a big compile (by calling
+# big_build). It temporarily sets $got_unabridged to false, to prevent
+# big_build from building the unabridged copy as well (because the goal of this
+# function is to build a complete instance of the main copy. This is required,
+# e.g., after clean(): doing a big compile with \includeonly might lead to
+# errors in, for example, bibliography building).
+#
+# It then waits for the big compile to finish, and restores (renames) the
+# backup copy to $name.tex
+function FULL_build() {
+
+  local big_build_failed="false"
+
+  rm -f "${name}.tex.orig" && cp "${name}.tex" "${name}.tex.orig"
+
+  got_unabridged="false"
+# Comment any \includeonly lines.
+  sed -e '/^\s*\\includeonly/ s/^\s*\\/% \\/' -i "${name}.tex"
+  big_build || big_build_failed = "true"
+  wait
+
+  if [[ $big_build_failed == "true" ]]; then
+    echo "Big compile failed!"
+    rm -f "${name}.tex" && mv "${name}.tex.orig" "${name}.tex"
+    return 1
+  fi
+
+  echo "Finished big build."
+  rm -f "${name}.tex" && mv "${name}.tex.orig" "${name}.tex"
+  got_unabridged="true"
+}
+
 
 # Get the pid of the running $texcmd process (if any). This is needed to avoid
 # starting (from within vim) a new compilation, if one is already running.
@@ -317,14 +350,16 @@ function main() {
 # - argument is killall_tex: compile that function.
   if [[ $# -eq 0 ]] ; then
     small_build
+  elif [[ $# -eq 1 && "$1" == "big" ]] ; then
+    big_build
   elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
     clean
   elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
     debugbuild
   elif [[ $# -eq 1 && "$1" == "final" ]] ; then
     final_document
-  elif [[ $# -eq 1 && "$1" == "big" ]] ; then
-    big_build
+  elif [[ $# -eq 1 && "$1" == "FULL" ]] ; then
+    FULL_build
   elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
     get_compiler_pid
   elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
