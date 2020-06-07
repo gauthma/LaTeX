@@ -56,7 +56,7 @@ function clean() {
   fi
 
   if [[ "${got_unabridged}" == "true" ]]; then
-    if [[ -d "$build_dir_regular" ]]; then
+    if [[ -d "$build_dir_unabridged" ]]; then
       echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
       cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
     else
