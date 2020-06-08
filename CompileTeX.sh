@@ -3,11 +3,19 @@
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
 
-# Two functions, compile and big_build, do a simple compile, and a compile with
-# bibliography building and three singles afterwords, respectively. Most of the
-# remaining functions build on these two, to compile both the report and its
-# unabridged version (only in the case of reports), and to check for errors and
-# give feedback properly, and so on.
+# Three main functions, compile(), small_build(), and big_build():
+#
+# - compile() just runs the LaTeX compiler on whatever file it is given;
+#
+# - small_build() runs compile() on the regular copy, and then on the
+# unabridged copy, it there is one.
+#
+# - big_build() runs compile() once, then build bibliography etc. (if
+# required), and then runs compile() three more times.
+#
+# Most of the remaining functions revolve around these three, to compile both
+# the report and its unabridged version (only in the case of reports), and to
+# check for errors and give feedback properly, and so on.
 
 # IMPORTANT: to disable bibliography, set this to false.
 got_bib="true"
@@ -74,6 +82,14 @@ function clean() {
 }
 
 # A normal (single) LaTeX compile.
+function compile() {
+  ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
+  local ret=$?
+  echo "" # Print a newline (SyncTeX doesn't).
+  return $ret
+}
+
+# A normal (single) LaTeX compile.
 function debugbuild() {
   ${texcmd} ${debug_texcmdopts} ${name}
   return $?
@@ -120,7 +136,7 @@ function big_build() {
 # twice more and exit.
   if [[ "$got_bib" == "false" ]] ; then
     echo "$0: The \$got_bib var is set to false, so I assume there is no bibliography to build."
-      echo "$0: I will just do two more normal compiles."
+      echo "$0: I will just run compile() twice more."
     compile "$name" "$build_dir_regular" && \
       compile "$name" "$build_dir_regular"
 # If one of the compile runs failed, notify the user and quit.
@@ -133,6 +149,18 @@ function big_build() {
 # compiles, instead of the usual two, is that an extra compile is required for
 # backreferences in bib entries to be constructed (e.g. "Cited in page ...").
   else
+    local have_cite_entries=$(grep --recursive '\\cite' --include=*.tex)
+    if [[ -z "$have_cite_entries" ]]; then
+      echo "$0: The $got_bib var is set to true, but no \\cite entries found.
+      So I will just do two more small compiles..."
+      compile "$name" "$build_dir_regular" && \
+        compile "$name" "$build_dir_regular"
+# If one of the compile runs failed, notify the user and quit.
+      if [[ $? -ne 0 ]]; then
+        echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
+        exit 1
+      fi
+    fi
     cd "${build_dir_regular}" && pwd
     ${bibcmd} ${name}
     if [[ $? -eq 0 ]]; then
@@ -216,6 +244,16 @@ function big_build() {
   # Script execution should never reach this point.
 }
 
+function final_document() {
+  big_build
+
+  if [[ "${got_unabridged}" == "true" ]]; then
+    cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
+  else
+    cp "${build_dir_regular}"/"${name}.pdf" "${finalname}.pdf"
+  fi
+}
+
 # This function comments the \includeonly line, if it exists, in $name.tex (it
 # makes a backup copy first), and then does a big compile (by calling
 # big_build). It temporarily sets $got_unabridged to false, to prevent
@@ -269,7 +307,7 @@ function killall_tex() {
 function small_build() {
   compile "$name" "$build_dir_regular" # compile() returns the $? of the LaTeX command. See Note (1).
   if [[ $? -ne 0 ]]; then
-    echo "Compile of *.tex file was not successful!"
+    echo "Compile of ${name}.tex file was not successful!"
     exit 1
   fi
 
@@ -283,15 +321,11 @@ function small_build() {
     echo -e "*************************************************************************\n"
 
     compile "${name_unabridged}" "$build_dir_unabridged"
+    if [[ $? -ne 0 ]]; then
+      echo "Compile of ${name_unabridged}.tex file was not successful!"
+      exit 1
+    fi
   fi
-}
-
-# A normal (single) LaTeX compile.
-function compile() {
-  ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
-  local ret=$?
-  echo "" # Print a newline (SyncTeX doesn't).
-  return $ret
 }
 
 # Copy main .tex file as $name_unabridged, patch it to comment all
