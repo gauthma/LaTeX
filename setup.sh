@@ -118,30 +118,25 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     ln -sr "sources.bib" "${build_dir_unabridged}"/
   fi
 
-# For the types that DON'T come with references, comment the got_bib line in
-# CompileTeX.sh and delete the sources file. Also, the types that don't come
-# with references happen to be the same that a) have no includes (so delete the
-# include folder); and b) and do not require SyncTeX (so remove it).
+# For the types that DON'T happen to a) have no includes, we delete the include
+# folder); and b) do not require SyncTeX, we remove it.
 #
 # Otherwise, symlink bib file to build dir (bibtex command has to be run inside
 # this dir).
   if [[ "${doctype}" != "essay" && "${doctype}" != "llncs" \
     && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
 
-# Set $got_bib to "false".
-    sed -i "/^got_bib=\"true\"/c\got_bib=\"false\"" CompileTeX.sh
+    rm -rf includes/
 
 # Remove the --synctex=1 option from $texcmdopts variable. And delete all lines
 # that dealt with .synctex.gz files (usually symlinks from the buildir to the
 # top dir).
     sed -i "/^texcmdopts=\"/ s/ --synctex=1\"$/\"/" CompileTeX.sh
     sed -i "/\.synctex\./d" CompileTeX.sh
-
-    rm sources.bib
-    rm -rf includes/
-  else
-    ln -sr sources.bib "${build_dir}"/
   fi
+
+# The compiler need to find the sources file in the build dir, so symlink.
+  ln -sr sources.bib "${build_dir}"/
 
 # Finally delete this script (no use for it after everything is set up).
   rm -- "$0"

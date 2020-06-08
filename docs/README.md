@@ -26,17 +26,17 @@ The `setup.sh` script will patch `CompileTeX.sh` and set `name` to the *main fil
 
 Do work with LaTeX skeletons provided, compile using adequate `CompileTeX.sh` target and enjoy profit!! `CompileTeX.sh` offers the following options:
 
-Note: there exists a variable, `got_bib`, which if set to `false`, will cause the script to ignore any `\cite` or `\nocite` commands, and never run the bibliography command. It is set to `true` by default.
+Note: there exists a variable, `do_bib`, which if set to `false`, will cause the script to ignore any `\cite` or `\nocite` commands, and never run the bibliography command. It is set to `true` by default.
 
 - `no argument`: run `LaTeX` compiling command once, without debug output. 
 
 - `debug`: run `LaTeX` compiling command once, *with* debug output. 
 
-- `full`: A full LaTeX build run: clean and run once, then run bib (if `got_bib` is `true`), then run three more times (usually two are enough, but in some thorny cases three are required, so...). If using bib is not set, just run three times.
+- `big`: A full LaTeX build run: clean and run once, then run bib (if `got_bib` is `true`), then run three more times (usually two are enough, but in some thorny cases three are required, so...). If using bib is not set, just run three times.
 
 - `final`: `clean`s everything up, and them makes a `full` build. If you need the final PDF document to have a different name, then you can use the `endname` variable, which the last command in this function sets as its name.
 
-- `clean`: removes everything in the `build/` directory. And rebuilds its structure. By default this means create a link to the biliography file inside the the `build` directory (this is always done, regardless of the value of `got_bib`). However, more actions may be required; see the "TeX Trickety" section below.
+- `clean`: removes everything in the `build/` directory. And rebuilds its structure. By default this means create a link to the biliography file inside the the `build` directory (this is always done, regardless of the value of `got_bib`). However, more actions may be required; see the "TeX Trickeyy" section below.
 
 - `get_compiler_pid`: used in the `vim` code that builds the `LaTeX` command on writing the `.tex` file (see [myvim](https://github.com/gauthma/myvim)).
 

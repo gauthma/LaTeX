@@ -17,10 +17,10 @@
 # the report and its unabridged version (only in the case of reports), and to
 # check for errors and give feedback properly, and so on.
 
-# IMPORTANT: to disable bibliography, set this to false.
-got_bib="true"
+# IMPORTANT: to disable building bibliography, set this to false.
+do_dib="true"
 # IMPORTANT: to disable building the index, set this to false.
-got_idx="false"
+do_idx="false"
 
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
@@ -122,7 +122,7 @@ function big_build() {
   fi
 
 # If the compile succeeded, then build the index.
-  if [[ "$got_idx" == "true" ]] ; then
+  if [[ "$do_idx" == "true" ]] ; then
     cd "${build_dir_regular}" && pwd
     ${indexcmd} ${name}
 # If the building the index failed, notify the user and quit.
@@ -134,10 +134,10 @@ function big_build() {
     cd ..
   fi
 
-# If the previous compile succeeded, and we have no bibliography, then just compile
-# twice more and exit.
-  if [[ "$got_bib" == "false" ]] ; then
-    echo "$0: The \$got_bib var is set to false, so I assume there is no bibliography to build."
+# If the previous compile succeeded, and we are not building bibliography, then
+# just compile twice more and exit.
+  if [[ "$do_dib" == "false" ]] ; then
+    echo "$0: The \$do_dib var is set to false, so I am skipping the bibliography part."
       echo "$0: I will just run compile() twice more."
     compile "$name" "$build_dir_regular" && \
       compile "$name" "$build_dir_regular"
@@ -147,13 +147,15 @@ function big_build() {
       exit 1
     fi
 
-# If $got_bib is true, then build bib and do three compiles. The reason for *three*
-# compiles, instead of the usual two, is that an extra compile is required for
-# backreferences in bib entries to be constructed (e.g. "Cited in page ...").
+# Else, if there are uncommented \cite commands, then build the bibliography.
+# The reason for *three* compiles, instead of the usual two, is that an extra
+# compile is required for backreferences in bib entries to be constructed (e.g.
+# "Cited in page ...").
   else
-    local have_cite_entries=$(grep --recursive '\\cite' --include=*.tex)
+    # XXX change the regexp to detect \nocite!
+    local have_cite_entries=$(grep --recursive '^[^%]*\\cite' --include=*.tex)
     if [[ -z "$have_cite_entries" ]]; then
-      echo "$0: The $got_bib var is set to true, but no \\cite entries found.
+      echo "$0: The $do_dib var is set to true, but no \\cite entries found.
       So I will just do two more small compiles..."
       compile "$name" "$build_dir_regular" && \
         compile "$name" "$build_dir_regular"
@@ -202,7 +204,7 @@ function big_build() {
     fi
 
 # If the compile succeeded, then build the index.
-    if [[ "$got_idx" == "true" ]] ; then
+    if [[ "$do_idx" == "true" ]] ; then
       cd "${build_dir_unabridged}" && pwd
       ${indexcmd} ${name_unabridged}
 # If the building the index failed, notify the user and quit.
@@ -234,7 +236,7 @@ function big_build() {
         echo "Building bibliography (unabridged copy) file was not successful!"
         exit 1
       fi
-# If no bibliography requested, just do two small compile runs.
+# If we are skipping bibliography, just do two compile() runs.
     else
       compile "${name_unabridged}" "$build_dir_unabridged" && \
         compile "${name_unabridged}" "$build_dir_unabridged"
@@ -243,7 +245,7 @@ function big_build() {
         echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
         exit 1
       fi
-    fi # If $got_bib is true.
+    fi # If $do_dib is true.
   fi # If got unabridged copy.
   # Script execution should never reach this point.
 }
