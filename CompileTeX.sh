@@ -166,7 +166,7 @@ function big_build() {
       cd "${build_dir_regular}" && pwd
       ${bibcmd} ${name}
       if [[ $? -eq 0 ]]; then
-        bibliography_was_actuall_built = "true"
+        bibliography_was_actuall_built="true"
         cd ..
         compile "$name" "$build_dir_regular" && \
           compile "$name" "$build_dir_regular" && \
