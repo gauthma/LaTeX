@@ -147,13 +147,12 @@ function big_build() {
       exit 1
     fi
 
-# Else, if there are uncommented \cite commands, then build the bibliography.
-# The reason for *three* compiles, instead of the usual two, is that an extra
-# compile is required for backreferences in bib entries to be constructed (e.g.
-# "Cited in page ...").
+# Else, if there are uncommented \cite or \nocite commands, then build the
+# bibliography. The reason for *three* compiles, instead of the usual two, is
+# that an extra compile is required for backreferences in bib entries to be
+# constructed (e.g. "Cited in page ...").
   else
-    # XXX change the regexp to detect \nocite!
-    local have_cite_entries=$(grep --recursive '^[^%]*\\cite' --include=*.tex)
+    local have_cite_entries=$(grep --extended-regexp --recursive '^[^%]*\\(no)?cite' --include=*.tex)
     if [[ -z "$have_cite_entries" ]]; then
       echo "$0: The $do_dib var is set to true, but no \\cite entries found.
       So I will just do two more small compiles..."
