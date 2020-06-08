@@ -111,7 +111,9 @@ function final_document() {
 # compile three times.
 function big_build() {
 
-# First, do a small compile.
+  local bibliography_was_actuall_built="false"
+
+# First, run compile().
   compile "$name" "$build_dir_regular"
 # If the compile failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
@@ -160,22 +162,24 @@ function big_build() {
         echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
         exit 1
       fi
-    fi
-    cd "${build_dir_regular}" && pwd
-    ${bibcmd} ${name}
-    if [[ $? -eq 0 ]]; then
-      cd ..
-      compile "$name" "$build_dir_regular" && \
+    else
+      cd "${build_dir_regular}" && pwd
+      ${bibcmd} ${name}
+      if [[ $? -eq 0 ]]; then
+        bibliography_was_actuall_built = "true"
+        cd ..
         compile "$name" "$build_dir_regular" && \
-        compile "$name" "$build_dir_regular"
+          compile "$name" "$build_dir_regular" && \
+          compile "$name" "$build_dir_regular"
 # If the compile compile after bib update failed, notify the user and quit.
-      if [[ $? -ne 0 ]]; then
-        echo "Compile of ${name}.tex file was not successful!"
+        if [[ $? -ne 0 ]]; then
+          echo "Compile of ${name}.tex, after building bibliography, was not successful!"
+          exit 1
+        fi
+      else
+        echo "Building bibliography (regular copy) file was not successful!"
         exit 1
       fi
-    else
-      echo "Building bibliography (regular copy) file was not successful!"
-      exit 1
     fi
   fi
 
@@ -211,7 +215,7 @@ function big_build() {
     fi
 
 # Then build bibliography, if requested.
-    if [[ "$got_bib" == "true" ]] ; then
+    if [[ "$bibliography_was_actuall_built" == "true" ]] ; then
       cd "${build_dir_unabridged}" && pwd
       ${bibcmd} ${name_unabridged}
 # If bibliography builds properly, then do more three runs.
