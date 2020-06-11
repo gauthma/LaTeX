@@ -95,16 +95,6 @@ function debugbuild() {
   return $?
 }
 
-function final_document() {
-  big_build
-
-  if [[ "${got_unabridged}" == "true" ]]; then
-    cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
-  else
-    cp "${build_dir_regular}"/"${name}.pdf" "${finalname}.pdf"
-  fi
-}
-
 # A big LaTeX compile: compile once (and build index, if it is set), then compile
 # bib (if it is set), then compile three more times (usually two are enough, but in
 # some thorny cases three are required, so...). If using bib is not set, just
