@@ -16,24 +16,24 @@
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
 \usepackage{fontspec}
-\setmainfont[Scale=0.9, Ligatures=TeX]{Charis SIL}
-\defaultfontfeatures[Charis SIL]{Script=latn}
+\setmainfont[Scale=0.9, SmallCapsFont={Charis SIL Small Caps}]{Charis SIL}
+\defaultfontfeatures[Charis SIL]{Script=latn, Ligatures=TeX}
 
 % Languages et al.
-\usepackage[UKenglish]{babel}
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\setkeys{english}{variant=british}
+% \setmainlanguage{portuges}
+% END Languages et al.
 
 % This improves the quality of the PDF, but slows down the creation
 % time, so you might want to comment it until you have the final version.
 \usepackage{microtype}
 
 \usepackage{enumitem}
-% The fontawesome package requires (with XeLaTeX) setting the below path
-% manually. It is the folder that contains the file FontAwesome.otf.
-\defaultfontfeatures{
-    Path = /usr/share/texmf-dist/fonts/opentype/public/fontawesome/ }
-\usepackage{fontawesome}  % For the cute home, email, etc, symbols.
+\usepackage{fontawesome} % For the icons for address, website, and email.
 \usepackage{url}
-\usepackage[dvipsnames]{xcolor}  % for MidnightBlue colour
+\usepackage[usenames,dvipsnames]{xcolor}  % For MidnightBlue colour.
 \usepackage[colorlinks=true, urlcolor=MidnightBlue]{hyperref}
 
 \renewcommand\labelitemi{\fontfamily{lmr}\selectfont\textbullet}
@@ -55,12 +55,10 @@
 \begin{document}
 
 \begin{header}{Óscar Francisco Godinho Pereira}
-  \faHome \enskip  Postal address and phone number have been withheld for privacy reasons\\[0.7em]
-  \faFirefox \enskip \url{https://randomwalk.eu}%
-    \enskip \textbullet \enskip%
-    \faEnvelopeO \enskip \texttt{oscar@domain.name}%
-    \enskip \textbullet \enskip%
-    \faPhone\enskip +0 00000
+   \faHome \enskip  Postal address withheld for privacy reasons\\[0.7em]
+   \faFirefox \enskip \url{https://randomwalk.eu}%
+     \enskip \textbullet \enskip%
+     \faEnvelopeO \enskip \texttt{oscar@domain.name}%
 \end{header}
 
 \begin{topic}{Formal Education}
@@ -68,13 +66,14 @@
     \item {\bfseries University of Minho}, Braga, Portugal.\\
       PhD in Informatics, MAP-i Doctoral Programme, Fall 2015--present.
     \item {\bfseries University of Minho}, Braga, Portugal.\\
-			MSc in Informatics Engineering, Fall 2013--Fall 2015. \emph{Grade:} 16 out 
-			of 20.\\
-			\emph{Master Thesis}: Towards a Fully Algebrisable Symmetric Cryptosystem. 
-			\emph{Grade:} 18 out of 20.\\
-			Academic performance in curricular part got him the \textbf{2013/2014 
-			Multicert School Award}\footnote{See 
-			\url{https://www.multicert.com/en/about-us/universities/}.}.
+			MSc in Informatics Engineering, Fall 2013--Fall 2015. \emph{Mark}: 
+			16/20.\\
+			\hspace*{2em}\emph{Master Thesis}: Towards a Fully Algebrisable Symmetric 
+			Cryptosystem.\\
+			\hspace*{2em}\emph{Advisor}: José Manuel E.\ Valença. \emph{Mark}: 
+			18/20.\\
+			Academic performance in curricular part got him the \textbf{2013/2014 Multicert School Award}.\footnote{See 
+			\url{https://www.multicert.com/en/about-us/universities/}.}
     \item {\bfseries University of Coimbra}, Coimbra, Portugal.\\
 			\emph{Licenciatura} (roughly a 5 year pre-Bologna BSc) in Informatics 
 			Engineering, Fall 2001--Fall 2006.
@@ -83,7 +82,15 @@
 
 \begin{topic}{Professional Experience}
   \begin{itemize}[leftmargin=*]
-    \item {\bfseries AnubisNetworks}---Lisbon, Portugal.\\
+    \item {\bfseries University of Minho}, Braga, Portugal.\\
+			Teaching Assistant.
+			\begin{itemize}
+				\item {\scshape Fall, school year 2016/2017} -- \textbf{Cryptography and 
+					Information Security} (1st year of MSc in Informatics Engineering), 
+					and \textbf{Computational Logic} (3rd year of BSc in Computer 
+					Science). Lab classes in both cases.
+			\end{itemize}
+    \item {\bfseries AnubisNetworks}, Lisbon, Portugal.\\
       Software Engineer (multi-class), June 2007 -- April 2013.
       \begin{itemize}
 				\item {\scshape From October 2012} -- Moved to the Operations team. 
@@ -113,14 +120,15 @@
 \end{topic}
 
 \begin{topic}{Technical Skills}
-  {$\rhd$\ \ \bfseries \scshape Programming Languages}
+  {\rhd\ \ \bfseries \scshape Programming Languages}  
   \begin{itemize}[leftmargin=*]
     \item{\bfseries Imperative}: \emph{proficient}: C, Perl; \emph{experienced}: C{}\verb!++!, Python;
       \emph{basic skills}: Java, Javascript/JQuery, Vim script.
     \item{\bfseries Functional}: \emph{basic skills}: Common Lisp.
     \item{\bfseries Markup}: \emph{proficient}: HTML, CSS, \LaTeX, Markdown; \emph{basic skills}: UML.
   \end{itemize}
-  {$\rhd$\ \ \bfseries \scshape Operating Systems}
+	\newpage % obviously, comment this if unneeded
+  {\rhd\ \ \bfseries \scshape Operating Systems} 
   \begin{itemize}[leftmargin=*]
 		\item{\bfseries GNU/Linux}: Began experimenting different distributions in 
 			2000; became a regular user circa 2005.
@@ -132,8 +140,7 @@
 			(SP3). Nowadays, occasionally fires up Win 10, to play the occasional 
 			computer game.
   \end{itemize}
-	\newpage % obviously, comment this if unneeded
-  {$\rhd$\ \ \bfseries \scshape Miscellaneous Software}\\[1em]
+  {\rhd\ \ \bfseries \scshape Miscellaneous Software}\\[1em]
 	\begin{minipage}{0.5\textwidth}
 		\begin{itemize}
 			% see comment at header for \phantom...
@@ -162,6 +169,11 @@
 \end{topic}
 
 \begin{topic}{Additional Information}
+  {\hspace*{2em} \itshape ``Extras'' from Academia}
+  \begin{itemize}[leftmargin=*]
+    \item {\bfseries Extended listings}. To keep the CV short, some listings are omitted;\\
+      they are available at \url{https://randomwalk.eu/cv/}.
+  \end{itemize}
   {\hspace*{2em} \itshape Informal Education / Professional Development}
   \begin{itemize}[leftmargin=*]
     \item {\bfseries Cryptography I}, Stanford University, 2012.\\
@@ -172,19 +184,12 @@
   {\hspace*{2em} \itshape Miscellanea}  
   \begin{itemize}[leftmargin=*]
     \item{Outdoor sports enthusiast---mainly surf and football.}
-    \item{Enjoys recreational---and often not-so-recreational---mathematics,
-      as well as physics (and chess).}
-    \item{Participated in the 2003 and 2004 editions of \emph{Minho Campus
-			Party} (Portugal's first large scale LAN party!).}
-		\item Writes at \url{https://randomwalk.eu/blog}. Paraphrasing the 
-			Nobel prize winning physicist Richard Feynman: \emph{to explain, one must 
-			first understand}. Writing being mostly about the former, it provides a 
-			strong incentive to put in the effort needed to achieve the latter. 
-			Besides, writing helps one to become a better---and faster!---reader.
-    \item The above notwithstanding, he chronically tends to accumulate more books than 
-      what he is able to read.
-    \item{Full Portuguese driving license---Category B, passenger light
-      vehicles.}
+    \item{Enjoys recreational---and often not-so-recreational---mathematics, as well as physics (and chess).}
+    \item{Participated in the 2003 and 2004 editions of \emph{Minho Campus Party} (Portugal's first large scale LAN party!).}
+		\item Writes at \url{https://randomwalk.eu/}. Paraphrasing the 
+			Nobel prize winning physicist Richard Feynman: \emph{to explain, one must first understand}. Writing being mostly about the former, it provides a strong incentive to put in the effort needed to achieve the latter. Besides, writing helps one to become a better---and faster!---reader.
+    \item The above notwithstanding, he chronically tends to accumulate more books than what he is able to read.
+    \item{Full Portuguese driving license---Category B, passenger light vehicles.}
   \end{itemize}
 \end{topic}
 \end{document}

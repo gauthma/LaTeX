@@ -81,7 +81,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
         standalone.* \
   | grep -v $doctype)
 
-  rm -f "${doctype}.pdf" # If this exists, it's a symlink (actual pdf is in build/).
+  rm -f "${doctype}.pdf" # If this exists, it's a symlink (actual pdf is in build dir).
 
   rm -f \
   $(ls  includes/essay_preamble.tex \
@@ -96,6 +96,11 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 # up.
   ln -sr "${build_dir}/${doctype}.pdf" .
 
+# jse the simple build script for the simpler templates.
+  if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || "${doctype}" == "standalone" ]] ; then
+    mv CompileTeX.bare.minimum.sh CompileTeX.sh
+  fi
+
 # Setup CompileTeX.sh (requires GNU sed) Begin with setting what type of
 # document we want (report, presentation, ...)
   sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh
@@ -103,7 +108,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 # For some documents, special actions are required.
   if [[ "${doctype}" == "cv" ]] ; then
     sed -i "/^texcmd=/c\texcmd=\"lualatex\"" CompileTeX.sh
-  elif [[ "${doctype}" == "llncs" || "${doctype}" == "bare" ]] ; then
+  elif [[ "${doctype}" == "llncs" ]] ; then
     sed -i "/^texcmd=/c\texcmd=\"pdflatex\"" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
 # If document type is report, then first set $got_unabridged variable to true.
@@ -127,12 +132,6 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
 
     rm -rf includes/
-
-# Remove the --synctex=1 option from $texcmdopts variable. And delete all lines
-# that dealt with .synctex.gz files (usually symlinks from the buildir to the
-# top dir).
-    sed -i "/^texcmdopts=\"/ s/ --synctex=1\"$/\"/" CompileTeX.sh
-    sed -i "/\.synctex\./d" CompileTeX.sh
   fi
 
 # The compiler need to find the sources file in the build dir, so symlink.
