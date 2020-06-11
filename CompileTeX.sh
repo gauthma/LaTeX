@@ -18,7 +18,7 @@
 # check for errors and give feedback properly, and so on.
 
 # IMPORTANT: to disable building bibliography, set this to false.
-do_dib="true"
+do_bib="true"
 # IMPORTANT: to disable building the index, set this to false.
 do_idx="false"
 
@@ -136,8 +136,8 @@ function big_build() {
 
 # If the previous compile succeeded, and we are not building bibliography, then
 # just compile twice more and exit.
-  if [[ "$do_dib" == "false" ]] ; then
-    echo "$0: The \$do_dib var is set to false, so I am skipping the bibliography part."
+  if [[ "$do_bib" == "false" ]] ; then
+    echo "$0: The \$do_bib var is set to false, so I am skipping the bibliography part."
       echo "$0: I will just run compile() twice more."
     compile "$name" "$build_dir_regular" && \
       compile "$name" "$build_dir_regular"
@@ -154,7 +154,7 @@ function big_build() {
   else
     local have_cite_entries=$(grep --extended-regexp --recursive '^[^%]*\\(no)?cite' --include=*.tex)
     if [[ -z "$have_cite_entries" ]]; then
-      echo "$0: The $do_dib var is set to true, but no \\cite entries found.
+      echo "$0: The $do_bib var is set to true, but no \\cite entries found.
       So I will just do two more small compiles..."
       compile "$name" "$build_dir_regular" && \
         compile "$name" "$build_dir_regular"
@@ -244,7 +244,7 @@ function big_build() {
         echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
         exit 1
       fi
-    fi # If $do_dib is true.
+    fi # If $do_bib is true.
   fi # If got unabridged copy.
   # Script execution should never reach this point.
 }

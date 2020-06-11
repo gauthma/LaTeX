@@ -17,9 +17,9 @@ fi
 function usage()
 {
 	cat <<EOF
-Usage: $ sh $0 [report, cv, essay, llncs, presentation, standalone]
+Usage: $ sh $0 [bare, cv, essay, llncs, presentation, report, standalone]
 
-To call script pwd must be same as script location.
+Script location must be same as script location.
 
 EOF
 }
