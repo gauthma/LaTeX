@@ -324,12 +324,16 @@ function small_build() {
   fi
 }
 
-# Copy main .tex file as $name_unabridged, patch it to comment all
-# \includeonly's, and then build unabridged copy in $build_dir_unabridged.
+# Copy main .tex file as $name_unabridged, patch it to redefine all \include's
+# as \input's. This causes for \includeonly to be ignored (if it exists). Then
+# build unabridged copy in $build_dir_unabridged.
 function update_unabridged_tex_files() {
   cp "${name}.tex" "${name_unabridged}.tex"
 
-  sed -e '/^\s*\\includeonly/ s/^/% /' -i "${name_unabridged}.tex"
+# Insert the following line before \begin{document}:
+# \let\include\input
+  sed '/^\s*\\begin{document}/i \
+\\let\\include\\input' -i "${name_unabridged}.tex"
 }
 
 function unabridged_dir_and_symlinks_rebuild() {
