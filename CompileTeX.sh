@@ -51,8 +51,9 @@ build_dir_unabridged="build_UNABRIDGED"
 function clean() {
 
   echo -e "\nWARNING: after cleaning the build dir, it is VERY RECOMMENDED
-  to do a big build, WITHOUT \\includeonly (run this script with the FULL
-  option script). Otherwise things like bibliography might not build properly!\n"
+  to do a big build, WITHOUT \\includeonly (run this script with the
+  rebuild_aux_database option). Otherwise things like bibliography
+  might not build properly!\n"
   read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
 
   if [[ -d "$build_dir_regular" ]]; then
@@ -259,28 +260,25 @@ function final_document() {
 #
 # It then waits for the big compile to finish, and restores (renames) the
 # backup copy to $name.tex
-function FULL_build() {
+function rebuild_aux_database() {
 
   local big_build_failed="false"
 
-  rm -f "${name}.tex.orig" && cp "${name}.tex" "${name}.tex.orig"
+  rm -rf .temp_aux_rebuild && mkdir .temp_aux_rebuild
 
-  got_unabridged="false"
-# Comment any \includeonly lines.
+  cp -r $(ls | grep -v "$build_dir_unabridged\|$name_unabridged\|docs\|README.md") \
+    .temp_aux_rebuild
+  cd .temp_aux_rebuild
+
+  sed -e 's/^got_unabridged=.\+$/got_unabridged=\"false\"/' -i CompileTeX.sh
   sed -e '/^\s*\\includeonly/ s/^\s*\\/% \\/' -i "${name}.tex"
 
-  big_build || big_build_failed="true"
-  wait
+  sh CompileTeX.sh big
+  rsync -a --include '*/' --include '*.aux' --exclude '*' \
+    "${build_dir_regular}/" ../"${build_dir_regular}"
 
-  if [[ $big_build_failed == "true" ]]; then
-    echo "Big compile failed!"
-    rm -f "${name}.tex" && mv "${name}.tex.orig" "${name}.tex"
-    return 1
-  fi
-
-  echo "Finished big build."
-  rm -f "${name}.tex" && mv "${name}.tex.orig" "${name}.tex"
-  got_unabridged="true"
+  cd .. && rm -rf .temp_aux_rebuild
+  echo "Finished rebuild of .aux file database."
 }
 
 
@@ -322,6 +320,10 @@ function small_build() {
       exit 1
     fi
   fi
+}
+
+function u2r() {
+  cp "$build_dir_unabridged/$name_unabridged".pdf "$build_dir_regular/$name".pdf
 }
 
 # Copy main .tex file as $name_unabridged, patch it to redefine all \include's
@@ -392,14 +394,16 @@ function main() {
     debugbuild
   elif [[ $# -eq 1 && "$1" == "final" ]] ; then
     final_document
-  elif [[ $# -eq 1 && "$1" == "FULL" ]] ; then
-    FULL_build
   elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
     get_compiler_pid
   elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
     killall_tex
+  elif [[ $# -eq 1 && "$1" == "rebuild_aux" ]] ; then
+    rebuild_aux_database
   elif [[ $# -eq 1 && "$1" == "symlinks" ]] ; then
     unabridged_dir_and_symlinks_rebuild
+  elif [[ $# -eq 1 && "$1" == "u2r" ]] ; then
+    u2r
   else
     echo "Unknown option(s): $@"
     exit 1
