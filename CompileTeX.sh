@@ -51,8 +51,8 @@ build_dir_unabridged="build_UNABRIDGED"
 function clean() {
 
   echo -e "\nWARNING: after cleaning the build dir, it is VERY RECOMMENDED
-  to do a big build, WITHOUT \\includeonly (use FULL option to this
-  script). Otherwise things like bibliography might not build properly!\n"
+  to do a big build, WITHOUT \\includeonly (run this script with the FULL
+  option script). Otherwise things like bibliography might not build properly!\n"
   read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
 
   if [[ -d "$build_dir_regular" ]]; then
@@ -268,7 +268,8 @@ function FULL_build() {
   got_unabridged="false"
 # Comment any \includeonly lines.
   sed -e '/^\s*\\includeonly/ s/^\s*\\/% \\/' -i "${name}.tex"
-  big_build || big_build_failed = "true"
+
+  big_build || big_build_failed="true"
   wait
 
   if [[ $big_build_failed == "true" ]]; then
