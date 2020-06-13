@@ -38,7 +38,7 @@ The `setup.sh` script will patch `CompileTeX.sh`---running this script is how yo
 
 **Warning**: the script requires **GNU sed** to edit the `CompileTeX.sh`! If you don't have it, then comment that line and edit the `CompileTeX.sh` manually (check `setup.sh` to see where `sed` was used).
 
-Do work with LaTeX skeletons provided, compile using adequate `CompileTeX.sh` target and enjoy profit!!
+Do work with LaTeX skeletons provided, compile using `CompileTeX.sh`, and enjoy profit!!
 
 Unabridged copy
 ---
