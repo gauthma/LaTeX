@@ -11,7 +11,8 @@
 # unabridged copy, it there is one.
 #
 # - big_build() runs compile() once, then build bibliography etc. (if
-# required), and then runs compile() three more times.
+# required), and then runs compile() three more times. And does the same to the
+# unabridged copy, if there exists one.
 #
 # Most of the remaining functions revolve around these three, to compile both
 # the report and its unabridged version (only in the case of reports), and to
@@ -19,8 +20,10 @@
 
 # IMPORTANT: to disable building bibliography, set this to false.
 do_bib="true"
-# IMPORTANT: to disable building the index, set this to false.
+# IMPORTANT: to enable building the index, set this to true.
 do_idx="false"
+# IMPORTANT: to enable building an unabridged copy, set this to true.
+do_unabridged="false"
 
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
@@ -43,7 +46,6 @@ bibcmd="bibtex"
 indexcmd="makeindex"
 
 # Data for unabridged copy.
-got_unabridged="false"
 name_unabridged="Unabridged"
 build_dir_unabridged="build_UNABRIDGED"
 
@@ -64,7 +66,7 @@ function clean() {
     mkdir $build_dir_regular
   fi
 
-  if [[ "${got_unabridged}" == "true" ]]; then
+  if [[ "${do_unabridged}" == "true" ]]; then
     if [[ -d "$build_dir_unabridged" ]]; then
       echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
       cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
@@ -178,7 +180,7 @@ function big_build() {
 # Now we deal with unabridged copy, if there is one. If the three compiles
 # after a bib update did not fail, then update bib && triple compile in
 # unabridged_dir.
-  if [[ "${got_unabridged}" == "true" ]]; then
+  if [[ "${do_unabridged}" == "true" ]]; then
     update_unabridged_tex_files
 
     echo -e "\n*************************************************************************"
@@ -243,7 +245,7 @@ function big_build() {
 function final_document() {
   big_build
 
-  if [[ "${got_unabridged}" == "true" ]]; then
+  if [[ "${do_unabridged}" == "true" ]]; then
     cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
   else
     cp "${build_dir_regular}"/"${name}.pdf" "${finalname}.pdf"
@@ -252,7 +254,7 @@ function final_document() {
 
 # This function comments the \includeonly line, if it exists, in $name.tex (it
 # makes a backup copy first), and then does a big compile (by calling
-# big_build). It temporarily sets $got_unabridged to false, to prevent
+# big_build). It temporarily sets $do_unabridged to false, to prevent
 # big_build from building the unabridged copy as well (because the goal of this
 # function is to build a complete instance of the main copy. This is required,
 # e.g., after clean(): doing a big compile with \includeonly might lead to
@@ -270,7 +272,7 @@ function rebuild_aux_database() {
     .temp_aux_rebuild
   cd .temp_aux_rebuild
 
-  sed -e 's/^got_unabridged=.\+$/got_unabridged=\"false\"/' -i CompileTeX.sh
+  sed -e 's/^do_unabridged=.\+$/do_unabridged=\"false\"/' -i CompileTeX.sh
   sed -e '/^\s*\\includeonly/ s/^\s*\\/% \\/' -i "${name}.tex"
 
   sh CompileTeX.sh big
@@ -307,7 +309,7 @@ function small_build() {
 
 # If compile was successful, and we have an unabridged copy, then update unabridged
 # copy.
-  if [[ "${got_unabridged}" == "true" ]]; then
+  if [[ "${do_unabridged}" == "true" ]]; then
     update_unabridged_tex_files
 
     echo -e "\n*************************************************************************"
@@ -354,7 +356,7 @@ function unabridged_dir_and_symlinks_rebuild() {
   ln -sr ${sourcesname}.bib "${build_dir_regular}"/
 
 # And then with unabridged build dir (only for reports).
-  if [[ "${got_unabridged}" == "true" ]]; then
+  if [[ "${do_unabridged}" == "true" ]]; then
     if [[ ! -d "$build_dir_unabridged" ]]; then
       echo "Unabridged build dir does not exist! Run clean() to fix it."
       return 1

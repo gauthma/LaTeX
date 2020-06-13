@@ -1,7 +1,7 @@
 My LaTeX setup 
 ===
 
-These are the templates I use for most of my interactions with LaTeX:
+These are the templates I use for most of my interactions with LaTeX (there are PDF examples for each in the `build/` dir):
 
 - `bare.tex`: A very simple template, that I use for what one might dub "quick notes".
 
@@ -19,9 +19,7 @@ These are the templates I use for most of my interactions with LaTeX:
 
 The example *LaTeX* files are processed using `XeLaTeX`, except for `cv`, which uses `LuaLaTeX`, to simplify usign pretty fonts, and `llncs` which requires `PdfLaTeX`.
 
-Bear in mind that PDF is a [vector format][2], so including raster images might lead to poor results. You can ameliorate the problem by trial and error, tweaking scale factors, image width, etc.
-
-All of these templates depend on a... *sizable* number of packages. However, all of these should be available in the TeXLive package (in Archlinux, at least, they are). If such is not the case, the reader can always install them on a local TeX tree (see the [TeX Trickery](#tex-trickery) section).
+All of these templates use a... *sizable* number of packages. However, all of these should be available in the TeXLive package (in Archlinux, at least, they are). If such is not the case, the reader can always install them on a local TeX tree (see the [TeX Trickery](#tex-trickery) section).
 
 Usage 
 ---
@@ -45,43 +43,56 @@ Do work with LaTeX skeletons provided, compile using adequate `CompileTeX.sh` ta
 Unabridged copy
 ---
 
-When reading PDFs in front of a computer screen, it is exceedingly useful to have two copies of the document being read. In this way, one can quickly cross-reference different parts of the document---and this is all the more useful, the larger the document happens to be. With LaTeX, however, there is an extra nuance: the larger the document, the **longer it will take** to compile. So here's how I tackle the problem.
+When reading PDFs in front of a computer screen, it is exceedingly useful to have two copies of the document being read. In this way, one can quickly cross-reference different parts of the document---and this is all the more useful, the larger the document happens to be. With LaTeX, however, there is an extra nuance: the larger the document, the longer it will take **to compile**. So here's how I tackle the problem.
 
-First, for the simpler types---`bare`, `cv`, and `standalone`---there is `CompileTeX.bare.minimum.sh`, which `setup.sh` will rename to `CompileTeX.sh`, that just does a simple compile run. Here, there is nothing particularly complicated.
+First, for the simpler types---`bare`, `cv`, and `standalone`---there is `CompileTeX.bare.minimum.sh`, which `setup.sh` will rename to `CompileTeX.sh`, that just does a simple compile run---which is all that is required.
 
-For the not so simple types (everything else), the `CompileTeX.sh` script will do two kinds of builds: a "regular" build, and an "unabridged" build. The idea is that if the document is large, it can be divided into several partial documents, which are then `\include`'d in the main file. This makes it possible to build only a part of the document, using `\includeonly`. `CompileTeX.sh` will then also produce an unabridged copy, as if there was no `\includeonly`. This is done by copying the main `.tex`file into a new file called `Unabridged.tex`, and inserting in this latter file's preamble the line:
+For the not so simple types (everything else), the `CompileTeX.sh` script can do two kinds of builds: a "regular" build, and an "unabridged" build. The idea is that if the document is large, it can be divided into several partial documents, which are then `\include`'d in the main file. This makes it possible to build only a part of the document, using `\includeonly`. `CompileTeX.sh` will then also produce an unabridged copy, as if there was no `\includeonly`. This is done by copying the main `.tex`file into a new file called `Unabridged.tex`, and inserting in this latter file's preamble the line:
 
 ~~~ {.tex .numberLines}
 \let\include\input
 ~~~
 
-This done because `\include` always starts in a page, because it is supposed to be primarily used with chapters (which usually starts in a new page). But, as this is not the case with `\input`, with the above `\let` we can include, say, `\section`'s, and while the regular copy will, in this case, have extraneous `\newpage`'s, the unabridged one, will not.
+This done because `\include` always starts in a page, as it is supposed to be primarily used with chapters (which usually start in a new page). But, as this is not the case with `\input`, with the above `\let` we can include, say, `\section`'s---and while the regular copy will, in this case, have extraneous `\newpage`'s, the unabridged one, will not.
+
+**Note:** if `\include`'ng sections of a document with chapters, the chapter declarations **must be in the mainfile**. Otherwise the numbering of the sections will change; see below.
 
 Anyway, `Unabridged.tex` is then compiled into a different directory---so that the auxiliary files of both versions don't mingle.
 
-There is an important catch, however: when compiling a document with `include`'s, the compiler will generate one `.aux` file per `\include`. This is used to keep references and chapter/section numbers correct, when compiling a reduced version with `\includeonly`.
+There is an important catch, however: when compiling a document with `include`'s, the compiler will generate one `.aux` file per `\include` (stored in the build dir). This is used to keep references and chapter/section numbers correct, when compiling a reduced version with `\includeonly`. If those `.aux` files are not there---e.g. after using the `clean` options to clean the build dir---compiling a mainfile with an `\includeonly` will yield an error. This is the reason for the `rebuild_aux` option to the compile script. I detail all those options below.
+
+By default, only the `report` type has enabled the building of an unabridged copy. For the other non-simple types, set `do_unabridged` to `true` in `CompileTeX.sh`, and then use the `clean` option to setup the build dir for the unabridged copy.
 
 LaTeX compiling
 ---
 
-Compiling LaTeX files is not a simple matter. Here I will just describe the command line options of the script `CompileTeX.sh`. Before that though, some remarks are in order.
+Compiling LaTeX files is not a simple matter. Here I will just describe the command line options of the script `CompileTeX.sh`. There exists a `small_build()` function, which just runs the compiler once; and a `big_build()` function, which compile once, builds bibliography, etc., if set, and then compiles three more times. Both functions also do the same actions to the unabridged copy, if there exists one. See the comments in `CompileTeX.sh` for more details.
 
-Note: there exists a variable, `do_bib`, which can be used---set it to `false`---to cause the script to ignore any `\cite` or `\nocite` commands, and never run the bibliography command. It is set to `true` by default.
+Note: there exists a variable, `do_bib`, which can be used---set it to `false`---to cause the script to ignore any `\cite` or `\nocite` commands, and never run the bibliography command. It is set to `true` by default. Similarly, there exists variable `do_idx` to enable or disable building the index.
 
-- no argument: run `LaTeX` compiling command once, without debug output. 
+- no argument: run `small_build()`;
 
-- `debug`: run `LaTeX` compiling command once, *with* debug output. 
+- `big`: A full LaTeX build run, i.e. `big_build()`.
 
-- `big`: A full LaTeX build run: clean and run once, then run bib (if `got_bib` is `true`), then run three more times (usually two are enough, but in some thorny cases three are required, so...). If using bib is not set, just run three times.
+- `clean`: removes everything in the build directories. And rebuilds its structure. By default this means create a link, inside the the build directory, to the biliography file  (this is always done, regardless of the value of `got_bib`). However, more actions may be required; see the "TeX Trickey" section below TODO.
 
-- `final`: `clean`s everything up, and them makes a `full` build. If you need the final PDF document to have a different name, then you can use the `endname` variable, which the last command in this function sets as its name.
+- `debug`: run `small_build()`, but *with* debug output. 
 
-- `clean`: removes everything in the `build/` directory. And rebuilds its structure. By default this means create a link to the biliography file inside the the `build` directory (this is always done, regardless of the value of `got_bib`). However, more actions may be required; see the "TeX Trickeyy" section below.
+- `final`: `clean`s everything up, and them makes a `full` build. If you need the final PDF document to have a different name, then you can use the `endname` variable, which the last command in this function sets as its name;
 
-- `get_compiler_pid`: used in the `vim` code that builds the `LaTeX` command on writing the `.tex` file (see [myvim](https://github.com/gauthma/myvim)).
+- `get_compiler_pid`: used in the `vim` code that builds the `LaTeX` command on writing the `.tex` file (see [myvim](https://github.com/gauthma/myvim));
 
-- `killall_tex`: used to kill a running compile process (only used from within `vim`).
+- `killall_tex`: used to kill a running compile process (only used from within `vim`);
 
-**NOTA BENE:** for the `report` class, both normal (no argument) and `full` compiling also trigger the compilation of the **unabridged copy**; see below.
+- `rebuild_aux`: reconstructs the `.aux` files database used by the `\include[only]` macros;
 
-The files in the `includes/` directory are files that are supposed to be *included* in another file, and *not* compiled on their own. Next follows a brief description of available types.
+- `symlinks`: reconstructs the symlinks needed in build directory(ies);
+
+- `u2r`: replaces the regular, possibly abridged PDF file, with its unabridged counterpart. This is useful when one wants to read, more than to write, the document. As I usually have both version open in the PDF viewer, and it auto-updates, doing this leaves me with two open copies of the full document, which makes reading all that much easier.
+
+A final note: the files in the `includes/` directory are files that are supposed to be *included* in another file, and *not* compiled on their own. Next follows a brief description of available types.
+
+Further reading
+---
+
+to be done.
