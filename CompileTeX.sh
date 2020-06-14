@@ -252,16 +252,17 @@ function final_document() {
   fi
 }
 
-# This function comments the \includeonly line, if it exists, in $name.tex (it
-# makes a backup copy first), and then does a big compile (by calling
-# big_build). It temporarily sets $do_unabridged to false, to prevent
+# This function creates a copy of the main dir (except unabridged stuff),
+# comments the \includeonly line, if it exists, in $name.tex, and then does a
+# big compile. It sets $do_unabridged to false (in the copy folder), to prevent
 # big_build from building the unabridged copy as well (because the goal of this
 # function is to build a complete instance of the main copy. This is required,
 # e.g., after clean(): doing a big compile with \includeonly might lead to
 # errors in, for example, bibliography building).
 #
-# It then waits for the big compile to finish, and restores (renames) the
-# backup copy to $name.tex
+# It then waits for the big compile to finish, syncs the .aux files with the
+# regular build dir (it should not be needed for unabridged, because it does
+# not use \include's), and deletes the copy folder.
 function rebuild_aux_database() {
 
   local big_build_failed="false"
