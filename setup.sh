@@ -1,6 +1,6 @@
 #!/bin/bash
 
-build_dir="build"
+build_dir_regular="build"
 build_dir_unabridged="build_UNABRIDGED"
 name_unabridged="Unabridged"
 
@@ -94,11 +94,19 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
 # The actual pdf is in the build directory; instead of moving it, we symlink it
 # up.
-  ln -sr "${build_dir}/${doctype}.pdf" .
+  ln -sr "${build_dir_regular}/${doctype}.pdf" .
 
-# jse the simple build script for the simpler templates.
+# Use the simple build script for the simpler templates.
   if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || "${doctype}" == "standalone" ]] ; then
     mv CompileTeX.bare.minimum.sh CompileTeX.sh
+  else
+    rm CompileTeX.bare.minimum.sh
+
+    ln -sr "${build_dir_regular}/${doctype}.synctex.gz" .
+
+# The compiler needs to find the sources file in the build dir, so symlink.
+    ln -sr sources.bib "${build_dir_regular}"/
+
   fi
 
 # Setup CompileTeX.sh (requires GNU sed) Begin with setting what type of
@@ -111,20 +119,21 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   elif [[ "${doctype}" == "llncs" ]] ; then
     sed -i "/^texcmd=/c\texcmd=\"pdflatex\"" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
-# If document type is report, then first set $got_unabridged variable to true.
-    sed -i "/^got_unabridged=\"false\"/c\got_unabridged=\"true\"" CompileTeX.sh
+# If document type is report, then first set $do_unabridged variable to true.
+    sed -i "/^do_unabridged=\"false\"/c\do_unabridged=\"true\"" CompileTeX.sh
 
 # Next set up the directory where we will build the unabridged copy.
     mkdir "${build_dir_unabridged}"
 
-    cp "${build_dir}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
+    cp "${build_dir_regular}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
     ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" "Unabridged.pdf"
+
+    ln -sr "${build_dir_unabridged}/${name_unabridged}.synctex.gz" .
 
     ln -sr "sources.bib" "${build_dir_unabridged}"/
   fi
 
-# For the types that DON'T happen to a) have no includes, we delete the include
-# folder); and b) do not require SyncTeX, we remove it.
+# For the types that have no includes, we delete the include folder.
 #
 # Otherwise, symlink bib file to build dir (bibtex command has to be run inside
 # this dir).
@@ -133,9 +142,6 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
     rm -rf includes/
   fi
-
-# The compiler need to find the sources file in the build dir, so symlink.
-  ln -sr sources.bib "${build_dir}"/
 
 # Finally delete this script (no use for it after everything is set up).
   rm -- "$0"
