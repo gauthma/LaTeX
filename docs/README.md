@@ -108,7 +108,3 @@ Further reading
 ---
 
 For more details on the things I describe here, see <https://randomwalk.eu/notes/TeX-Trickery.pdf>.
-
-
-[//]: # vim: spell spelllang=en
-
