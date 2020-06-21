@@ -54,7 +54,7 @@ function clean() {
 
   echo -e "\nWARNING: after cleaning the build dir, it is VERY RECOMMENDED
   to do a big build, WITHOUT \\includeonly (run this script with the
-  rebuild_aux_database option). Otherwise things like bibliography
+  rebuild_build_files option). Otherwise things like bibliography
   might not build properly!\n"
   read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
 
@@ -252,36 +252,44 @@ function final_document() {
   fi
 }
 
-# This function creates a copy of the main dir (except unabridged stuff),
-# comments the \includeonly line, if it exists, in $name.tex, and then does a
-# big compile. It sets $do_unabridged to false (in the copy folder), to prevent
-# big_build from building the unabridged copy as well (because the goal of this
-# function is to build a complete instance of the main copy. This is required,
-# e.g., after clean(): doing a big compile with \includeonly might lead to
-# errors in, for example, bibliography building).
+# This function creates a copy of the main dir (including unabridged stuff),
+# deletes the \includeonly line, if it exists, in $name.tex, patches
+# $name_unabridged the same way update_unabridged_tex_files() does, and then
+# does a big compile. The goal of this function is to rebuild the same
+# auxiliary files that would be produced by building the entire document. This
+# is required, e.g., after clean(): doing a big compile with \includeonly might
+# lead to errors in, for example, bibliography building).
 #
-# It then waits for the big compile to finish, syncs the .aux files with the
-# regular build dir (it should not be needed for unabridged, because it does
-# not use \include's), and deletes the copy folder.
-function rebuild_aux_database() {
+# (The reason we build also an unabridged copy here is that in that case,
+# \include's are remapped to \input's, but that is not the case with the
+# regular copy, even when not using \includeonly. So the auxiliary files might
+# differ in the two cases.)
+#
+# It then waits for the big compile to finish, replaces the main folder's (../)
+# build dirs with these ones, and deletes the copy folder.
+function rebuild_build_files() {
 
-  local big_build_failed="false"
+  rm -rf .temp_build_rebuild && mkdir .temp_build_rebuild
 
-  rm -rf .temp_aux_rebuild && mkdir .temp_aux_rebuild
+  cp -r $(ls | grep -v "docs\|README.md") .temp_build_rebuild
+  cd .temp_build_rebuild
 
-  cp -r $(ls | grep -v "$build_dir_unabridged\|$name_unabridged\|docs\|README.md") \
-    .temp_aux_rebuild
-  cd .temp_aux_rebuild
+# Comment \includeonly line in $name.tex, if any.
+  sed -e 's/^\s*\\includeonly.*$//' -i "${name}.tex"
 
-  sed -e 's/^do_unabridged=.\+$/do_unabridged=\"false\"/' -i CompileTeX.sh
-  sed -e '/^\s*\\includeonly/ s/^\s*\\/% \\/' -i "${name}.tex"
+# See comments in update_unabridged_tex_files().
+  cp "${name}.tex" "${name_unabridged}.tex"
+  sed '/^\s*\\begin{document}/i \
+\\let\\include\\input' -i "${name_unabridged}.tex"
 
   sh CompileTeX.sh big
-  rsync -a --include '*/' --include '*.aux' --exclude '*' \
-    "${build_dir_regular}/" ../"${build_dir_regular}"
+  rm -rf ../"${build_dir_regular}"
+  rm -rf ../"${build_dir_unabridged}"
+  mv "${build_dir_regular}" ../
+  mv "${build_dir_unabridged}" ../
 
-  cd .. && rm -rf .temp_aux_rebuild
-  echo "Finished rebuild of .aux file database."
+  cd .. && rm -rf .temp_build_rebuild
+  echo "Finished rebuilding auxiliary files."
 }
 
 
@@ -408,8 +416,8 @@ function main() {
     get_compiler_pid
   elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
     killall_tex
-  elif [[ $# -eq 1 && "$1" == "rebuild_aux" ]] ; then
-    rebuild_aux_database
+  elif [[ $# -eq 1 && "$1" == "rebuild_build_files" ]] ; then
+    rebuild_build_files
   elif [[ $# -eq 1 && "$1" == "symlinks" ]] ; then
     unabridged_dir_and_symlinks_rebuild
   elif [[ $# -eq 1 && "$1" == "u2r" ]] ; then
