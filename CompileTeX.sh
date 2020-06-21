@@ -333,7 +333,14 @@ function u2r() {
 # as \input's. This causes for \includeonly to be ignored (if it exists). Then
 # build unabridged copy in $build_dir_unabridged.
 function update_unabridged_tex_files() {
-  cp "${name}.tex" "${name_unabridged}.tex"
+  rm -f "${name_unabridged}.tex"
+
+# Delete any \includeonly line from ${name_unabridged}.tex. This should not be
+# necessary, as the sed below redefines \include to \input, which means that
+# \includeonly lines will be ignored. But it is possible that there will exist
+# other code that runs (or doesn't run) when an \includeonly line exists. So
+# better wipe it out, just to be sure.
+  sed -e 's/^\s*\\includeonly.*$//' "${name}.tex" > "${name_unabridged}.tex"
 
 # Insert the following line before \begin{document}:
 # \let\include\input
