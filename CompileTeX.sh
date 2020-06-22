@@ -1,5 +1,22 @@
 #! /bin/bash
 
+# IMPORTANT: if you have .tex files in their own folders, indicate them here
+# (space separated). E.g. if you have your chapters in a folder named
+# "chapters" (no quotes), then add it like this (WITH quotes):
+# folders_to_be_rsyncd=( "chapters" )
+# VERY IMPORTANT: the folders' name MUST NOT end with a forward slash (/),
+# because that tells rsync to copy folder *contents*, rather than the folder
+# itself.
+folders_to_be_rsyncd=( "chapters" "frontmatter" )
+# IMPORTANT: to disable building bibliography, set this to false.
+do_bib="true"
+# IMPORTANT: to enable building the index, set this to true.
+do_idx="false"
+# IMPORTANT: to enable building an unabridged copy, set this to true.
+do_unabridged="true"
+
+###############################################################################
+
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
 
@@ -17,13 +34,6 @@
 # Most of the remaining functions revolve around these three, to compile both
 # the report and its unabridged version (only in the case of reports), and to
 # check for errors and give feedback properly, and so on.
-
-# IMPORTANT: to disable building bibliography, set this to false.
-do_bib="true"
-# IMPORTANT: to enable building the index, set this to true.
-do_idx="false"
-# IMPORTANT: to enable building an unabridged copy, set this to true.
-do_unabridged="false"
 
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
@@ -79,9 +89,17 @@ function clean() {
 # Rebuilding structure of build_dirs. Begin with symlinks.
   unabridged_dir_and_symlinks_rebuild
 
-# NOTA BENE: if any .tex files are in their own custom directories, those dirs
+# If any .tex files are in their own custom directories, those dirs
 # must also exist in $build_dir, with the same hierarchy. See README.md for
-# more details. Can be handled with rsync. Put code below, if/when needed.
+# more details. Handled with rsync.
+
+  if [[ ${#folders_to_be_rsyncd[@]} -gt 0 ]] ; then
+    rsync -a --include '*/' --exclude '*' "${folders_to_be_rsyncd[@]}" "${build_dir_regular}"
+
+    if [[ "${do_unabridged}" == "true" ]]; then
+      rsync -a --include '*/' --exclude '*' "${folders_to_be_rsyncd[@]}" "${build_dir_unabridged}"
+    fi
+  fi
 }
 
 # A normal (single) LaTeX compile.

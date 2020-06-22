@@ -91,16 +91,15 @@ Note: there exists a variable, `do_bib`, which can be used---set it to `false`--
 
 - `u2r`: replaces the regular, possibly abridged PDF file, with its unabridged counterpart. This is useful when one wants to read, more than to write, the document. As I usually have both version open in the PDF viewer, and it auto-updates, doing this leaves me with two open copies of the full document, which makes reading all that much easier.
 
-**Structure of the build directory.** If you split your input, say, by placing all chapters inside a `chapters/` folder, then that folder needs to exist inside the build directory. More generally, the same hierarchy of inclusion of input files needs to be replicated inside the build directory. One way of accomplishing this is with `rsync` lines, inserted at the end of the `clean()` method:
+**Structure of the build directory.** If you split your input, say, by placing all chapters inside a `chapters/` folder, then that folder needs to exist inside the build directory. More generally, the same hierarchy of inclusion of input files needs to be replicated inside the build directory. To accomplishing this, list those folders in the `folders_to_be_rsyncd` array. E.g. if you have two folders with `.tex` files in them, say `chapters` and `images`, that line should look something like:
 
-~~~ {.bash .numberLines}
-rsync -a --include '*/' --exclude '*' chapters "${build_dir_regular}"
-rsync -a --include '*/' --exclude '*' chapters "${build_dir_unabridged}"
+~~~ {.shell .numberLines}
+folders_to_be_rsyncd=( "chapters" "images" )
 ~~~
 
-Replace `chapters` with the list of folders where you have placed the input `.tex` files. And of course, use the `build_dir_unabridged` variable only if you have an unabridged copy.
+Add to the list any folders where you have placed the `.tex` files.
 
-**IMPORTANT:** the source folder(s)---`chapters` in the above example---**MUST NOT** end with a forward slash (/), because that tells `rsync` to copy folder *contents*, rather than the folder itself---which is not what we want.
+**IMPORTANT:** the source folder(s)---`chapters` and `images` in the above example---**MUST NOT** end with a forward slash (/), because that tells `rsync` to copy folder *contents*, rather than the folder itself---which is not what we want.
 
 A final note: the files in the `includes/` directory are files that are supposed to be *included* (actually `\input`'d) into another file, and *not* compiled on their own.
 
