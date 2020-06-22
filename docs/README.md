@@ -85,7 +85,7 @@ Note: there exists a variable, `do_bib`, which can be used---set it to `false`--
 
 - `killall_tex`: used to kill a running compile process (only used from within `vim`);
 
-- `rebuild_aux`: reconstructs the `.aux` files database used by the `\include[only]` macros;
+- `rebuild_build_files`: reconstructs the auxiliary files stored in both (regular and unabridged) build dirs. Note that to do this, any `\includeonly` lines are ignored; hence, the regular PDF file will be a "full" PDF file. If indeed there are any `\includeonly` lines, then subsequent compile runs will yield the abridged PDF.
 
 - `symlinks`: reconstructs the symlinks needed in build directory(ies);
 
