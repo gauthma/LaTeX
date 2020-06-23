@@ -60,7 +60,7 @@ This done because `\include` always starts a new page, as it is supposed to be p
 
 Anyway, `Unabridged.tex` is then compiled into a different directory---so that the auxiliary files of both versions don't mingle.
 
-There is an important catch, however: when compiling a document with `include`'s, the compiler will generate one `.aux` file per `\include` (stored in the build directory). This is used to keep references and chapter/section numbers correct, when compiling a reduced version with `\includeonly`. If those `.aux` files are not there---e.g. after using the `clean` options to clean the build dir---compiling a mainfile with an `\includeonly` will yield an error. This is the reason for the `rebuild_aux` option to the compile script. I detail all those options below.
+There is an important catch, however: when compiling a document with `include`'s, the compiler will generate some auxiliary files per `\include` (stored in the build directory). This is used to keep references and chapter/section numbers correct, when compiling a reduced version with `\includeonly`. If those auxiliary files are not there---e.g. after using the `clean` options to clean the build dir---compiling a mainfile with an `\includeonly` will yield an error. This is the reason for the `rebuild_build_files` option to the compile script. I detail all those options below.
 
 By default, only the `report` type has enabled the building of an unabridged copy. For the other non-simple types, set `do_unabridged` to `true` in `CompileTeX.sh`, and then use the `clean` option to setup the build directory for the unabridged copy.
 
@@ -85,7 +85,7 @@ Note: there exists a variable, `do_bib`, which can be used---set it to `false`--
 
 - `killall_tex`: used to kill a running compile process (only used from within `vim`);
 
-- `rebuild_build_files`: reconstructs the auxiliary files stored in both (regular and unabridged) build dirs. Note that to do this, any `\includeonly` lines are ignored; hence, the regular PDF file will be a "full" PDF file. If indeed there are any `\includeonly` lines, then subsequent compile runs will yield the abridged PDF.
+- `rebuild_build_files`: reconstructs the auxiliary files stored in both (regular and unabridged) build dirs.
 
 - `symlinks`: reconstructs the symlinks needed in build directory(ies);
 

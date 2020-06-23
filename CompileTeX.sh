@@ -59,7 +59,42 @@ indexcmd="makeindex"
 name_unabridged="Unabridged"
 build_dir_unabridged="build_UNABRIDGED"
 
-# Please do note that this WIPES OUT THE ENTIRE unabridged_dir!
+# Function that calls either small_build() (if given no arguments), or
+# big_build() (if given the "big" argument). Does the selected build in a
+# temporary directory: this way, if a .tex file is modified (written) while the
+# build is running, it won't cause any effect.
+function build() {
+  local go_big="false"
+
+  if [[ -n "$1" && "$1" == "big" ]]; then
+    go_big="true"
+  fi
+
+  if [[ ! -d .temp_compile ]]; then
+    mkdir .temp_compile
+    cp -r $(ls | grep -v "docs\|.temp_compile") .temp_compile
+  else
+    rsync -a --exclude '.temp_compile' --exclude 'docs' . .temp_compile
+  fi
+
+  cd .temp_compile
+
+  if [[ "$go_big" == "true" ]]; then
+    big_build
+  else
+    small_build
+  fi
+
+  if [[ $? == 0 ]]; then
+    rm -rf ../"${build_dir_regular}"
+    rm -rf ../"${build_dir_unabridged}"
+    mv "${build_dir_regular}" ../
+    mv "${build_dir_unabridged}" ../
+
+    cd ..
+  fi
+}
+
 function clean() {
 
   echo -e "\nWARNING: after cleaning the build dir, it is VERY RECOMMENDED
@@ -67,6 +102,8 @@ function clean() {
   rebuild_build_files option). Otherwise things like bibliography
   might not build properly!\n"
   read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
+
+  rm -rf .temp_compile
 
   if [[ -d "$build_dir_regular" ]]; then
     echo "Wiping contents of ${build_dir_regular} (except PDF files)"
@@ -129,7 +166,7 @@ function big_build() {
 # If the compile failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
     echo "Compile of ${name}.tex file was not successful!"
-    exit 1
+    return 1
   fi
 
 # If the compile succeeded, then build the index.
@@ -139,7 +176,7 @@ function big_build() {
 # If the building the index failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
       echo "Building of the index (regular copy) was not successful!"
-      exit 1
+      return 1
     fi
 # Otherwise leave the regular build dir.
     cd ..
@@ -155,7 +192,7 @@ function big_build() {
 # If one of the compile runs failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
       echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
-      exit 1
+      return 1
     fi
 
 # Else, if there are uncommented \cite or \nocite commands, then build the
@@ -172,7 +209,7 @@ function big_build() {
 # If one of the compile runs failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
         echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
-        exit 1
+        return 1
       fi
     else
       cd "${build_dir_regular}" && pwd
@@ -186,11 +223,11 @@ function big_build() {
 # If the compile compile after bib update failed, notify the user and quit.
         if [[ $? -ne 0 ]]; then
           echo "Compile of ${name}.tex, after building bibliography, was not successful!"
-          exit 1
+          return 1
         fi
       else
         echo "Building bibliography (regular copy) file was not successful!"
-        exit 1
+        return 1
       fi
     fi
   fi
@@ -210,7 +247,7 @@ function big_build() {
 # If the compile failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
       echo "Compile of ${name_unabridged}.tex file was not successful!"
-      exit 1
+      return 1
     fi
 
 # If the compile succeeded, then build the index.
@@ -220,7 +257,7 @@ function big_build() {
 # If the building the index failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
         echo "Building of the index (unabridged copy) was not successful!"
-        exit 1
+        return 1
       fi
 # Otherwise leave the regular build dir.
       cd ..
@@ -239,12 +276,12 @@ function big_build() {
 # If the compile compile after bib update failed, notify the user and quit.
         if [[ $? -ne 0 ]]; then
           echo "Compile of ${name_unabridged}.tex file was not successful!"
-          exit 1
+          return 1
         fi
 # Bibliography did NOT build property; notify user and quit.
       else
         echo "Building bibliography (unabridged copy) file was not successful!"
-        exit 1
+        return 1
       fi
 # If we are skipping bibliography, just do two compile() runs.
     else
@@ -253,7 +290,7 @@ function big_build() {
 # If one of the compile runs failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
         echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
-        exit 1
+        return 1
       fi
     fi # If $do_bib is true.
   fi # If got unabridged copy.
@@ -301,6 +338,8 @@ function rebuild_build_files() {
 \\let\\include\\input' -i "${name_unabridged}.tex"
 
   sh CompileTeX.sh big
+
+  cp ../"${build_dir_regular}"/"${name}.pdf" "${build_dir_regular}"
   rm -rf ../"${build_dir_regular}"
   rm -rf ../"${build_dir_unabridged}"
   mv "${build_dir_regular}" ../
@@ -331,7 +370,7 @@ function small_build() {
   compile "$name" "$build_dir_regular" # compile() returns the $? of the LaTeX command. See Note (1).
   if [[ $? -ne 0 ]]; then
     echo "Compile of ${name}.tex file was not successful!"
-    exit 1
+    return 1
   fi
 
 # If compile was successful, and we have an unabridged copy, then update unabridged
@@ -421,9 +460,9 @@ function main() {
 # - argument is get_compiler_pid: compile that function;
 # - argument is killall_tex: compile that function.
   if [[ $# -eq 0 ]] ; then
-    small_build
+    build
   elif [[ $# -eq 1 && "$1" == "big" ]] ; then
-    big_build
+    build big
   elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
     clean
   elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
