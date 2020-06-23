@@ -1,5 +1,11 @@
 #! /bin/bash
 
+# IMPORTANT: to disable building bibliography, set this to false.
+do_bib="true"
+# IMPORTANT: to enable building the index, set this to true.
+do_idx="false"
+# IMPORTANT: to enable building an unabridged copy, set this to true.
+do_unabridged="true"
 # IMPORTANT: if you have .tex files in their own folders, indicate them here
 # (space separated). E.g. if you have your chapters in a folder named
 # "chapters" (no quotes), then add it like this (WITH quotes):
@@ -7,19 +13,16 @@
 # VERY IMPORTANT: the folders' name MUST NOT end with a forward slash (/),
 # because that tells rsync to copy folder *contents*, rather than the folder
 # itself.
-folders_to_be_rsyncd=( "chapters" "frontmatter" )
-# IMPORTANT: to disable building bibliography, set this to false.
-do_bib="true"
-# IMPORTANT: to enable building the index, set this to true.
-do_idx="false"
-# IMPORTANT: to enable building an unabridged copy, set this to true.
-do_unabridged="true"
+folders_to_be_rsyncd=( "chapters" )
+# IMPORTANT: set the temporary build dir here. Use a RAM-based temporary
+# filesystem if you have one. See README.
+tmp_build_dir="/run/user/$UID/xyz-temp-compile"
 
 ###############################################################################
-
+#
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
-
+#
 # Three main functions, compile(), small_build(), and big_build():
 #
 # - compile() just runs the LaTeX compiler on whatever file it is given;
@@ -64,20 +67,18 @@ build_dir_unabridged="build_UNABRIDGED"
 # temporary directory: this way, if a .tex file is modified (written) while the
 # build is running, it won't cause any effect.
 function build() {
+  local curr_dir=$(pwd)
   local go_big="false"
 
   if [[ -n "$1" && "$1" == "big" ]]; then
     go_big="true"
   fi
 
-  if [[ ! -d .temp_compile ]]; then
-    mkdir .temp_compile
-    cp -r $(ls | grep -v "docs\|.temp_compile") .temp_compile
-  else
-    rsync -a --exclude '.temp_compile' --exclude 'docs' . .temp_compile
-  fi
+  rm -rf "$tmp_build_dir"
+  mkdir  "$tmp_build_dir"
+  cp -r $(ls | grep -v "docs") "$tmp_build_dir"
 
-  cd .temp_compile
+  cd "$tmp_build_dir"
 
   if [[ "$go_big" == "true" ]]; then
     big_build
@@ -85,14 +86,16 @@ function build() {
     small_build
   fi
 
-  if [[ $? == 0 ]]; then
-    rm -rf ../"${build_dir_regular}"
-    rm -rf ../"${build_dir_unabridged}"
-    mv "${build_dir_regular}" ../
-    mv "${build_dir_unabridged}" ../
+  cd "$curr_dir"
 
-    cd ..
+  if [[ $? == 0 ]]; then
+    rm -rf "${build_dir_regular}"
+    rm -rf "${build_dir_unabridged}"
+    mv "$tmp_build_dir"/"${build_dir_regular}" .
+    mv "$tmp_build_dir"/"${build_dir_unabridged}" .
   fi
+
+  rm -rf "$tmp_build_dir"
 }
 
 function clean() {
@@ -323,11 +326,12 @@ function final_document() {
 # It then waits for the big compile to finish, replaces the main folder's (../)
 # build dirs with these ones, and deletes the copy folder.
 function rebuild_build_files() {
+  local curr_dir=$(pwd)
 
-  rm -rf .temp_build_rebuild && mkdir .temp_build_rebuild
+  rm -rf "$tmp_build_dir" && mkdir "$tmp_build_dir"
 
-  cp -r $(ls | grep -v "docs\|README.md") .temp_build_rebuild
-  cd .temp_build_rebuild
+  cp -r $(ls | grep -v "docs") "$tmp_build_dir"
+  cd "$tmp_build_dir"
 
 # Comment \includeonly line in $name.tex, if any.
   sed -e 's/^\s*\\includeonly.*$//' -i "${name}.tex"
@@ -337,15 +341,17 @@ function rebuild_build_files() {
   sed '/^\s*\\begin{document}/i \
 \\let\\include\\input' -i "${name_unabridged}.tex"
 
-  sh CompileTeX.sh big
+  big_build
 
-  cp ../"${build_dir_regular}"/"${name}.pdf" "${build_dir_regular}"
-  rm -rf ../"${build_dir_regular}"
-  rm -rf ../"${build_dir_unabridged}"
-  mv "${build_dir_regular}" ../
-  mv "${build_dir_unabridged}" ../
+  cd "$curr_dir"
 
-  cd .. && rm -rf .temp_build_rebuild
+  cp "${build_dir_regular}"/"${name}.pdf" "$tmp_build_dir"/"${build_dir_regular}"
+  rm -rf "${build_dir_regular}"
+  rm -rf "${build_dir_unabridged}"
+  mv "$tmp_build_dir"/"${build_dir_regular}" .
+  mv "$tmp_build_dir"/"${build_dir_unabridged}" .
+
+  rm -rf "$tmp_build_dir"
   echo "Finished rebuilding auxiliary files."
 }
 

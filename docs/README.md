@@ -17,7 +17,6 @@ These are the templates I use for most of my interactions with LaTeX (there are 
 
 - `standalone.tex`: This I use when I need to try out some sketch, in `TikZ` or `xy-pic`, or something like that. Instead of experimenting in the document where I need to place the picture, I try it out in this standalone template. If nothing else, it compiles a lot faster! The PDF produced will be a "full-scale" picture. To include it say, on a presentation, do `\centering{\graphicbox{standalone}}`.
 
-
 The example *LaTeX* files are processed using `XeLaTeX`, except for `cv`, which uses `LuaLaTeX`, to simplify using pretty fonts, and `llncs` which requires `PdfLaTeX`.
 
 All of these templates use a... *sizable* number of packages. However, all of these should be available in the TeXLive package (in Archlinux, at least, they are). If such is not the case, the reader can always install them on a local TeX tree. Also, I use a custom font, `Charis SIL`, which requires manual installation (see below, the "Further Reading" section). If the user does *not* wish to use them, just comment out the lines concerning the `fontspec` package, and any related lines (that should be just above, or just below).
@@ -54,7 +53,7 @@ For the not so simple types (everything else), the `CompileTeX.sh` script can do
 \let\include\input
 ~~~
 
-This done because `\include` always starts a new page, as it is supposed to be primarily used with chapters (which usually start in a new page). But, as this is not the case with `\input`, with the above `\let` we can include, say, `\section`'s---and while the regular copy will, in the case of `\section`'s, have extraneous `\newpage`'s, the unabridged one will not.
+This is done because `\include` always starts a new page, as it is supposed to be primarily used with chapters (which usually start in a new page). But, as this is not the case with `\input`, with the above `\let` we can include, say, `\section`'s---and while the regular copy will, in the case of `\section`'s, have extraneous `\newpage`'s, the unabridged one will not.
 
 **Note:** if `\include`'ng sections of a document with chapters, the chapter declarations **must be in the mainfile**. Otherwise the numbering of the sections will change; see below.
 
@@ -67,7 +66,17 @@ By default, only the `report` type has enabled the building of an unabridged cop
 LaTeX compiling
 ---
 
-Compiling LaTeX files is not a simple matter. Here I will just describe the command line options of the script `CompileTeX.sh`. There exists a `small_build()` function, which just runs the compiler once; and a `big_build()` function, which compile once, builds bibliography, etc., if set, and then compiles three more times. Both functions also do the same actions to the unabridged copy, if there exists one. See the comments in `CompileTeX.sh` for more details.
+Compiling LaTeX files is not a simple matter. Here I will just describe the variables you can set in, and the command line options of, the script `CompileTeX.sh`. First, the variables. We have already encountered `do_unabridged` (see above). There are also:
+
+- `do_bib`: when running `big_build()`, also build the bibliography.
+
+- `do_idx`: when running `big_build()`, also build the index.
+
+- `folders_to_be_rsyncd`: see the note on the structure of the build directory, below.
+
+- `tmp_build_dir`: the actual compilation takes place in a copy of the root folder, to insure that even in longer compiles, if some `.tex` file is changed while the compiler is running, this does not affect that compilation. Ideally this should a folder in a RAM-based `tmpfs` filesystem. In Archlinux, one such filesystem is mounted at `/run/user/<your_user_id>/`.
+
+There exists a `small_build()` function, which just runs the compiler once; and a `big_build()` function, which compile once, builds bibliography, etc., if set, and then compiles three more times. Both functions also do the same actions to the unabridged copy, if there exists one. See the comments in `CompileTeX.sh` for more details.
 
 Note: there exists a variable, `do_bib`, which can be used---set it to `false`---to cause the script to ignore any `\cite` or `\nocite` commands, and never run the bibliography command. It is set to `true` by default. Similarly, there exists variable `do_idx` to enable or disable building the index.
 
