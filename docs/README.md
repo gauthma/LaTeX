@@ -97,7 +97,7 @@ Note: there exists a variable, `do_bib`, which can be used---set it to `false`--
 folders_to_be_rsyncd=( "chapters" "images" )
 ~~~
 
-Add to the list any folders where you have placed the `.tex` files.
+Add to the list any folders where you have placed the `.tex` files---**EXCEPT** files in the `\includes/` directory, as these are supposed to be `\input`'d (and hence, cause no problem).
 
 **IMPORTANT:** the source folder(s)---`chapters` and `images` in the above example---**MUST NOT** end with a forward slash (/), because that tells `rsync` to copy folder *contents*, rather than the folder itself---which is not what we want.
 
