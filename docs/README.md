@@ -1,30 +1,10 @@
-My LaTeX setup 
+LaTeX, made simple (or at least, simpler...) 
 ===
 
-These are the templates I use for most of my interactions with LaTeX (there are PDF examples for each in the `build/` directory):
-
-- `bare.tex`: A very simple template, that I use for what one might dub "quick notes".
-
-- `cv.tex`: The template I use for my Curriculum Vitæ.
-
-- `essay.tex`: Writing is often a good way to vent complaints. I write them with this template and then dump them on my website.
-
-- `llncs.tex`: Springer's template for writing papers, with a few tweaks of my own (for more on these, see below section "Further Reading").
-
-- `presentation.tex`: This uses the `beamer` class, tweaked to my liking. Because in what slide making (and presentation giving) is concerned, the simpler the better.
-
-- `report.tex`: I use this template as a sort of "offline wiki". For notes about research.
-
-- `standalone.tex`: This I use when I need to try out some sketch, in `TikZ` or `xy-pic`, or something like that. Instead of experimenting in the document where I need to place the picture, I try it out in this standalone template. If nothing else, it compiles a lot faster! The PDF produced will be a "full-scale" picture. To include it say, on a presentation, do `\centering{\graphicbox{standalone}}`.
-
-The example *LaTeX* files are processed using `XeLaTeX`, except for `cv`, which uses `LuaLaTeX`, to simplify using pretty fonts, and `llncs` which requires `PdfLaTeX`.
-
-All of these templates use a... *sizable* number of packages. However, all of these should be available in the TeXLive package (in Archlinux, at least, they are). If such is not the case, the reader can always install them on a local TeX tree. Also, I use a custom font, `Charis SIL`, which requires manual installation (see below, the "Further Reading" section). If the user does *not* wish to use them, just comment out the lines concerning the `fontspec` package, and any related lines (that should be just above, or just below).
-
-Usage 
+Short intro
 ---
 
-In the first command below, `your_document_dir` must not exist; it should be the name of the new folder which will contain your document.
+In my interactions with LaTeX, I use a set of templates (some of which have an accompanying preamble in the `includes/` folder), together with a script for compilation, `CompileTeX.sh`, which the `setup.sh` script will tailor to the specific template chosen. In fact, usage is as simple as:
 
 ```bash
 $ git clone https://github.com/notnotrandom/LaTeX.git your_document_dir
@@ -32,13 +12,43 @@ $ cd your_document_dir
 $ sh setup.sh [bare, cv, essay, llncs, presentation, report, standalone]
 ```
 
-In the last command, if you tab-complete (as the argument has the same name of the `\*.tex` file, minus extension), either the final dot or the whole extension will also be "completed"; this is ok, the script will filter it (i.e. work correctly even with the ending dot and/or extension).
+where `your_document_dir` should be the name of the (new) folder which will contain your LaTeX project. PDF samples of the templates can be seen in the `build/` directory. Sounds simple, right?
 
-The `setup.sh` script will patch `CompileTeX.sh`---running this script is how you compile the templates---and set all the required options for the chosen template. It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc.
+Well, it gets even better. In the last command (`sh setup.sh`), if you tab-complete (as the argument has the same name of the `\*.tex` template file, minus extension), either the final dot or the whole extension will also be "completed"; this is ok, the script will filter it (i.e. work correctly even with the ending dot and/or extension). So just type the first characters of the name of the template you want, hit <Tab>, and the setup script will take care of the rest.
 
-**Warning**: the script requires **GNU sed** to edit the `CompileTeX.sh`! If you don't have it, then comment that line and edit the `CompileTeX.sh` manually (check `setup.sh` to see where `sed` was used).
+Speaking of which, the `setup.sh` script will also patch `CompileTeX.sh`---running this latter script is how you compile the templates---and set all the required options for the chosen template (see XXX for further details about these options). It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc.
 
-Do work with LaTeX skeletons provided, compile using `CompileTeX.sh`, and enjoy profit!!
+And to top it all, if you are working on a large document, and just `\including` the specific part you are writing, then `CompileTeX.sh` can also be configured to build *two* copies: one abridged, which is supposed to build quickly, and another, *unabridged* one (more on this below), comprising the full document. It will take longer to compile, but it will also leave you with a handy reference copy, should you need to check something that is not in the part you are currently writing.
+
+So all that is left is to do work with LaTeX skeletons provided, compile using `CompileTeX.sh`, and enjoy profit!! If you're interested, read on!
+
+The templates
+---
+
+These are the templates I use for most of (there are PDF examples for each in the `build/` directory):
+
+- `bare.tex`: A very simple template, that I use for what one might dub "quick notes".
+
+- `cv.tex`: The template I use for my Curriculum Vitæ.
+
+- `essay.tex`: Writing is often a good way to vent complaints. I write them with this template and then dump them on my website. `\input`s preamble `includes/essay_preamble.tex`.
+
+- `llncs.tex`: Springer's template for writing papers, with a few tweaks of my own (for more on these, see below section "Further Reading"). `\input`s preamble `includes/llncs_preamble.tex`.
+
+- `presentation.tex`: This uses the `beamer` class, tweaked to my liking. Because in what slide making (and presentation giving) is concerned, the simpler the better. `\input`s preamble `includes/presentation_preamble.tex`.
+
+- `report.tex`: I use this template as a sort of "offline wiki". For notes about research. `\input`s preamble `includes/report_preamble.tex`.
+
+- `standalone.tex`: This I use when I need to try out some sketch, in `TikZ` or `xy-pic`, or something like that. Instead of experimenting in the document where I need to place the picture, I try it out in this standalone template. If nothing else, it compiles a lot faster! The PDF produced will be a "full-scale" picture. To include it say, on a presentation, do `\centering{\graphicbox{standalone}}`.
+
+The example *LaTeX* files are processed using `XeLaTeX`, except for `cv`, which uses `LuaLaTeX`, to simplify using pretty fonts, and `llncs` which requires `PdfLaTeX`.
+
+All of these templates use a... *sizable* number of packages. However, all of these should be available in the TeXLive package (in Archlinux, at least, they are). If such is not the case, the reader can always install them on a local TeX tree. Also, I use a custom font, `Charis SIL`, which requires manual installation (see below, the "Further Reading" section). If the user does *not* wish to use them, just comment out the lines concerning the `fontspec` package, and any related lines (that should be just above, or just below).
+
+Fonts
+---
+
+sdf
 
 Unabridged copy
 ---
@@ -47,17 +57,17 @@ When reading PDFs in front of a computer screen, it is exceedingly useful to hav
 
 First, for the simpler types---`bare`, `cv`, and `standalone`---there is `CompileTeX.bare.minimum.sh`, which `setup.sh` will rename to `CompileTeX.sh`, that just does a simple compile run---which is all that is required.
 
-For the not so simple types (everything else), the `CompileTeX.sh` script can do two kinds of builds: a "regular" build, and an "unabridged" build. The idea is that if the document is large, it can be divided into several partial documents, which are then `\include`'d in the main file. This makes it possible to build only a part of the document, using `\includeonly`. `CompileTeX.sh` will then also produce an unabridged copy, as if there was no `\includeonly`. This is done by copying the main `.tex`file into a new file called `Unabridged.tex`, and inserting in this latter file's preamble the line:
+For the not so simple types (everything else), the `CompileTeX.sh` script can do two kinds of builds: a "regular" build, and an "unabridged" build. The idea is that if the document is large, it can be divided into several partial documents, which are then `\include`d in the main file. This makes it possible to build only a part of the document, using `\includeonly`. `CompileTeX.sh` will then also produce an unabridged copy, as if there was no `\includeonly`. This is done by copying the main `.tex`file into a new file called `Unabridged.tex`, and inserting in this latter file's preamble the line:
 
 ~~~ {.tex .numberLines}
 \let\include\input
 ~~~
 
-This is done because `\include` always starts a new page, as it is supposed to be primarily used with chapters (which usually start in a new page). But, as this is not the case with `\input`, with the above `\let` we can include, say, `\section`'s---and while the regular copy will, in the case of `\section`'s, have extraneous `\newpage`'s, the unabridged one will not.
+This is done because `\include` always starts a new page, as it is supposed to be primarily used with chapters (which usually start in a new page). But, as this is not the case with `\input`, with the above `\let` we can include, say, `\section`s---and while the regular copy will, in the case of `\section`s, have extraneous `\newpage`s, the unabridged one will not.
 
 **Note:** if `\include`'ng sections of a document with chapters, the chapter declarations **must be in the mainfile**. Otherwise the numbering of the sections will change; see below.
 
-Anyway, `Unabridged.tex` is then compiled into a different directory---so that the auxiliary files of both versions don't mingle.
+Anyway, `Unabridged.tex` is then compiled into a different directory---so that the auxiliary files of both versions don't mingle. But you don't have to worry about this: there will be a symlink in the root folder, named `Unabridged.pdf`, and pointing to the unabridged PDF document proper.
 
 There is an important catch, however: when compiling a document with `include`'s, the compiler will generate some auxiliary files per `\include` (stored in the build directory). This is used to keep references and chapter/section numbers correct, when compiling a reduced version with `\includeonly`. If those auxiliary files are not there---e.g. after using the `clean` options to clean the build dir---compiling a mainfile with an `\includeonly` will yield an error. This is the reason for the `rebuild_build_files` option to the compile script. I detail all those options below.
 
