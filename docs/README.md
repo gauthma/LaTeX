@@ -68,13 +68,13 @@ LaTeX compiling
 
 Compiling LaTeX files is not a simple matter. Here I will just describe the variables you can set in, and the command line options of, the script `CompileTeX.sh`. First, the variables. We have already encountered `do_unabridged` (see above). There are also:
 
-- `do_bib`: when running `big_build()`, also build the bibliography.
+- `do_bib`: when doing a `big_build()`, also build the bibliography.
 
-- `do_idx`: when running `big_build()`, also build the index.
+- `do_idx`: when doing a `big_build()`, also build the index.
 
 - `folders_to_be_rsyncd`: see the note on the structure of the build directory, below.
 
-- `tmp_build_dir`: the actual compilation takes place in a copy of the root folder, to insure that even in longer compiles, if some `.tex` file is changed while the compiler is running, this does not affect that compilation. Ideally this should a folder in a RAM-based `tmpfs` filesystem. In Archlinux, one such filesystem is mounted at `/run/user/<your_user_id>/`.
+- `tmp_build_dir`: used for rebuilding auxiliary files; see option `rebuild_build_files` below. Ideally this should be a folder in a RAM-based `tmpfs` filesystem. In Archlinux, one such filesystem is mounted at `/run/user/<your_user_id>/`.
 
 There exists a `small_build()` function, which just runs the compiler once; and a `big_build()` function, which compile once, builds bibliography, etc., if set, and then compiles three more times. Both functions also do the same actions to the unabridged copy, if there exists one. See the comments in `CompileTeX.sh` for more details.
 

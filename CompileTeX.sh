@@ -62,42 +62,6 @@ indexcmd="makeindex"
 name_unabridged="Unabridged"
 build_dir_unabridged="build_UNABRIDGED"
 
-# Function that calls either small_build() (if given no arguments), or
-# big_build() (if given the "big" argument). Does the selected build in a
-# temporary directory: this way, if a .tex file is modified (written) while the
-# build is running, it won't cause any effect.
-function build() {
-  local curr_dir=$(pwd)
-  local go_big="false"
-
-  if [[ -n "$1" && "$1" == "big" ]]; then
-    go_big="true"
-  fi
-
-  rm -rf "$tmp_build_dir"
-  mkdir  "$tmp_build_dir"
-  cp -r $(ls | grep -v "docs") "$tmp_build_dir"
-
-  cd "$tmp_build_dir"
-
-  if [[ "$go_big" == "true" ]]; then
-    big_build
-  else
-    small_build
-  fi
-
-  cd "$curr_dir"
-
-  if [[ $? == 0 ]]; then
-    rm -rf "${build_dir_regular}"
-    rm -rf "${build_dir_unabridged}"
-    mv "$tmp_build_dir"/"${build_dir_regular}" .
-    mv "$tmp_build_dir"/"${build_dir_unabridged}" .
-  fi
-
-  rm -rf "$tmp_build_dir"
-}
-
 function clean() {
 
   echo -e "\nWARNING: after cleaning the build dir, it is VERY RECOMMENDED
@@ -310,6 +274,17 @@ function final_document() {
   fi
 }
 
+# Get the pid of the running $texcmd process (if any). This is needed to avoid
+# starting (from within vim) a new compilation, if one is already running.
+function get_compiler_pid() {
+  pidof ${texcmd}
+}
+
+# Kill a running $texcmd process (useful when an error occurs, for example).
+function killall_tex() {
+  killall ${texcmd}
+}
+
 # This function creates a copy of the main dir (including unabridged stuff),
 # deletes the \includeonly line, if it exists, in $name.tex, patches
 # $name_unabridged the same way update_unabridged_tex_files() does, and then
@@ -353,18 +328,6 @@ function rebuild_build_files() {
 
   rm -rf "$tmp_build_dir"
   echo "Finished rebuilding auxiliary files."
-}
-
-
-# Get the pid of the running $texcmd process (if any). This is needed to avoid
-# starting (from within vim) a new compilation, if one is already running.
-function get_compiler_pid() {
-  pidof ${texcmd}
-}
-
-# Kill a running $texcmd process (useful when an error occurs, for example).
-function killall_tex() {
-  killall ${texcmd}
 }
 
 # Do a normal compile. If we are dealing with a report, also do a single compile build
@@ -466,9 +429,9 @@ function main() {
 # - argument is get_compiler_pid: compile that function;
 # - argument is killall_tex: compile that function.
   if [[ $# -eq 0 ]] ; then
-    build
+    small_build
   elif [[ $# -eq 1 && "$1" == "big" ]] ; then
-    build big
+    big_build
   elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
     clean
   elif [[ $# -eq 1 && "$1" == "debug" ]] ; then
