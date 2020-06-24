@@ -70,8 +70,6 @@ function clean() {
   might not build properly!\n"
   read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
 
-  rm -rf .temp_compile
-
   if [[ -d "$build_dir_regular" ]]; then
     echo "Wiping contents of ${build_dir_regular} (except PDF files)"
     cd "${build_dir_regular}" && rm -rf $(ls | grep -v ".pdf") && cd ..
