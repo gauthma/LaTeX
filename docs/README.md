@@ -85,7 +85,14 @@ Anyway, `Unabridged.tex` is then compiled into a different directory---so that t
 
 There is an important catch, however: when compiling a document with `include`'s, the compiler will generate some auxiliary files per `\include` (stored in the build directory). This is used to keep references and chapter/section numbers correct, when compiling a reduced version with `\includeonly`. If those auxiliary files are not there---e.g. after using the `clean` options to clean the build directories---compiling a mainfile with an `\includeonly` will yield an error. This is the reason for the `rebuild_build_files` option to the compile script. I detail all those options below.
 
-By default, only the `report` type has enabled the building of an unabridged copy. To get an unabridged copy for the other non-simple types, set variable `do_unabridged` to `true` in `CompileTeX.sh` (see below), and then use the `clean` option to setup the custom build directory for the unabridged copy (don't forget to run `sh CompileTeX rebuild_build_files` afterwords, if you're using `\includeonly`!).
+By default, only the `report` type has enabled the building of an unabridged copy. To get an unabridged copy for the other non-simple types, set variable `do_unabridged` to `true` in `CompileTeX.sh` (see below), and then do:
+
+~~~ {.shell .numberLines}
+$ sh CompileTeX clean
+$ sh CompileTeX rebuild_build_files
+$ sh CompileTeX big
+~~~
+(Do `$ sh CompileTeX rebuild_build_files` is required only if you're using `\includeonly`!)
 
 LaTeX compiling
 ---
