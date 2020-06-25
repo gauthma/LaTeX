@@ -12,15 +12,32 @@ $ cd your_document_dir
 $ sh setup.sh [bare, cv, essay, llncs, presentation, report, standalone]
 ```
 
-where `your_document_dir` should be the name of the (new) folder which will contain your LaTeX project. PDF samples of the templates can be seen in the `build/` directory. Sounds simple, right?
+where `your_document_dir` should be the name of the (new) folder which will contain your LaTeX project. PDF samples of the templates can be seen in the `build/` directory. Sounds simple enough, right?
 
 Well, it gets even better. In the last command (`sh setup.sh ...`), if you tab-complete (as the argument has the same name of the `\*.tex` template file, minus extension), either the final dot or the whole extension will also be "completed"; this is ok, the script will filter it (i.e. work correctly even with the ending dot and/or extension). So just type the first characters of the name of the template you want, hit <Tab>, and the setup script will take care of the rest.
 
-Speaking of which, the `setup.sh` script will also patch `CompileTeX.sh`---running this latter script is how you compile the templates---and set all the required options for the chosen template (see XXX for further details about these options). It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc.
+Speaking of which, the `setup.sh` script will also patch `CompileTeX.sh`---running this latter script is how you compile the templates---and set all the required options for the chosen template (see "LaTeX Compiling" below, for further details about these options). It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc.
 
-And to top it all, if you are working on a large document, and just `\including` the specific part you are writing, then `CompileTeX.sh` can also be configured to build *two* copies: one abridged, which is supposed to build quickly, and another, *unabridged* one (more on this below), comprising the full document. It will take longer to compile, but it will also leave you with a handy reference copy, should you need to check something that is not in the part you are currently writing.
+And to top it all, if you are working on a large document, and just `\including` the specific part you are writing, then `CompileTeX.sh` can also be configured to build *two* copies: one abridged, which is supposed to build quickly, and another, *unabridged* one (more on this below), comprising the full document. It will take longer to compile, but it will also leave you with a handy reference copy, should you need to check something that is not in the part you are currently writing. (It will display a large notice when the small compile is done, allowing you to get back to work ASAP.)
 
 So all that is left is to do work with LaTeX skeletons provided, compile using `CompileTeX.sh`, and enjoy profit!! If you're interested, read on!
+
+(Well, technically, that's a lie. You still have to deal with the font---but don't let that stop you! It's simple---instructions below.)
+
+Fonts
+---
+
+Except for `llncs`, which uses its own font, I use a custom font, `Charis SIL`, because I don't really like *Computer Modern* and its cousins (judge me if you will). I you don't feel like dealing with font issues, just comment the relevant lines (they will be in the preamble if there is one); look for the comments about font setup.
+
+If you do decide to try out `Charis SIL`, then download the font from <http://software.sil.org/charis/download/>. It will consist of a bunch of `*.ttf` files. The proper way of installing it (only for you user) is with your own `TeX Tree`; see <https://randomwalk.eu/notes/TeX-Trickery.pdf>. For the `cv` template, which uses `LuaLaTeX`, this is, I'm afraid, required. But for all the others (minus `llncs`), which use `XeLaTeX`, it's quick and easy. Create the following directory, if it does not already exist, and just dump all the `*.ttf` files in there.
+
+~~~ {.shell .numberLines}
+$ mkdir -p ~/.fonts/truetype/
+~~~
+
+For good measure, you can also do `$ texhash ~/.fonts`---and now you should be good to go!
+
+Now you can experiment with the templates; and come back to read the rest of this README when/if you need to. Have fun!
 
 The templates
 ---
@@ -39,7 +56,7 @@ These are the templates I use for most of (there are PDF examples for each in th
 
 - `report.tex`: I use this template as a sort of "offline wiki". For notes about research. `\input`s preamble `includes/report_preamble.tex`.
 
-- `standalone.tex`: This I use when I need to try out some sketch, in `TikZ` or `xy-pic`, or something like that. Instead of experimenting in the document where I need to place the picture, I try it out in this standalone template. If nothing else, it compiles a lot faster! The PDF produced will be a "full-scale" picture. To include it say, on a presentation, do `\centering{\graphicbox{standalone}}`.
+- `standalone.tex`: This I use when I need to try out some sketch, in `TikZ` or `xy-pic`, or something like that. Instead of experimenting in the document where I need to place the picture, I try it out in this standalone template. If nothing else, it compiles a lot faster! The PDF produced will be a "full-scale" picture; to include it say, on a presentation, do `\centering{\graphicbox{standalone}}`.
 
 **Note:** the files in the `includes/` directory are files that are supposed to `\input`ed into another file, and *not* compiled on their own.
 
@@ -47,12 +64,7 @@ The example *LaTeX* files are processed using `XeLaTeX`, except for `cv`, which 
 
 For the simpler types---`bare`, `cv`, and `standalone`---there is much simpler compile script, `CompileTeX.bare.minimum.sh`, which `setup.sh` will, for the mentioned templates, rename to `CompileTeX.sh`, that just does a simple compile run---which is all that is required.
 
-Of the non-simple templates (plus `cv`), they all use a... *sizable* number of packages. However, all of these should be available in the TeXLive package (in Archlinux, at least, they are). If such is not the case, the reader can always install them on a local TeX tree. Also, I use a custom font, `Charis SIL`, which requires manual installation (see below). If you do *not* wish to use them, just comment out the lines in the preamble concerning the `fontspec` package, and any related lines (that should be just above, or just below).
-
-Fonts
----
-
-sdf
+Of the non-simple templates (plus `cv`), they all use a... *sizable* number of packages. However, all of these should be available in the TeXLive package (in Archlinux, at least, they are). If such is not the case, the reader can always install them on a local TeX tree. 
 
 Unabridged copy
 ---
@@ -71,9 +83,9 @@ This is done because `\include` always starts a new page, as it is supposed to b
 
 Anyway, `Unabridged.tex` is then compiled into a different directory---so that the auxiliary files of both versions don't mingle. But you don't have to worry about this: there will be a symlink in the root folder, named `Unabridged.pdf`, and pointing to the unabridged PDF document proper.
 
-There is an important catch, however: when compiling a document with `include`'s, the compiler will generate some auxiliary files per `\include` (stored in the build directory). This is used to keep references and chapter/section numbers correct, when compiling a reduced version with `\includeonly`. If those auxiliary files are not there---e.g. after using the `clean` options to clean the build dir---compiling a mainfile with an `\includeonly` will yield an error. This is the reason for the `rebuild_build_files` option to the compile script. I detail all those options below.
+There is an important catch, however: when compiling a document with `include`'s, the compiler will generate some auxiliary files per `\include` (stored in the build directory). This is used to keep references and chapter/section numbers correct, when compiling a reduced version with `\includeonly`. If those auxiliary files are not there---e.g. after using the `clean` options to clean the build directories---compiling a mainfile with an `\includeonly` will yield an error. This is the reason for the `rebuild_build_files` option to the compile script. I detail all those options below.
 
-By default, only the `report` type has enabled the building of an unabridged copy. For the other non-simple types, set variable `do_unabridged` to `true` in `CompileTeX.sh` (see below), and then use the `clean` option to setup the build directory for the unabridged copy.
+By default, only the `report` type has enabled the building of an unabridged copy. To get an unabridged copy for the other non-simple types, set variable `do_unabridged` to `true` in `CompileTeX.sh` (see below), and then use the `clean` option to setup the custom build directory for the unabridged copy (don't forget to run `sh CompileTeX rebuild_build_files` afterwords, if you're using `\includeonly`!).
 
 LaTeX compiling
 ---
