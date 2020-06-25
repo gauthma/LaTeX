@@ -99,6 +99,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 # Use the simple build script for the simpler templates.
   if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || "${doctype}" == "standalone" ]] ; then
     mv CompileTeX.bare.minimum.sh CompileTeX.sh
+    rm sources.bib
   else
     rm CompileTeX.bare.minimum.sh
 
@@ -106,7 +107,6 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
 # The compiler needs to find the sources file in the build dir, so symlink.
     ln -sr sources.bib "${build_dir_regular}"/
-
   fi
 
 # Setup CompileTeX.sh (requires GNU sed) Begin with setting what type of
