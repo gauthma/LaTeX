@@ -14,20 +14,20 @@ $ sh setup.sh [bare, cv, essay, llncs, presentation, report, standalone]
 
 where `your_document_dir` should be the name of the (new) folder which will contain your LaTeX project. PDF samples of the templates can be seen in the `build/` directory. Sounds simple enough, right?
 
-Well, it gets even better. In the last command (`sh setup.sh ...`), if you tab-complete (as the argument has the same name of the `\*.tex` template file, minus extension), either the final dot or the whole extension will also be "completed"; this is ok, the script will filter it (i.e. work correctly even with the ending dot and/or extension). So just type the first characters of the name of the template you want, hit <Tab>, and the setup script will take care of the rest.
+Well, it gets even better. In the last command (`sh setup.sh ...`), if the argument ends in `.tex`, or just a dot `.`---which can happen with <Tab> completion if there are files with the same name but different extensions---the script will still work correctly. So just type the first characters of the name of the template you want, hit <Tab>, and the `setup.sh` script will take care of the rest!
 
 Speaking of which, the `setup.sh` script will also patch `CompileTeX.sh`---running this latter script is how you compile the templates---and set all the required options for the chosen template (see "LaTeX Compiling" below, for further details about these options). It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc.
 
 And to top it all, if you are working on a large document, and just `\including` the specific part you are writing, then `CompileTeX.sh` can also be configured to build *two* copies: one abridged, which is supposed to build quickly, and another, *unabridged* one (more on this below), comprising the full document. It will take longer to compile, but it will also leave you with a handy reference copy, should you need to check something that is not in the part you are currently writing. (It will display a large notice when the small compile is done, allowing you to get back to work ASAP.)
 
-So all that is left is to do work with LaTeX skeletons provided, compile using `CompileTeX.sh`, and enjoy profit!! If you're interested, read on!
+So all that is left is to do your writing with LaTeX templates provided, compile using `CompileTeX.sh`, and enjoy profit!! If you're interested, read on!
 
-(Well, technically, that's a lie. You still have to deal with the font---but don't let that stop you! It's simple---instructions below.)
+(Well, technically, that's a lie. You still have to deal with the font configuration---but don't let that stop you! It's simple---instructions below.)
 
 Fonts
 ---
 
-Except for `llncs`, which uses its own font, I use a custom font, `Charis SIL`, because I don't really like *Computer Modern* and its cousins (judge me if you will). I you don't feel like dealing with font issues, just comment the relevant lines (they will be in the preamble if there is one); look for the comments about font setup.
+Except for `llncs`, which uses its own font, I use a custom font, `Charis SIL`, because I don't really like *Computer Modern* and its cousins (condemn me if you will). I you don't feel like dealing with font issues, just comment the relevant lines (they will be in the preamble if there is one); look for the comments about font setup.
 
 If you do decide to try out `Charis SIL`, then download the font from <http://software.sil.org/charis/download/>. It will consist of a bunch of `*.ttf` files. The proper way of installing it (only for you user) is with your own `TeX Tree`; see <https://randomwalk.eu/notes/TeX-Trickery.pdf>. For the `cv` template, which uses `LuaLaTeX`, this is, I'm afraid, required. But for all the others (minus `llncs`), which use `XeLaTeX`, it's quick and easy. Create the following directory, if it does not already exist, and just dump all the `*.ttf` files in there.
 
@@ -35,7 +35,7 @@ If you do decide to try out `Charis SIL`, then download the font from <http://so
 $ mkdir -p ~/.fonts/truetype/
 ~~~
 
-For good measure, you can also do `$ texhash ~/.fonts`---and now you should be good to go!
+For good measure, you can also run `$ texhash ~/.fonts`---and now you should be good to go!
 
 Now you can experiment with the templates; and come back to read the rest of this README when/if you need to. Have fun!
 
@@ -97,11 +97,13 @@ $ sh CompileTeX big
 LaTeX compiling
 ---
 
-Compiling LaTeX files is not a simple matter. Here I will just describe the variables you can set in, and the command line options of, the script `CompileTeX.sh` (obviously, the non-bare version). First, the variables. We have already encountered `do_unabridged` (see above). There are also:
+Compiling LaTeX files is not a simple matter. Here I will just describe the variables you can set in, and the command line options of, the script `CompileTeX.sh` (obviously, the non-bare version). First, the variables:
 
 - `do_bib`: if `true` (the default), when doing a big build (see below), also build the bibliography.
 
 - `do_idx`: if `true` (the default is `false`), when doing a big build, also build the index.
+
+- `do_unabridged`: we have already encountered this one above (see "Unabridged copy"); it enables the construction of a full version of the document, i.e., one where any `\includeonly` lines will be commented out.
 
 - `folders_to_be_rsyncd`: required if you store `\include`d `.tex` files in custom subdirectories. See the note on the structure of the build directory, below.
 
@@ -113,13 +115,13 @@ So `do_bib` can be used---if set to `false`---to cause the script to ignore any 
 
 Next, the command line arguments to `CompileTeX.sh`:
 
-- no argument: run `small_build()`;
+- no argument: run the compiler once, i.e. `small_build()`;
 
-- `big`: A full LaTeX build run, i.e. `big_build()`.
+- `big`: full LaTeX build run, i.e. `big_build()`.
 
 - `clean`: removes everything in the build directories. And rebuilds its structure. By default this means create a link, inside the build directory, to the bibliography file  (this is always done, regardless of the value of `got_bib`). However, more actions may be required; see the remark on the structure of the build directory, below.
 
-- `debug`: run `small_build()`, but *with* debug output. 
+- `debug`: run `small_build()`, but *with* debug output. It does *NOT* run on the abridged copy. 
 
 - `final`: `clean`s everything up, and them makes a `full` build. If you need the final PDF document to have a different name, then you can use the `endname` variable, which the last command in this function sets as its name;
 
