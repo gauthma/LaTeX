@@ -94,6 +94,8 @@ $ sh CompileTeX big
 ~~~
 (Do `$ sh CompileTeX rebuild_build_files` is required only if you're using `\includeonly`!)
 
+Conversely, to *remove* an unabridged copy, set `do_unabridged` to `false`, and re-run the same three commands quoted above (the same remark about `\includeonly` applies).
+
 LaTeX compiling
 ---
 
