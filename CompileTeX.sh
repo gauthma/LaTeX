@@ -5,7 +5,7 @@ do_bib="true"
 # IMPORTANT: to enable building the index, set this to true.
 do_idx="false"
 # IMPORTANT: to enable building an unabridged copy, set this to true.
-do_unabridged="true"
+do_unabridged="false"
 # IMPORTANT: if you have .tex files in their own folders, indicate them here
 # (space separated). E.g. if you have your chapters in a folder named
 # "chapters" (no quotes), then add it like this (WITH quotes):
