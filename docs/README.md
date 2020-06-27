@@ -105,7 +105,7 @@ Compiling LaTeX files is not a simple matter. Here I will just describe the vari
 
 - `do_idx`: if `true` (the default is `false`), when doing a big build, also build the index.
 
-- `do_unabridged`: we have already encountered this one above (see "Unabridged copy"); it enables the construction of a full version of the document, i.e., one where any `\includeonly` lines will be commented out.
+- `do_unabridged`: we have already encountered this one above (see "Unabridged copy"); it enables the construction of a full version copy of the document, i.e., one where any `\includeonly` lines will be commented out.
 
 - `folders_to_be_rsyncd`: required if you store `\include`d `.tex` files in custom subdirectories. See the note on the structure of the build directory, below.
 
