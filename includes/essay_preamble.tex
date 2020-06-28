@@ -14,6 +14,21 @@
 \setmainfont[Scale=0.9]{Charis SIL}
 \defaultfontfeatures[Charis SIL]{Script=latn, Ligatures=TeX}
 
+% For a footnote with no symbol, usually in page 1, containing the date the
+% authors' contacts,  etc.
+\newcommand\fnnosym[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+% To make the ToC, which here uses sections has the main structural unit,
+% display a line of dots until the page number. (If the main sectional unit is
+% sections, normally the dots would only be displayed for subsections.)
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
 % -------------------------------------------------------
 % -------------------------------------------------------
 % ------------------- CUSTOM STUFF ----------------------

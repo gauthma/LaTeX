@@ -12,22 +12,26 @@
 Write, or wrong?
 }
 \author{
-  {Óscar Pereira}\fn{\texttt{\{https://, oscar@\}randomwalk.eu}.}
+  Óscar Pereira
 }
-\date{\today\fn{Revised in XXX}}
+
+% This negative space is required to avoid having too much space between the
+% title of the document and the title of the first section.
+\date{\vspace{-4em}}
 % --- END PREAMBLE ---
 
 \begin{document}
 
 \maketitle
+\fnnosym{\emph{Date:} \today. \emph{Contact information:} \texttt{\{https://, oscar@\}randomwalk.eu}.}
 
-% \tableofcontents
+\tableofcontents
 
 \section{Introduction}
   Something less technical about Feynman~\cite{Feynman74} and Sagan~\cite{Sagan}.
 
 \phantomsection
-\addcontentsline{toc}{chapter}{References}
+\addcontentsline{toc}{section}{References}
 \bibliographystyle{plain}
 \bibliography{sources}
 \end{document}
