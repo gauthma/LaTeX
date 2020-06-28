@@ -9,19 +9,12 @@ Skeleton for \LaTeX\ articles  % main title
 \normalsize A first sketch for a general template for article writing  % subtitle
 }
 \author{
-  R.\ Madillo\inst{1}
-\and
-  Jane Doe\inst{2}
+  R.\ Madillo \and Jane Doe
 }
-\institute{
-  \LaTeX\ Corp., Shire, Middle Earth\thanks{This work is financed by some very nice folks!}\\
-  \email{mad@TeX.tld}
-\and
-  Evil Corp., NY, U.S.\thanks{This work is financed by some very evil folks!}\\
-  \email{jane@evil.tld}
-}
-% See note (1) about placement of \thanks footnote symbol.
 
+% The negative space is to avoid too much space between the title and the title
+% of the next section. Adding space inside \date{} has no effect.
+\institute{\vspace{-3em}}
 \date{}
 % --- END title heading ---
 
@@ -33,21 +26,21 @@ Skeleton for \LaTeX\ articles  % main title
 \begin{document}
 
 \maketitle
-% \tableofcontents
+\fnnosym{\emph{Date}: May 2020. \emph{Contacts, affiliations \& support}:
+
+R.\ M.: \LaTeX\ Corp., Shire, Middle Earth. \texttt{mad@TeX.tld}. This work was financed by some very nice folks.
+
+J.\ D.: Evil Corp., NY, U.S. \texttt{jane@evil.tld}. This work is financed by some very evil folks!}
 
 \begin{abstract}
   Some tips for a \LaTeX\ template.
 \end{abstract}
 
-\section{Introduction}\fnnosym{\emph{Date}: May 2020.}
+\section{Introduction}
 	Science is cool!~\cite{Sagan}. But lots of people don't get it\ldots~\cite{Feynman74}.
   
 \bibliography{sources}
 \bibliographystyle{splncs03}
 \end{document}
-
-% NOTES:
-% (1) - The \thanks can also be placed by author, instead of by institute. Just
-% place it after the \inst{} command.
 
 % vim: spell spelllang=en

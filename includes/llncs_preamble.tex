@@ -4,6 +4,15 @@
 \usepackage{xurl} % For making urls clickable.
 \usepackage{graphicx}% For graphics inclusion, etc.
 
+% For a footnote with no symbol, usually in page 1, containing the date the
+% authors' contacts,  etc.
+\newcommand\fnnosym[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
 %--------------------------------------------------------
 %--------------------------------------------------------
 % ------------------- CUSTOM STUFF ----------------------
