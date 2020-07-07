@@ -13,7 +13,7 @@ do_unabridged="false"
 # VERY IMPORTANT: the folders' name MUST NOT end with a forward slash (/),
 # because that tells rsync to copy folder *contents*, rather than the folder
 # itself.
-folders_to_be_rsyncd=( "chapters" )
+folders_to_be_rsyncd=()
 # IMPORTANT: set the temporary build dir here. Use a RAM-based temporary
 # filesystem if you have one. See README.
 tmp_build_dir="/run/user/$UID/xyz-temp-compile"
@@ -124,7 +124,7 @@ function debugbuild() {
 # compile three times.
 function big_build() {
 
-  local bibliography_was_actuall_built="false"
+  local bibliography_was_actually_built="false"
 
 # First, run compile().
   compile "$name" "$build_dir_regular"
@@ -151,9 +151,8 @@ function big_build() {
 # just compile twice more and exit.
   if [[ "$do_bib" == "false" ]] ; then
     echo "$0: The \$do_bib var is set to false, so I am skipping the bibliography part."
-      echo "$0: I will just run compile() twice more."
-    compile "$name" "$build_dir_regular" && \
-      compile "$name" "$build_dir_regular"
+    echo "$0: I will just run compile() twice more."
+    compile "$name" "$build_dir_regular" && compile "$name" "$build_dir_regular"
 # If one of the compile runs failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
       echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
@@ -166,21 +165,22 @@ function big_build() {
 # constructed (e.g. "Cited in page ...").
   else
     local have_cite_entries=$(grep --extended-regexp --recursive '^[^%]*\\(no)?cite' --include=*.tex)
+# No \cite or \nocite entries have been found.
     if [[ -z "$have_cite_entries" ]]; then
       echo "$0: The $do_bib var is set to true, but no \\cite entries found.
-      So I will just do two more small compiles..."
-      compile "$name" "$build_dir_regular" && \
-        compile "$name" "$build_dir_regular"
+      So I will just do two more compile runs..."
+      compile "$name" "$build_dir_regular" && compile "$name" "$build_dir_regular"
 # If one of the compile runs failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
         echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
         return 1
       fi
+# Some \cite or \nocite entries have been found.
     else
       cd "${build_dir_regular}" && pwd
       ${bibcmd} ${name}
       if [[ $? -eq 0 ]]; then
-        bibliography_was_actuall_built="true"
+        bibliography_was_actually_built="true"
         cd ..
         compile "$name" "$build_dir_regular" && \
           compile "$name" "$build_dir_regular" && \
@@ -229,7 +229,7 @@ function big_build() {
     fi
 
 # Then build bibliography, if requested.
-    if [[ "$bibliography_was_actuall_built" == "true" ]] ; then
+    if [[ "$bibliography_was_actually_built" == "true" ]] ; then
       cd "${build_dir_unabridged}" && pwd
       ${bibcmd} ${name_unabridged}
 # If bibliography builds properly, then do more three runs.
@@ -238,7 +238,7 @@ function big_build() {
         compile "${name_unabridged}" "$build_dir_unabridged" && \
           compile "${name_unabridged}" "$build_dir_unabridged" && \
           compile "${name_unabridged}" "$build_dir_unabridged"
-# If the compile compile after bib update failed, notify the user and quit.
+# If the compile after bib update failed, notify the user and quit.
         if [[ $? -ne 0 ]]; then
           echo "Compile of ${name_unabridged}.tex file was not successful!"
           return 1
