@@ -14,7 +14,7 @@ $ sh setup.sh [bare, cv, essay, llncs, presentation, report, standalone]
 
 where `your_document_dir` should be the name of the (new) folder which will contain your LaTeX project. PDF samples of the templates can be seen in the `build/` directory. Sounds simple enough, right?
 
-Well, it gets even better. In the last command (`sh setup.sh ...`), if the argument ends in `.tex`, or just a dot `.`---which can happen with `<Tab>` completion if there are files with the same name but different extensions---the script will still work correctly. So just type the first characters of the name of the template you want, hit <Tab>, and the `setup.sh` script will take care of the rest!
+Well, it gets even better. In the last command (`sh setup.sh ...`), if the argument ends in `.tex`, or just a dot `.`---which can happen with `<Tab>` completion if there are files with the same name but different extensions---the script will still work correctly. So just type the first characters of the name of the template you want, hit `<Tab>`, and the `setup.sh` script will take care of the rest!
 
 Speaking of which, the `setup.sh` script will also patch `CompileTeX.sh`---running this latter script is how you compile the templates---and set all the required options for the chosen template (see "LaTeX Compiling" below, for further details about these options). It will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc.
 
