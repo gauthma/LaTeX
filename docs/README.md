@@ -29,7 +29,7 @@ Fonts
 
 Except for `llncs`, which uses its own font, I use a custom font, `Charis SIL`, because I don't really like *Computer Modern* and its cousins (condemn me if you will). I you don't feel like dealing with font issues, just comment the relevant lines (they will be in the preamble if there is one); look for the comments about font setup.
 
-If you do decide to try out `Charis SIL`, then download the font from <http://software.sil.org/charis/download/>. It will consist of a bunch of `*.ttf` files. The proper way of installing it (only for you user) is with your own `TeX Tree`; see <https://randomwalk.eu/notes/TeX-Trickery.pdf>. For the `cv` template, which uses `LuaLaTeX`, this is, I'm afraid, required. But for all the others (minus `llncs`), which use `XeLaTeX`, it's quick and easy. Create the following directory, if it does not already exist, and just dump all the `*.ttf` files in there.
+If you do decide to try out `Charis SIL`, then download the font from <http://software.sil.org/charis/download/>. It will consist of a bunch of `*.ttf` files. The proper way of installing it (only for you user) is with your own `TeX Tree`; see <https://randomwalk.eu/notes/TeX-Trickery.pdf>. For the `cv` template, which uses `LuaLaTeX`, this is, I'm afraid, required. But for all the others (minus `llncs`, which uses more standard fonts), which use `XeLaTeX`, it's quick and easy. Create the following directory, if it does not already exist, and just dump all the `*.ttf` files in there.
 
 ~~~ {.shell .numberLines}
 $ mkdir -p ~/.fonts/truetype/
