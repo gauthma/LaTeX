@@ -1,11 +1,20 @@
 #! /bin/bash
 
-# IMPORTANT: to disable building bibliography, set this to false.
+# $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
+name="report"
+
+##### VARIABLES THAT THE USER CAN SET #####
+# To disable building bibliography, set this to false.
 do_bib="true"
-# IMPORTANT: to enable building the index, set this to true.
+
+# To enable building the index, set this to true.
 do_idx="false"
-# IMPORTANT: to enable building an unabridged copy, set this to true.
-do_unabridged="false"
+
+# The final name of the .pdf file (without extension). Defaults to original
+# name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
+# foreign chars, ...
+finalname="${name}.FINAL"
+
 # IMPORTANT: if you have .tex files in their own folders, indicate them here
 # (space separated). E.g. if you have your chapters in a folder named
 # "chapters" (no quotes), then add it like this (WITH quotes):
@@ -13,10 +22,12 @@ do_unabridged="false"
 # VERY IMPORTANT: the folders' name MUST NOT end with a forward slash (/),
 # because that tells rsync to copy folder *contents*, rather than the folder
 # itself.
-folders_to_be_rsyncd=()
+folders_to_be_rsyncd=( "chapters" )
+
 # IMPORTANT: set the temporary build dir here. Use a RAM-based temporary
 # filesystem if you have one. See README.
 tmp_build_dir="/run/user/$UID/xyz-temp-compile"
+###########################################
 
 ###############################################################################
 #
@@ -27,8 +38,10 @@ tmp_build_dir="/run/user/$UID/xyz-temp-compile"
 #
 # - compile() just runs the LaTeX compiler on whatever file it is given;
 #
-# - small_build() runs compile() on the regular copy, and then on the
-# unabridged copy, it there is one.
+# - small_build() runs compile() on the regular copy, and then (if using \includeonly) on the
+# unabridged copy. If \includeonly is not used, after compiling the regular
+# copy, it just copies the pdf file --- because in this case, both regular and
+# unabridged versions match.
 #
 # - big_build() runs compile() once, then build bibliography etc. (if
 # required), and then runs compile() three more times. And does the same to the
@@ -37,14 +50,6 @@ tmp_build_dir="/run/user/$UID/xyz-temp-compile"
 # Most of the remaining functions revolve around these three, to compile both
 # the report and its unabridged version (only in the case of reports), and to
 # check for errors and give feedback properly, and so on.
-
-# $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
-name="report"
-
-# The final name of the .pdf file (without extension). Defaults to original
-# name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
-# foreign chars, ...
-finalname="${name}.FINAL"
 
 # Name of the .bib file (sans extension).
 sourcesname="sources"
@@ -62,62 +67,6 @@ indexcmd="makeindex"
 name_unabridged="Unabridged"
 build_dir_unabridged="build_UNABRIDGED"
 
-function clean() {
-
-  echo -e "\nWARNING: after cleaning the build dir, it is VERY RECOMMENDED
-  to do a big build, WITHOUT \\includeonly (run this script with the
-  rebuild_build_files option). Otherwise things like bibliography
-  might not build properly!\n"
-  read -p "Press any key to continue... [ctrl-c cancels]" -n 1 -r
-
-  if [[ -d "$build_dir_regular" ]]; then
-    echo "Wiping contents of ${build_dir_regular} (except PDF files)"
-    cd "${build_dir_regular}" && rm -rf $(ls | grep -v ".pdf") && cd ..
-  else
-    echo "Creating directory ${build_dir_regular}"
-    mkdir $build_dir_regular
-  fi
-
-  if [[ "${do_unabridged}" == "true" ]]; then
-    if [[ -d "$build_dir_unabridged" ]]; then
-      echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
-      cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
-    else
-      echo "Creating directory ${build_dir_unabridged}"
-      mkdir $build_dir_unabridged
-    fi
-  fi
-
-# Rebuilding structure of build_dirs. Begin with symlinks.
-  unabridged_dir_and_symlinks_rebuild
-
-# If any .tex files are in their own custom directories, those dirs
-# must also exist in $build_dir, with the same hierarchy. See README.md for
-# more details. Handled with rsync.
-
-  if [[ ${#folders_to_be_rsyncd[@]} -gt 0 ]] ; then
-    rsync -a --include '*/' --exclude '*' "${folders_to_be_rsyncd[@]}" "${build_dir_regular}"
-
-    if [[ "${do_unabridged}" == "true" ]]; then
-      rsync -a --include '*/' --exclude '*' "${folders_to_be_rsyncd[@]}" "${build_dir_unabridged}"
-    fi
-  fi
-}
-
-# A normal (single) LaTeX compile.
-function compile() {
-  ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
-  local ret=$?
-  echo "" # Print a newline (SyncTeX doesn't).
-  return $ret
-}
-
-# A normal (single) LaTeX compile.
-function debugbuild() {
-  ${texcmd} ${debug_texcmdopts} ${name}
-  return $?
-}
-
 # A big LaTeX compile: compile once (and build index, if it is set), then compile
 # bib (if it is set), then compile three more times (usually two are enough, but in
 # some thorny cases three are required, so...). If using bib is not set, just
@@ -126,15 +75,26 @@ function big_build() {
 
   local bibliography_was_actually_built="false"
 
-# First, run compile().
-  compile "$name" "$build_dir_regular"
+# First, run compile(). If the main file has an \includeonly line, then we
+# first create a temp copy of the whole dir, so as to remove that command (we
+# can't do this on the main file itself, because it will likely be open for
+# editing by the user). If the main file has no \includeonly line, then just do
+# a simple compile run.
+# The reason for this is that in order to build properly the bibliography and
+# other things, when using \includeonly, the first compile run must be on the
+# **whole document**.
+  if [[ "$(do_we_have_includeonly)" == "true" ]]; then
+    compile_on_tmp_folder_comment_include_only "$name" "$build_dir_regular"
+  else
+    compile "$name" "$build_dir_regular"
+  fi
 # If the compile failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
-    echo "Compile of ${name}.tex file was not successful!"
+    echo "Compilation (ignoring \includeonly, if present) of ${name}.tex file was not successful!"
     return 1
   fi
 
-# If the compile succeeded, then build the index.
+# If the compile succeeded, then build the index (inside the regular build dir).
   if [[ "$do_idx" == "true" ]] ; then
     cd "${build_dir_regular}" && pwd
     ${indexcmd} ${name}
@@ -159,10 +119,10 @@ function big_build() {
       return 1
     fi
 
-# Else, if there are uncommented \cite or \nocite commands, then build the
-# bibliography. The reason for *three* compiles, instead of the usual two, is
-# that an extra compile is required for backreferences in bib entries to be
-# constructed (e.g. "Cited in page ...").
+# Else, if $do_bib is true, and there are uncommented \cite or \nocite
+# commands, then build the bibliography. The reason for *three* compiles,
+# instead of the usual two, is that an extra compile is required for
+# backreferences in bib entries to be constructed (e.g. "Cited in page ...").
   else
     local have_cite_entries=$(grep --extended-regexp --recursive '^[^%]*\\(no)?cite' --include=*.tex)
 # No \cite or \nocite entries have been found.
@@ -175,7 +135,7 @@ function big_build() {
         echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
         return 1
       fi
-# Some \cite or \nocite entries have been found.
+# Some \cite or \nocite entries have been found -- hence more three compiles.
     else
       cd "${build_dir_regular}" && pwd
       ${bibcmd} ${name}
@@ -197,79 +157,168 @@ function big_build() {
     fi
   fi
 
-# Now we deal with unabridged copy, if there is one. If the three compiles
-# after a bib update did not fail, then update bib && triple compile in
-# unabridged_dir.
-  if [[ "${do_unabridged}" == "true" ]]; then
-    update_unabridged_tex_files
+# Now we deal with unabridged copy. If the three compiles after a bib update
+# did not fail, then update bib && triple compile in unabridged_dir.
+  update_unabridged_tex_files
 
-    echo -e "\n*************************************************************************"
-    echo -e "* Now continuing with (background) unabridged (full) build..."
-    echo -e "*************************************************************************\n"
+  echo -e "\n*************************************************************************"
+  echo -e "* Now continuing with (background) unabridged (full) build..."
+  echo -e "*************************************************************************\n"
 
 # Just as above, first, do a single compile.
-    compile "${name_unabridged}" "$build_dir_unabridged"
+  compile "${name_unabridged}" "$build_dir_unabridged"
 # If the compile failed, notify the user and quit.
-    if [[ $? -ne 0 ]]; then
-      echo "Compile of ${name_unabridged}.tex file was not successful!"
-      return 1
-    fi
+  if [[ $? -ne 0 ]]; then
+    echo "Compile of ${name_unabridged}.tex file was not successful!"
+    return 1
+  fi
 
 # If the compile succeeded, then build the index.
-    if [[ "$do_idx" == "true" ]] ; then
-      cd "${build_dir_unabridged}" && pwd
-      ${indexcmd} ${name_unabridged}
+  if [[ "$do_idx" == "true" ]] ; then
+    cd "${build_dir_unabridged}" && pwd
+    ${indexcmd} ${name_unabridged}
 # If the building the index failed, notify the user and quit.
-      if [[ $? -ne 0 ]]; then
-        echo "Building of the index (unabridged copy) was not successful!"
-        return 1
-      fi
-# Otherwise leave the regular build dir.
-      cd ..
+    if [[ $? -ne 0 ]]; then
+      echo "Building of the index (unabridged copy) was not successful!"
+      return 1
     fi
+# Otherwise leave the regular build dir.
+    cd ..
+  fi
 
 # Then build bibliography, if requested.
-    if [[ "$bibliography_was_actually_built" == "true" ]] ; then
-      cd "${build_dir_unabridged}" && pwd
-      ${bibcmd} ${name_unabridged}
+  if [[ "$bibliography_was_actually_built" == "true" ]] ; then
+    cd "${build_dir_unabridged}" && pwd
+    ${bibcmd} ${name_unabridged}
 # If bibliography builds properly, then do more three runs.
-      if [[ $? -eq 0 ]]; then
-        cd ..
-        compile "${name_unabridged}" "$build_dir_unabridged" && \
-          compile "${name_unabridged}" "$build_dir_unabridged" && \
-          compile "${name_unabridged}" "$build_dir_unabridged"
-# If the compile after bib update failed, notify the user and quit.
-        if [[ $? -ne 0 ]]; then
-          echo "Compile of ${name_unabridged}.tex file was not successful!"
-          return 1
-        fi
-# Bibliography did NOT build property; notify user and quit.
-      else
-        echo "Building bibliography (unabridged copy) file was not successful!"
-        return 1
-      fi
-# If we are skipping bibliography, just do two compile() runs.
-    else
+    if [[ $? -eq 0 ]]; then
+      cd ..
       compile "${name_unabridged}" "$build_dir_unabridged" && \
+        compile "${name_unabridged}" "$build_dir_unabridged" && \
         compile "${name_unabridged}" "$build_dir_unabridged"
-# If one of the compile runs failed, notify the user and quit.
+# If the compile after bib update failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
-        echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
+        echo "Compile of ${name_unabridged}.tex file was not successful!"
         return 1
       fi
-    fi # If $do_bib is true.
-  fi # If got unabridged copy.
+# Bibliography did NOT build property; notify user and quit.
+    else
+      echo "Building bibliography (unabridged copy) file was not successful!"
+      return 1
+    fi
+# If we are skipping bibliography, just do two compile() runs.
+  else
+    compile "${name_unabridged}" "$build_dir_unabridged" && \
+      compile "${name_unabridged}" "$build_dir_unabridged"
+# If one of the compile runs failed, notify the user and quit.
+    if [[ $? -ne 0 ]]; then
+      echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
+      return 1
+    fi
+  fi # If bibliography was actually built.
   # Script execution should never reach this point.
+}
+
+function clean() {
+  if [[ -d "$build_dir_regular" ]]; then
+    echo "Wiping contents of ${build_dir_regular} (except PDF files)"
+    cd "${build_dir_regular}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+  else
+    echo "Creating directory ${build_dir_regular}"
+    mkdir $build_dir_regular
+  fi
+
+  if [[ -d "$build_dir_unabridged" ]]; then
+    echo "Wiping contents of ${build_dir_unabridged} (except PDF files)"
+    cd "${build_dir_unabridged}" && rm -rf $(ls | grep -v ".pdf") && cd ..
+  else
+    echo "Creating directory ${build_dir_unabridged}"
+    mkdir $build_dir_unabridged
+  fi
+
+# Rebuilding structure of build_dirs. Begin with symlinks.
+  unabridged_dir_and_symlinks_rebuild
+
+# If any .tex files are in their own custom directories, those dirs
+# must also exist in $build_dir, with the same hierarchy. See README.md for
+# more details. Handled with rsync.
+
+# In the rsync commands, the source arguments (folders) must not end with a
+# forward slash. The %%+(/) appended to $folders_to_be_rsyncd strips such
+# trailing slashes, if any. But in order for it to work, it requires the
+# extglob option. The program shopt sets it with the -s option, and unsets it
+# with -u.
+  if [[ ${#folders_to_be_rsyncd[@]} -gt 0 ]] ; then
+    shopt -s extglob
+    rsync -a --include '*/' --exclude '*' "${folders_to_be_rsyncd[@]%%+(/)}" "${build_dir_regular}"
+
+    rsync -a --include '*/' --exclude '*' "${folders_to_be_rsyncd[@]%%+(/)}" "${build_dir_unabridged}"
+    shopt -u extglob
+  fi
+}
+
+# A normal (single) LaTeX compile.
+function compile() {
+  ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
+  local ret=$?
+  echo "" # Print a newline (SyncTeX doesn't).
+  return $ret
+}
+
+# This function creates a copy of the main dir (excluding unabridged stuff),
+# deletes the \includeonly line in $name.tex, patches and then does a regular
+# compile run. The goal of this function is to rebuild the same auxiliary files
+# that would be produced by building the entire document. This is required when
+# running big_build() after clean(): if using \includeonly, then the first
+# compile run must be of the whole document. For precaution, I do that first
+# compile run the whole document always, irrespective of whether clean() was
+# called before.
+#
+# It then waits for the big compile to finish, replaces the main folder's (../)
+# build dirs with these ones, and deletes the copy folder.
+function compile_on_tmp_folder_comment_include_only() {
+  local curr_dir=$(pwd)
+
+  rm -rf "$tmp_build_dir" && mkdir "$tmp_build_dir"
+
+  cp -r $(ls | grep -v "docs\|$build_dir_unabridged") "$tmp_build_dir"
+  cd "$tmp_build_dir"
+
+# Comment \includeonly line in $name.tex, if any.
+  sed -e 's/^\s*\\includeonly.*$//' -i "${name}.tex"
+
+  ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
+  local ret=$?
+
+  cd "$curr_dir"
+
+  rm -rf "${build_dir_regular}"
+  mv "$tmp_build_dir"/"${build_dir_regular}" .
+
+  rm -rf "$tmp_build_dir"
+  return $ret
+}
+
+# A normal (single) LaTeX compile.
+function debugbuild() {
+  ${texcmd} ${debug_texcmdopts} ${name}
+  return $?
+}
+
+function do_we_have_includeonly() {
+# This string is of nonzero length if $name.tex has an \includeonly line.
+  local have_includeonly=$(grep --extended-regexp '^\s*\\includeonly' "${name}.tex")
+
+  if [[ -n "$have_includeonly" ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
 }
 
 function final_document() {
   big_build
-
-  if [[ "${do_unabridged}" == "true" ]]; then
-    cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
-  else
-    cp "${build_dir_regular}"/"${name}.pdf" "${finalname}.pdf"
-  fi
+  cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
 }
 
 # Get the pid of the running $texcmd process (if any). This is needed to avoid
@@ -283,56 +332,11 @@ function killall_tex() {
   killall ${texcmd}
 }
 
-# This function creates a copy of the main dir (including unabridged stuff),
-# deletes the \includeonly line, if it exists, in $name.tex, patches
-# $name_unabridged the same way update_unabridged_tex_files() does, and then
-# does a big compile. The goal of this function is to rebuild the same
-# auxiliary files that would be produced by building the entire document. This
-# is required, e.g., after clean(): doing a big compile with \includeonly might
-# lead to errors in, for example, bibliography building).
+# Do a normal compile. If we are dealing with a report, also do a single
+# compile build on the unabridged copy.
 #
-# (The reason we build also an unabridged copy here is that in that case,
-# \include's are remapped to \input's, but that is not the case with the
-# regular copy, even when not using \includeonly. So the auxiliary files might
-# differ in the two cases.)
-#
-# It then waits for the big compile to finish, replaces the main folder's (../)
-# build dirs with these ones, and deletes the copy folder.
-function rebuild_build_files() {
-  local curr_dir=$(pwd)
-
-  rm -rf "$tmp_build_dir" && mkdir "$tmp_build_dir"
-
-  cp -r $(ls | grep -v "docs") "$tmp_build_dir"
-  cd "$tmp_build_dir"
-
-# Comment \includeonly line in $name.tex, if any.
-  sed -e 's/^\s*\\includeonly.*$//' -i "${name}.tex"
-
-# See comments in update_unabridged_tex_files().
-  cp "${name}.tex" "${name_unabridged}.tex"
-  sed '/^\s*\\begin{document}/i \
-\\let\\include\\input' -i "${name_unabridged}.tex"
-
-  big_build
-
-  cd "$curr_dir"
-
-  cp "${build_dir_regular}"/"${name}.pdf" "$tmp_build_dir"/"${build_dir_regular}"
-  rm -rf "${build_dir_regular}"
-  rm -rf "${build_dir_unabridged}"
-  mv "$tmp_build_dir"/"${build_dir_regular}" .
-  mv "$tmp_build_dir"/"${build_dir_unabridged}" .
-
-  rm -rf "$tmp_build_dir"
-  echo "Finished rebuilding auxiliary files."
-}
-
-# Do a normal compile. If we are dealing with a report, also do a single compile build
-# on the unabridged copy.
-#
-# First do a simple compile. Then, if it was successful, and if we are dealing with
-# report, build unabridged copy.
+# First do a simple compile. Then, if it was successful, and if we are dealing
+# with report, build unabridged copy.
 function small_build() {
   compile "$name" "$build_dir_regular" # compile() returns the $? of the LaTeX command. See Note (1).
   if [[ $? -ne 0 ]]; then
@@ -340,9 +344,9 @@ function small_build() {
     return 1
   fi
 
-# If compile was successful, and we have an unabridged copy, then update unabridged
-# copy.
-  if [[ "${do_unabridged}" == "true" ]]; then
+# If compile was successful, and we are using \includeonly, then update
+# unabridged copy.
+  if [[ "$(do_we_have_includeonly)" == "true" ]]; then
     update_unabridged_tex_files
 
     echo -e "\n*************************************************************************"
@@ -354,6 +358,10 @@ function small_build() {
       echo "Compile of ${name_unabridged}.tex file was not successful!"
       exit 1
     fi
+  else
+# If \includeonly is not used, then unabridged version is just the normal
+# version, so just copy the $name.pdf file to $name_unabridged.pdf.
+    cp "${build_dir_regular}/${name}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
   fi
 }
 
@@ -396,20 +404,18 @@ function unabridged_dir_and_symlinks_rebuild() {
   ln -sr ${sourcesname}.bib "${build_dir_regular}"/
 
 # And then with unabridged build dir (only for reports).
-  if [[ "${do_unabridged}" == "true" ]]; then
-    if [[ ! -d "$build_dir_unabridged" ]]; then
-      echo "Unabridged build dir does not exist! Run clean() to fix it."
-      return 1
-    fi
-
-    rm -f "${name_unabridged}.pdf"
-    rm -f "${name_unabridged}.synctex.gz"
-    rm -f "${build_dir_unabridged}/${sourcesname}.bib"
-
-    ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" .
-    ln -sr "${build_dir_unabridged}/${name_unabridged}.synctex.gz" .
-    ln -sr ${sourcesname}.bib "${build_dir_unabridged}"/
+  if [[ ! -d "$build_dir_unabridged" ]]; then
+    echo "Unabridged build dir does not exist! Run clean() to fix it."
+    return 1
   fi
+
+  rm -f "${name_unabridged}.pdf"
+  rm -f "${name_unabridged}.synctex.gz"
+  rm -f "${build_dir_unabridged}/${sourcesname}.bib"
+
+  ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" .
+  ln -sr "${build_dir_unabridged}/${name_unabridged}.synctex.gz" .
+  ln -sr ${sourcesname}.bib "${build_dir_unabridged}"/
 }
 
 #
@@ -440,8 +446,6 @@ function main() {
     get_compiler_pid
   elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
     killall_tex
-  elif [[ $# -eq 1 && "$1" == "rebuild_build_files" ]] ; then
-    rebuild_build_files
   elif [[ $# -eq 1 && "$1" == "symlinks" ]] ; then
     unabridged_dir_and_symlinks_rebuild
   elif [[ $# -eq 1 && "$1" == "u2r" ]] ; then

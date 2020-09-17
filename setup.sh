@@ -84,10 +84,10 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -f "${doctype}.pdf" # If this exists, it's a symlink (actual pdf is in build dir).
 
   rm -f \
-  $(ls  includes/essay_preamble.tex \
-        includes/llncs_preamble.tex \
-        includes/presentation_preamble.tex \
-        includes/report_preamble.tex \
+  $(ls  inputs/essay_preamble.tex \
+        inputs/llncs_preamble.tex \
+        inputs/presentation_preamble.tex \
+        inputs/report_preamble.tex \
   | grep -v $doctype)
 
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
@@ -98,14 +98,22 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
 # Use the simple build script for the simpler templates.
   if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || "${doctype}" == "standalone" ]] ; then
-    mv CompileTeX.bare.minimum.sh CompileTeX.sh
-    rm sources.bib
+    mv CompileTeX.minimum.sh CompileTeX.sh
+    rm CompileTeX.medium.sh CompileTeX.reports.sh
+  elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
+    mv CompileTeX.medium.sh CompileTeX.sh
+    rm CompileTeX.minimum.sh CompileTeX.reports.sh
+    rm comp*
+
+# The compiler needs to find the sources file in the build dir, so symlink.
+    ln -sr sources.bib "${build_dir_regular}"/
   else
-    rm CompileTeX.bare.minimum.sh
+    mv CompileTeX.reports.sh CompileTeX.sh
+    rm CompileTeX.minimum.sh CompileTeX.medium.sh
 
     ln -sr "${build_dir_regular}/${doctype}.synctex.gz" .
 
-# The compiler needs to find the sources file in the build dir, so symlink.
+# The compiler again needs the sources file in the build dir, so symlink.
     ln -sr sources.bib "${build_dir_regular}"/
   fi
 
@@ -119,10 +127,8 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   elif [[ "${doctype}" == "llncs" ]] ; then
     sed -i "/^texcmd=/c\texcmd=\"pdflatex\"" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
-# If document type is report, then first set $do_unabridged variable to true.
-    sed -i "/^do_unabridged=\"false\"/c\do_unabridged=\"true\"" CompileTeX.sh
-
-# Next set up the directory where we will build the unabridged copy.
+# If document type is report, then set up the directory where we will build the
+# unabridged copy.
     mkdir "${build_dir_unabridged}"
 
     cp "${build_dir_regular}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
@@ -133,14 +139,14 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     ln -sr "sources.bib" "${build_dir_unabridged}"/
   fi
 
-# For the types that have no includes, we delete the include folder.
+# For the types that have no specific inputs, we delete the inputs/ folder.
 #
 # Otherwise, symlink bib file to build dir (bibtex command has to be run inside
 # this dir).
   if [[ "${doctype}" != "essay" && "${doctype}" != "llncs" \
     && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
 
-    rm -rf includes/
+    rm -rf inputs/
   fi
 
 # Finally delete this script (no use for it after everything is set up).

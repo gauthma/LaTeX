@@ -3,10 +3,12 @@
 # $name is one of: cv, bare, or standalone.
 name="bare"
 
+##### VARIABLES THAT THE USER CAN SET #####
 # The final name of the .pdf file (without extension). Defaults to original
 # name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
 # foreign chars, ...
 finalname="${name}.FINAL"
+###########################################
 
 # Build dir.
 build_dir="build"
