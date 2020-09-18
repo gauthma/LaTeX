@@ -73,7 +73,7 @@ Of the non-simple templates (plus `cv`), they all use a... *sizable* number of p
 LaTeX compiling
 ---
 
-Compiling LaTeX files is not a simple matter---after all, there is a reason to use three different scripts... For all those scripts, calling with no argument runs the compiler once, i.e. does `small_build()`.
+Compiling LaTeX files is not a simple matter---after all, there is a reason to use three different scripts... For all those scripts, calling with no argument runs the compiler once, i.e. calls the function `small_build`.
 
 ### `compileTeX.minimum.sh`
 
