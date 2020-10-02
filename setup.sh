@@ -103,7 +103,6 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
     mv CompileTeX.medium.sh CompileTeX.sh
     rm CompileTeX.minimum.sh CompileTeX.reports.sh
-    rm comp*
 
 # The compiler needs to find the sources file in the build dir, so symlink.
     ln -sr sources.bib "${build_dir_regular}"/
