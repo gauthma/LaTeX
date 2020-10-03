@@ -14,7 +14,7 @@ do_bib="true"
 #
 # - compile() just runs the LaTeX compiler on whatever file it is given;
 #
-# - small_build() runs compile() on the regular copy.
+# - small_build() runs compile().
 #
 # - big_build() runs compile() once, then build bibliography etc. (if
 # required), and then runs compile() three more times.
@@ -33,7 +33,7 @@ finalname="${name}.FINAL"
 # Name of the .bib file (sans extension).
 sourcesname="sources"
 
-# Build dir for the regular (possibly abridged) copy.
+# Build dir.
 build_dir="build"
 
 texcmd="xelatex"
@@ -102,7 +102,7 @@ function big_build() {
           return 1
         fi
       else
-        echo "Building bibliography (regular copy) file was not successful!"
+        echo "Building bibliography file was not successful!"
         return 1
       fi
     fi
