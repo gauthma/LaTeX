@@ -138,7 +138,7 @@ function big_build() {
 # Some \cite or \nocite entries have been found -- hence more three compiles.
     else
       cd "${build_dir_regular}" && pwd
-      ${bibcmd} ${name}
+      ${bibcmd} "${name}.aux"
       if [[ $? -eq 0 ]]; then
         bibliography_was_actually_built="true"
         cd ..
@@ -189,7 +189,7 @@ function big_build() {
 # Then build bibliography, if requested.
   if [[ "$bibliography_was_actually_built" == "true" ]] ; then
     cd "${build_dir_unabridged}" && pwd
-    ${bibcmd} ${name_unabridged}
+    ${bibcmd} "${name_unabridged}.aux"
 # If bibliography builds properly, then do more three runs.
     if [[ $? -eq 0 ]]; then
       cd ..

@@ -89,7 +89,7 @@ function big_build() {
 # Some \cite or \nocite entries have been found -- hence more three compiles.
     else
       cd "${build_dir}" && pwd
-      ${bibcmd} ${name}
+      ${bibcmd} "${name}.aux"
       if [[ $? -eq 0 ]]; then
         bibliography_was_actually_built="true"
         cd ..
