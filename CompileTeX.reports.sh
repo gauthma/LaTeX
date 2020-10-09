@@ -16,13 +16,11 @@ do_idx="false"
 finalname="${name}.FINAL"
 
 # IMPORTANT: if you have .tex files in their own folders, indicate them here
-# (space separated). E.g. if you have your chapters in a folder named
-# "chapters" (no quotes), then add it like this (WITH quotes):
-# folders_to_be_rsyncd=( "chapters" )
-# VERY IMPORTANT: the folders' name MUST NOT end with a forward slash (/),
-# because that tells rsync to copy folder *contents*, rather than the folder
-# itself.
-folders_to_be_rsyncd=( "chapters" )
+# (space separated). E.g. if you have your chapters and frontmatter in folders
+# named "chapters" and "frontmatter" (no quotes), then add them like this (WITH
+# quotes):
+# folders_to_be_rsyncd=( "chapters" "frontmatter" )
+folders_to_be_rsyncd=()
 
 # IMPORTANT: set the temporary build dir here. Use a RAM-based temporary
 # filesystem if you have one. See README.
