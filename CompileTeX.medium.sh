@@ -21,6 +21,8 @@ do_bib="true"
 #
 # Most of the remaining functions revolve around these three, to check for
 # errors and give feedback properly, and so on.
+#
+###############################################################################
 
 # $name is one of: essay, llncs or presentation.
 name="report"

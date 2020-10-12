@@ -36,10 +36,10 @@ tmp_build_dir="/run/user/$UID/xyz-temp-compile"
 #
 # - compile() just runs the LaTeX compiler on whatever file it is given;
 #
-# - small_build() runs compile() on the regular copy, and then (if using \includeonly) on the
-# unabridged copy. If \includeonly is not used, after compiling the regular
-# copy, it just copies the pdf file --- because in this case, both regular and
-# unabridged versions match.
+# - small_build() runs compile() on the regular copy, and then (if using
+# \includeonly) on the unabridged copy. If \includeonly is not used, after
+# compiling the regular copy, it just copies the pdf file --- because in this
+# case, both regular and unabridged versions match.
 #
 # - big_build() runs compile() once, then build bibliography etc. (if
 # required), and then runs compile() three more times. And does the same to the
@@ -48,6 +48,8 @@ tmp_build_dir="/run/user/$UID/xyz-temp-compile"
 # Most of the remaining functions revolve around these three, to compile both
 # the report and its unabridged version (only in the case of reports), and to
 # check for errors and give feedback properly, and so on.
+#
+###############################################################################
 
 # Name of the .bib file (sans extension).
 sourcesname="sources"
