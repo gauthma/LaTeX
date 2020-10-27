@@ -1,28 +1,12 @@
 #! /bin/bash
 
+# See the end of file for explanatory comments.
+
 ##### VARIABLES THAT THE USER CAN SET #####
 # To disable building bibliography, set this to false.
 do_bib="true"
 ###########################################
 
-###############################################################################
-#
-# Much like targets in a Makefile, this scripts provides functions to do a
-# simple build, a full build, etc, for a LaTeX project.
-#
-# Three main functions, compile(), small_build(), and big_build():
-#
-# - compile() just runs the LaTeX compiler on whatever file it is given;
-#
-# - small_build() runs compile().
-#
-# - big_build() runs compile() once, then build bibliography etc. (if
-# required), and then runs compile() three more times.
-#
-# Most of the remaining functions revolve around these three, to check for
-# errors and give feedback properly, and so on.
-#
-###############################################################################
 
 # $name is one of: essay, llncs or presentation.
 name="report"
@@ -217,7 +201,27 @@ function main() {
 
 main "$@"
 
-#####
+###############################################################################
+#
+# Much like targets in a Makefile, this scripts provides functions to do a
+# simple build, a full build, etc, for a LaTeX project.
+#
+# Three main functions, compile(), small_build(), and big_build():
+#
+# - compile() just runs the LaTeX compiler on whatever file it is given;
+#
+# - small_build() runs compile().
+#
+# - big_build() runs compile() once, then build bibliography etc. (if
+# required), and then runs compile() three more times.
+#
+# Most of the remaining functions revolve around these three, to check for
+# errors and give feedback properly, and so on.
+#
+###############################################################################
+
+###
+
 # Notes:
 # - (1) After an unsuccessful compilation, and after fixing the mistake that
 #   caused it, a normal compile, in batchmode with halt on errors, will still lead

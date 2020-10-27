@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# See the end of file for explanatory comments.
+
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
 
@@ -26,30 +28,6 @@ folders_to_be_rsyncd=()
 # filesystem if you have one. See README.
 tmp_build_dir="/run/user/$UID/xyz-temp-compile"
 ###########################################
-
-###############################################################################
-#
-# Much like targets in a Makefile, this scripts provides functions to do a
-# simple build, a full build, etc, for a LaTeX project.
-#
-# Three main functions, compile(), small_build(), and big_build():
-#
-# - compile() just runs the LaTeX compiler on whatever file it is given;
-#
-# - small_build() runs compile() on the regular copy, and then (if using
-# \includeonly) on the unabridged copy. If \includeonly is not used, after
-# compiling the regular copy, it just copies the pdf file --- because in this
-# case, both regular and unabridged versions match.
-#
-# - big_build() runs compile() once, then build bibliography etc. (if
-# required), and then runs compile() three more times. And does the same to the
-# unabridged copy, if there exists one.
-#
-# Most of the remaining functions revolve around these three, to compile both
-# the report and its unabridged version (only in the case of reports), and to
-# check for errors and give feedback properly, and so on.
-#
-###############################################################################
 
 # Name of the .bib file (sans extension).
 sourcesname="sources"
@@ -458,7 +436,32 @@ function main() {
 
 main "$@"
 
-#####
+###############################################################################
+#
+# Much like targets in a Makefile, this scripts provides functions to do a
+# simple build, a full build, etc, for a LaTeX project.
+#
+# Three main functions, compile(), small_build(), and big_build():
+#
+# - compile() just runs the LaTeX compiler on whatever file it is given;
+#
+# - small_build() runs compile() on the regular copy, and then (if using
+# \includeonly) on the unabridged copy. If \includeonly is not used, after
+# compiling the regular copy, it just copies the pdf file --- because in this
+# case, both regular and unabridged versions match.
+#
+# - big_build() runs compile() once, then build bibliography etc. (if
+# required), and then runs compile() three more times. And does the same to the
+# unabridged copy, if there exists one.
+#
+# Most of the remaining functions revolve around these three, to compile both
+# the report and its unabridged version, and to check for errors and give
+# feedback properly, and so on.
+#
+###############################################################################
+
+###
+
 # Notes:
 # - (1) After an unsuccessful compilation, and after fixing the mistake that
 #   caused it, a normal compile, in batchmode with halt on errors, will still lead
