@@ -340,6 +340,7 @@ function small_build() {
 # If \includeonly is not used, then unabridged version is just the normal
 # version, so just copy the $name.pdf file to $name_unabridged.pdf.
     cp "${build_dir_regular}/${name}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
+    cp "${build_dir_regular}/${name}.synctex.gz" "${build_dir_unabridged}/${name_unabridged}.synctex.gz"
   fi
 }
 
