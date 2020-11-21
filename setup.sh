@@ -100,6 +100,8 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || "${doctype}" == "standalone" ]] ; then
     mv CompileTeX.minimum.sh CompileTeX.sh
     rm CompileTeX.medium.sh CompileTeX.reports.sh
+
+    rm sources.bib
   elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
     mv CompileTeX.medium.sh CompileTeX.sh
     rm CompileTeX.minimum.sh CompileTeX.reports.sh

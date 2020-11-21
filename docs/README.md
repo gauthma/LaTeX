@@ -107,7 +107,7 @@ The `final` option works slightly differently:
 
 - `final`: `clean`s everything up, and them makes a `big_build`. Then renames the PDF document to the value of `finalname` variable---by default, it is `${name}.FINAL.pdf`, where `${name}` is the original name of the PDF file.
 
-### `compileTeX.sh`
+### `compileTeX.reports.sh`
 
 As mentioned in the beginning, this particular compile script is meant for the `report.tex` template, which, as also mentioned at the beginning, has its own section---the next one.
 
@@ -131,6 +131,8 @@ folders_to_be_rsyncd=( "chapters" "images" )
 ~~~
 
 Add to the list any folders where you have placed the `.tex` files---**EXCEPT** files in the `\inputs/` directory, as these are supposed to be `\input`ed (and hence, cause no problem).
+
+Finally, note that **whenever you add a new folder**, you need to clean and do a `big_build()`, so as to have that new folder replicated in the build dir. To do this, compile first with the `clean` option, and then with the `big` option.
 
 ---
 
