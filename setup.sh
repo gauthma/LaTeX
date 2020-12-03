@@ -118,6 +118,15 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     ln -sr sources.bib "${build_dir_regular}"/
   fi
 
+# Reports/essays: use the proper style file.
+  if [[ "${doctype}" == "report" ]] ; then
+    mv inputs/style_report.tex inputs/style.tex
+    rm inputs/style_essay.tex
+  elif [[ "${doctype}" == "essay" ]] ; then
+    mv inputs/style_essay.tex inputs/style.tex
+    rm inputs/style_report.tex
+  fi
+
 # Setup CompileTeX.sh (requires GNU sed) Begin with setting what type of
 # document we want (report, presentation, ...)
   sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh

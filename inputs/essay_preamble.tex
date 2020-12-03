@@ -1,51 +1,24 @@
-% Set up FONTS to use.
-\usepackage[bitstream-charter]{mathdesign}
-\usepackage{fontspec}
-\DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
-\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
-\setmainfont[Scale=0.9]{Charis SIL}
-\defaultfontfeatures[Charis SIL]{Script=latn, Ligatures=TeX}
+\input{inputs/fonts}
 
-% Hide section numbers.
-\setcounter{secnumdepth}{0}
-
-% -------------------------------------------------------
-% -------------------------------------------------------
-% -------------- ADD YOUR OWN STUFF HERE ----------------
-% -------------------------------------------------------
-% -------------------------------------------------------
-%
-% Grouped as follows packages first, \new or \renew commands second, and
-% everything else after that.
+\input{inputs/style}
 
 %
-% Packages.
+% Custom Packages.
 %
-\usepackage[font=small,
-            labelfont=bf]{caption} % Proper formatting for caption text.
-
-% Basically increase text width.
-\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
 
 % For graphics inclusion.
 \usepackage{graphicx}
 
-% To have centred titles.
-\usepackage{sectsty}
-\allsectionsfont{\centering}
+% -------------------------------------------------------
+% -------------------------------------------------------
+% ------------------- CUSTOM STUFF ----------------------
+% -------------------------------------------------------
+% -------------------------------------------------------
 
-% To make the ToC, which here uses sections has the main structural unit,
-% display a line of dots until the page number. (If the main sectional unit is
-% sections, normally the dots would only be displayed for subsections.)
-\usepackage{tocloft}
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+% Use this space for custom things, other than \usepackage's. If the
+% customisations are lengthy, consider putting them into their own file, to be
+% \input'd. Such files should go in the inputs/ folder.
 
-% For making urls clickable.
-\usepackage{xurl}
-
-%
-% (Re)new commands. (Except those that are part of a specific setup).
-%
 \newcommand{\emd}{\textemdash}
 \newcommand{\fn}[1]{\footnote{#1}}
 
@@ -62,15 +35,12 @@
 % so use this command instead.
 \newcommand{\ts}{\textsection}
 
-%
-% All other custom stuff.
-%
-
 % -------------------------------------------------------
 % -------------------------------------------------------
 % ------------------- END CUSTOM STUFF ------------------
 % -------------------------------------------------------
 % -------------------------------------------------------
+
 
 % Language and bibliography. Language with polyglossia must be set before
 % biblatex is used, or error ensues. But it's probably good advice with babel

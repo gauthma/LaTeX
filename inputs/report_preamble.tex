@@ -1,23 +1,13 @@
-% Set up FONTS to use.
-\usepackage[bitstream-charter]{mathdesign}
-\usepackage{fontspec}
-\DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
-\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
-\setmainfont[Scale=0.9]{Charis SIL}
-\defaultfontfeatures[Charis SIL]{Script=latn, Ligatures=TeX}
+\input{inputs/fonts}
 
-% To indicate current chapter name and number in the header.
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
-\fancyhead[R]{}
-\fancyhead[L]{\chaptername\ \thechapter\ --\ \leftmark \hfill \thepage}
+\input{inputs/style}
 
-% For fancy chapter header.
-\usepackage{titlesec, blindtext, color}
-\definecolor{gray75}{gray}{0.75}
-\newcommand{\hsp}{\hspace{20pt}}
-\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+%
+% Custom Packages.
+%
+
+% For graphics inclusion.
+\usepackage{graphicx}
 
 % -------------------------------------------------------
 % -------------------------------------------------------
@@ -25,34 +15,16 @@
 % -------------------------------------------------------
 % -------------------------------------------------------
 
-%
-% Packages.
-%
-\usepackage[font=small,
-            labelfont=bf]{caption} % Proper formatting for caption text.
+% Use this space for custom things, other than \usepackage's. If the
+% customisations are lengthy, consider putting them into their own file, to be
+% \input'd. Such files should go in the inputs/ folder.
 
-% Basically increase text width.
-\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
-
-% For graphics inclusion.
-\usepackage{graphicx}
-
-% For making urls clickable.
-\usepackage{xurl}
-
-%
-% (Re)new commands. (Except those that are part of a specific setup).
-%
 \newcommand{\emd}{\textemdash}
 \newcommand{\fn}[1]{\footnote{#1}}
 
 % For § symbol. Some TeX compilers might complain if it is entered literally,
 % so use this command instead.
 \newcommand{\ts}{\textsection}
-
-%
-% All other custom stuff.
-%
 
 % -------------------------------------------------------
 % -------------------------------------------------------
