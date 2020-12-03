@@ -150,12 +150,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   fi
 
 # For the types that have no specific inputs, we delete the inputs/ folder.
-#
-# Otherwise, symlink bib file to build dir (bibtex command has to be run inside
-# this dir).
-  if [[ "${doctype}" != "essay" && "${doctype}" != "llncs" \
-    && "${doctype}" != "presentation" && "${doctype}" != "report" ]] ; then
-
+  if [[ "${doctype}" == "standalone"  ]] ; then
     rm -rf inputs/
   fi
 

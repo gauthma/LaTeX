@@ -1,0 +1,16 @@
+% Set up FONTS to use.
+
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage{fontspec}
+\DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
+\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
+
+\setmainfont[Scale=0.9]{CharisSIL}[%
+  Path=$HOME/.fonts/truetype/ ,
+  Extension      = .ttf       ,
+  UprightFont    = *-R        ,
+  ItalicFont     = *-I        ,
+  BoldFont       = *-B        ,
+  BoldItalicFont = *-BI       ,
+]
+\defaultfontfeatures[Charis SIL]{Script=latn, Ligatures=TeX}

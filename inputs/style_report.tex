@@ -1,0 +1,23 @@
+% Style commands go here.
+
+% To indicate current chapter name and number in the header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
+\fancyhead[R]{}
+\fancyhead[L]{\chaptername\ \thechapter\ --\ \leftmark \hfill \thepage}
+
+% For fancy chapter header.
+\usepackage{titlesec, blindtext, color}
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+
+% Basically increase text width.
+\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+
+\usepackage[font=small,
+            labelfont=bf]{caption} % Proper formatting for caption text.
+
+% For making urls clickable.
+\usepackage{xurl}

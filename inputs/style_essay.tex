@@ -1,0 +1,21 @@
+% Hide section numbers.
+\setcounter{secnumdepth}{0}
+
+\usepackage[font=small,
+            labelfont=bf]{caption} % Proper formatting for caption text.
+
+% Basically increase text width.
+\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=3.5cm]{geometry}
+
+% To have centred titles.
+\usepackage{sectsty}
+\allsectionsfont{\centering}
+
+% To make the ToC, which here uses sections has the main structural unit,
+% display a line of dots until the page number. (If the main sectional unit is
+% sections, normally the dots would only be displayed for subsections.)
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% For making urls clickable.
+\usepackage{xurl}
