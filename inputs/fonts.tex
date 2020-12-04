@@ -5,12 +5,13 @@
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
 
-\setmainfont[Scale=0.9]{CharisSIL}[%
+\setmainfont[%
   Path=$HOME/.fonts/truetype/ ,
   Extension      = .ttf       ,
   UprightFont    = *-R        ,
   ItalicFont     = *-I        ,
   BoldFont       = *-B        ,
   BoldItalicFont = *-BI       ,
-]
-\defaultfontfeatures[Charis SIL]{Script=latn, Ligatures=TeX}
+  Scale=0.9 ,
+]{CharisSIL}
+\defaultfontfeatures[CharisSIL]{Script=latn, Ligatures=TeX}

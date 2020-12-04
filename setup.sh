@@ -119,7 +119,9 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   fi
 
 # Reports/essays: use the proper style file.
-  if [[ "${doctype}" == "report" ]] ; then
+  if [[ "${doctype}" == "cv" ]] ; then
+    mv inputs/fonts_cv.tex inputs/fonts.tex
+  elif [[ "${doctype}" == "report" ]] ; then
     mv inputs/style_report.tex inputs/style.tex
     rm inputs/style_essay.tex
   elif [[ "${doctype}" == "essay" ]] ; then
@@ -132,9 +134,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh
 
 # For some documents, special actions are required.
-  if [[ "${doctype}" == "cv" ]] ; then
-    sed -i "/^texcmd=/c\texcmd=\"lualatex\"" CompileTeX.sh
-  elif [[ "${doctype}" == "llncs" ]] ; then
+  if [[ "${doctype}" == "llncs" ]] ; then
     sed -i "/^texcmd=/c\texcmd=\"pdflatex\"" CompileTeX.sh
   elif [[ "${doctype}" == "report" ]] ; then
 # If document type is report, then set up the directory where we will build the

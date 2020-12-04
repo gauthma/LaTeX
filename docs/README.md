@@ -35,15 +35,11 @@ Fonts
 
 Except for `llncs`, which uses its own font, I use a custom font, `Charis SIL`, because I don't really like *Computer Modern* and its cousins (condemn me if you will). If you don't feel like dealing with font issues, just comment the relevant lines (they will be in the preamble if there is one); look for the comments about font setup.
 
-If you do decide to try out `Charis SIL`, then download the font from <http://software.sil.org/charis/download/>. It will consist of a bunch of `*.ttf` files. The proper way of installing it (only for you user) is with your own `TeX Tree`; see <https://randomwalk.eu/notes/TeX-Trickery.pdf>. For the `cv` template, which uses `LuaLaTeX`, this proper installation is, I'm afraid, required. But for all the others, which use `XeLaTeX`, it's quick and easy (except `llncs`, which uses `PdfLaTeX` and more standard fonts). Create the following directory, if it does not already exist, and just dump all the `*.ttf` files in there.
+If you do decide to try out `Charis SIL`, then download the font from <http://software.sil.org/charis/download/>. It will consist of a bunch of `*.ttf` files. Put them in a location of your choice; here I will assume `$HOME/.fonts/truetype/` (yes, the `$HOME` variable can be used!). If you use another location, then just change that location in `inputs/fonts.tex`, and you are ready to go---except for `cv`.
 
-~~~ {.shell .numberLines}
-$ mkdir -p ~/.fonts/truetype/
-~~~
+For `cv`, you need to 1) modify `inputs/fonts_cv.tex` instead of `inputs/fonts.tex`. And 2), you also need the `fontawesome` font. It should come with TeXLive, but I'm afraid XeLaTeX, for some reason, requires a path... So find the path for the `fontawesome.otf` file, and modify the path (line after the one starting with `\newfontfamily{\FA}`) to point to the *directory* where the `fontawesome.otf` file is located (see the example configuration in `inputs/fonts_cv.tex`).
 
-For good measure, you can also run `$ texhash ~/.fonts`---and now you should be good to go!
-
-Now you can experiment with the templates; and come back to read the rest of this README when/if you need to. Have fun!
+That's it: now you can experiment with the templates; and come back to read the rest of this README when/if you need to. Have fun!
 
 The templates
 ---
