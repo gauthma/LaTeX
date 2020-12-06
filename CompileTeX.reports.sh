@@ -45,6 +45,69 @@ indexcmd="makeindex"
 name_unabridged="Unabridged"
 build_dir_unabridged="build_UNABRIDGED"
 
+function big_build_unabridged_copy() {
+# Now we deal with unabridged copy. If the three compiles after a bib update
+# did not fail, then update bib && triple compile in unabridged_dir.
+  update_unabridged_tex_files
+
+  echo -e "\n*************************************************************************"
+  echo -e "* Now building the unabridged (full) build..."
+  echo -e "*************************************************************************\n"
+
+# Just as above, first, do a single compile.
+  compile "${name_unabridged}" "$build_dir_unabridged"
+# If the compile failed, notify the user and quit.
+  if [[ $? -ne 0 ]]; then
+    echo "Compile of ${name_unabridged}.tex file was not successful!"
+    return 1
+  fi
+
+# If the compile succeeded, then build the index.
+  if [[ "$do_idx" == "true" ]] ; then
+    cd "${build_dir_unabridged}" && pwd
+    ${indexcmd} ${name_unabridged}
+# If the building the index failed, notify the user and quit.
+    if [[ $? -ne 0 ]]; then
+      echo "Building of the index (unabridged copy) was not successful!"
+      return 1
+    fi
+# Otherwise leave the regular build dir.
+    cd ..
+  fi
+
+# Then build bibliography, if requested.
+  if [[ "$bibliography_was_actually_built" == "true" ]] ; then
+    cd "${build_dir_unabridged}" && pwd
+    ${bibcmd} "${name_unabridged}.aux"
+# If bibliography builds properly, then do more three runs.
+    if [[ $? -eq 0 ]]; then
+      cd ..
+      compile "${name_unabridged}" "$build_dir_unabridged" && \
+        compile "${name_unabridged}" "$build_dir_unabridged" && \
+        compile "${name_unabridged}" "$build_dir_unabridged"
+# If the compile after bib update failed, notify the user and quit.
+      if [[ $? -ne 0 ]]; then
+        echo "Compile of ${name_unabridged}.tex file was not successful!"
+        return 1
+      fi
+# Bibliography did NOT build property; notify user and quit.
+    else
+      echo "Building bibliography (unabridged copy) file was not successful!"
+      return 1
+    fi
+# If we are skipping bibliography, just do two compile() runs.
+  else
+    compile "${name_unabridged}" "$build_dir_unabridged" && \
+      compile "${name_unabridged}" "$build_dir_unabridged"
+# If one of the compile runs failed, notify the user and quit.
+    if [[ $? -ne 0 ]]; then
+      echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
+      return 1
+    fi
+  fi # If bibliography was actually built.
+  # Script execution should never reach this point.
+}
+
 # A big LaTeX compile: compile once (and build index, if it is set), then compile
 # bib (if it is set), then compile three more times (usually two are enough, but in
 # some thorny cases three are required, so...). If using bib is not set, just
@@ -135,66 +198,8 @@ function big_build() {
     fi
   fi
 
-# Now we deal with unabridged copy. If the three compiles after a bib update
-# did not fail, then update bib && triple compile in unabridged_dir.
-  update_unabridged_tex_files
-
-  echo -e "\n*************************************************************************"
-  echo -e "* Now continuing with (background) unabridged (full) build..."
-  echo -e "*************************************************************************\n"
-
-# Just as above, first, do a single compile.
-  compile "${name_unabridged}" "$build_dir_unabridged"
-# If the compile failed, notify the user and quit.
-  if [[ $? -ne 0 ]]; then
-    echo "Compile of ${name_unabridged}.tex file was not successful!"
-    return 1
-  fi
-
-# If the compile succeeded, then build the index.
-  if [[ "$do_idx" == "true" ]] ; then
-    cd "${build_dir_unabridged}" && pwd
-    ${indexcmd} ${name_unabridged}
-# If the building the index failed, notify the user and quit.
-    if [[ $? -ne 0 ]]; then
-      echo "Building of the index (unabridged copy) was not successful!"
-      return 1
-    fi
-# Otherwise leave the regular build dir.
-    cd ..
-  fi
-
-# Then build bibliography, if requested.
-  if [[ "$bibliography_was_actually_built" == "true" ]] ; then
-    cd "${build_dir_unabridged}" && pwd
-    ${bibcmd} "${name_unabridged}.aux"
-# If bibliography builds properly, then do more three runs.
-    if [[ $? -eq 0 ]]; then
-      cd ..
-      compile "${name_unabridged}" "$build_dir_unabridged" && \
-        compile "${name_unabridged}" "$build_dir_unabridged" && \
-        compile "${name_unabridged}" "$build_dir_unabridged"
-# If the compile after bib update failed, notify the user and quit.
-      if [[ $? -ne 0 ]]; then
-        echo "Compile of ${name_unabridged}.tex file was not successful!"
-        return 1
-      fi
-# Bibliography did NOT build property; notify user and quit.
-    else
-      echo "Building bibliography (unabridged copy) file was not successful!"
-      return 1
-    fi
-# If we are skipping bibliography, just do two compile() runs.
-  else
-    compile "${name_unabridged}" "$build_dir_unabridged" && \
-      compile "${name_unabridged}" "$build_dir_unabridged"
-# If one of the compile runs failed, notify the user and quit.
-    if [[ $? -ne 0 ]]; then
-      echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
-      return 1
-    fi
-  fi # If bibliography was actually built.
-  # Script execution should never reach this point.
+  # Now that we're finished with regular copy, build the unabridged one.
+  big_build_unabridged_copy
 }
 
 function clean() {
@@ -295,7 +300,7 @@ function do_we_have_includeonly() {
 }
 
 function final_document() {
-  big_build
+  big_build_unabridged_copy
   cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
 }
 
