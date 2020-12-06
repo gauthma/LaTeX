@@ -103,6 +103,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     rm CompileTeX.medium.sh CompileTeX.reports.sh
 
     rm sources.bib
+    rm -rf docs
   elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
     mv CompileTeX.medium.sh CompileTeX.sh
     rm CompileTeX.minimum.sh CompileTeX.reports.sh
