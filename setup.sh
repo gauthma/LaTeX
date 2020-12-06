@@ -70,6 +70,7 @@ read -p "Are you sure you want to continue? [type uppercase y]" -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Y]$ ]]; then
   rm -rf .git
+  rm -rf .gitignore
 
   rm -f \
   $(ls  cv.* \
