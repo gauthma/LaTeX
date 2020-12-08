@@ -84,63 +84,61 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
   rm -f "${doctype}.pdf" # If this exists, it's a symlink (actual pdf is in build dir).
 
-  rm -f \
-  $(ls  inputs/essay_preamble.tex \
-        inputs/llncs_preamble.tex \
-        inputs/presentation_preamble.tex \
-        inputs/report_preamble.tex \
-  | grep -v $doctype)
+# Deal with inputs/ folder.
+  if [[ -f  "inputs/${doctype}_fonts.tex" ]] ; then
+    mv "inputs/${doctype}_fonts.tex" "inputs/fonts.tex"
+  fi
+  if [[ -f  "inputs/${doctype}_preamble.tex" ]] ; then
+    mv "inputs/${doctype}_preamble.tex" "inputs/preamble.tex"
+  fi
+  if [[ -f  "inputs/${doctype}_style.tex" ]] ; then
+    mv "inputs/${doctype}_style.tex" "inputs/style.tex"
+  fi
 
+# remove unneeded files from inputs/ folder.
+  rm -f inputs/*_fonts.tex inputs/*_preamble.tex inputs/*_style.tex
+
+# Do the same for the build/ dir.
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
+
+# Choose proper compiler.
+  if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || \
+    "${doctype}" == "standalone" ]] ; then
+    mv compileTeX.minimum.sh CompileTeX.sh
+  elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
+    mv compileTeX.medium.sh CompileTeX.sh
+  else # Reports.
+    mv compileTeX.reports.sh CompileTeX.sh
+  fi
+
+  rm compileTeX.*
+
+# Setup compile script. Requires GNU sed.
+  sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh
+# llncs requires pdflatex, not xelatex.
+  if [[ "${doctype}" == "llncs" ]] ; then
+    sed -i "/^texcmd=/c\texcmd=\"pdflatex\"" CompileTeX.sh
+  fi
 
 # The actual pdf is in the build directory; instead of moving it, we symlink it
 # up.
   ln -sr "${build_dir_regular}/${doctype}.pdf" .
 
-# Use the simple build script for the simpler templates.
-  if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || "${doctype}" == "standalone" ]] ; then
-    mv CompileTeX.minimum.sh CompileTeX.sh
-    rm CompileTeX.medium.sh CompileTeX.reports.sh
-
+# Miscellaneous actions required for specific types.
+  if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || \
+    "${doctype}" == "standalone" ]] ; then
     rm sources.bib
-    rm -rf docs
+# standalone has no specific inputs, so delete the inputs/ folder.
+    if [[ "${doctype}" == "standalone"  ]] ; then
+      rm -rf inputs/
+    fi
   elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
-    mv CompileTeX.medium.sh CompileTeX.sh
-    rm CompileTeX.minimum.sh CompileTeX.reports.sh
-
 # The compiler needs to find the sources file in the build dir, so symlink.
     ln -sr sources.bib "${build_dir_regular}"/
-  else
-    mv CompileTeX.reports.sh CompileTeX.sh
-    rm CompileTeX.minimum.sh CompileTeX.medium.sh
-
     ln -sr "${build_dir_regular}/${doctype}.synctex.gz" .
-
-# The compiler again needs the sources file in the build dir, so symlink.
-    ln -sr sources.bib "${build_dir_regular}"/
-  fi
-
-# Reports/essays: use the proper style file.
-  if [[ "${doctype}" == "cv" ]] ; then
-    mv inputs/fonts_cv.tex inputs/fonts.tex
   elif [[ "${doctype}" == "report" ]] ; then
-    mv inputs/style_report.tex inputs/style.tex
-    rm inputs/style_essay.tex
-  elif [[ "${doctype}" == "essay" ]] ; then
-    mv inputs/style_essay.tex inputs/style.tex
-    rm inputs/style_report.tex
-  fi
 
-# Setup CompileTeX.sh (requires GNU sed) Begin with setting what type of
-# document we want (report, presentation, ...)
-  sed -i "/^name=/c\name=\"$doctype\"" CompileTeX.sh
-
-# For some documents, special actions are required.
-  if [[ "${doctype}" == "llncs" ]] ; then
-    sed -i "/^texcmd=/c\texcmd=\"pdflatex\"" CompileTeX.sh
-  elif [[ "${doctype}" == "report" ]] ; then
-# If document type is report, then set up the directory where we will build the
-# unabridged copy.
+# For reports, then set up the directory for unabridged copy.
     mkdir "${build_dir_unabridged}"
 
     cp "${build_dir_regular}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
@@ -148,12 +146,9 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
     ln -sr "${build_dir_unabridged}/${name_unabridged}.synctex.gz" .
 
+# The compiler again needs the sources file in both build dirs, so symlink.
+    ln -sr "sources.bib" "${build_dir_regular}"/
     ln -sr "sources.bib" "${build_dir_unabridged}"/
-  fi
-
-# For the types that have no specific inputs, we delete the inputs/ folder.
-  if [[ "${doctype}" == "standalone"  ]] ; then
-    rm -rf inputs/
   fi
 
 # Finally delete this script (no use for it after everything is set up).

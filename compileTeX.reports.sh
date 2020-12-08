@@ -318,8 +318,7 @@ function killall_tex() {
 # Do a normal compile. If we are dealing with a report, also do a single
 # compile build on the unabridged copy.
 #
-# First do a simple compile. Then, if it was successful, and if we are dealing
-# with report, build unabridged copy.
+# First do a simple compile. Then, if it was successful, build unabridged copy.
 function small_build() {
   compile "$name" "$build_dir_regular" # compile() returns the $? of the LaTeX command. See Note (1).
   if [[ $? -ne 0 ]]; then
@@ -344,6 +343,10 @@ function small_build() {
   else
 # If \includeonly is not used, then unabridged version is just the normal
 # version, so just copy the $name.pdf file to $name_unabridged.pdf.
+    echo -e "\n*************************************************************************"
+    echo -e "* \includeonly not used; just copying regular pdf..."
+    echo -e "*************************************************************************\n"
+
     cp "${build_dir_regular}/${name}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
     cp "${build_dir_regular}/${name}.synctex.gz" "${build_dir_unabridged}/${name_unabridged}.synctex.gz"
   fi

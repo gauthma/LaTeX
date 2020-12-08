@@ -30,11 +30,13 @@
   {\csname faicon@#1\endcsname}}
 
 % The custom command for each needed icon.
-\def\faHome{\faicon{home}}
-\def\faFirefox{\faicon{firefox}}
 \def\faEnvelopeO{\faicon{envelope-o}}
+\def\faFirefox{\faicon{firefox}}
+\def\faHome{\faicon{home}}
+\def\faPhone{\faicon{phone}}
 
 % And the actual symbol for each icon.
-\expandafter\def\csname faicon@home\endcsname{{\FA\symbol{"F015}}}
 \expandafter\def\csname faicon@envelope-o\endcsname{{\FA\symbol{"F003}}}
 \expandafter\def\csname faicon@firefox\endcsname{{\FA\symbol{"F269}}}
+\expandafter\def\csname faicon@home\endcsname{{\FA\symbol{"F015}}}
+\expandafter\def\csname faicon@phone\endcsname{{\FA\symbol{"F095}}}
