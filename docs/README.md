@@ -24,7 +24,7 @@ where `your_document_dir` should be the name of the (new) folder which will cont
 
 Well, it gets even better. In the last command (`sh setup.sh ...`), if the argument ends in `.tex`, or just a dot `.`---which can happen with `<Tab>` completion if there are files with the same name but different extensions---the script will still work correctly. So just type the first characters of the name of the template you want, hit `<Tab>`, and the `setup.sh` script will take care of the rest!
 
-Speaking of which, the `setup.sh` script will also **remove the .git folder**, in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc.
+Speaking of which, the `setup.sh` script will also **remove the .git folder** (plus `.gitignore`), in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc. It is up to decide if, and how, any version control should be used.
 
 So all that is left is to do your writing with LaTeX templates provided, compile using `CompileTeX.sh`, and enjoy profit!! If you're interested, read on!
 
@@ -142,7 +142,9 @@ So for variables that the user can set, in addition to the ones mentioned previo
 
 - `tmp_build_dir`: when doing a `big_build`, and `\includeonly` is used, the first run must "see" the entire document. (Sctricty speaking, this is only required after a `clean` of the build dir, but I think it good practice to start a `big_build` like this.) So the `\includeonly` statement needs to be commented out, but in a file the user is likely editing. So the script does a compilation in another folder, namely `tmp_build_dir`, and then copies back the auxiliary files. **If possible**,this should be a folder in a RAM-based `tmpfs` filesystem. In Archlinux, one such filesystem is mounted at `/run/user/$UID/` (that variable should contain your user id; usually starts at 1000).
 
-As for command line options, they are the same as for the two simpler compile scripts documented above, with one change and one addition:
+As for command line options, they are the same as for the two simpler compile scripts documented above, with two changes and one addition:
+
+- `clean` (changed): besides cleaning per se, it also rebuilds the build dirs' structure (see above).
 
 - `final` (changed): always uses the unabridged copy, so as to ensure that it is the complete version PDF that is renamed to its final name (the default is again `${name}.FINAL.pdf`).
 

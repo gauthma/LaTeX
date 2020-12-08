@@ -127,7 +127,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 # Miscellaneous actions required for specific types.
   if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || \
     "${doctype}" == "standalone" ]] ; then
-    rm sources.bib
+    rm -rf sources.bib docs
 # standalone has no specific inputs, so delete the inputs/ folder.
     if [[ "${doctype}" == "standalone"  ]] ; then
       rm -rf inputs/
