@@ -45,76 +45,22 @@ indexcmd="makeindex"
 name_unabridged="Unabridged"
 build_dir_unabridged="build_UNABRIDGED"
 
-function big_build_unabridged_copy() {
-# Now we deal with unabridged copy. If the three compiles after a bib update
-# did not fail, then update bib && triple compile in unabridged_dir.
-  update_unabridged_tex_files
-
-  echo -e "\n*************************************************************************"
-  echo -e "* Now building the unabridged (full) build..."
-  echo -e "*************************************************************************\n"
-
-# Just as above, first, do a single compile.
-  compile "${name_unabridged}" "$build_dir_unabridged"
-# If the compile failed, notify the user and quit.
-  if [[ $? -ne 0 ]]; then
-    echo "Compile of ${name_unabridged}.tex file was not successful!"
-    return 1
-  fi
-
-# If the compile succeeded, then build the index.
-  if [[ "$do_idx" == "true" ]] ; then
-    cd "${build_dir_unabridged}" && pwd
-    ${indexcmd} ${name_unabridged}
-# If the building the index failed, notify the user and quit.
-    if [[ $? -ne 0 ]]; then
-      echo "Building of the index (unabridged copy) was not successful!"
-      return 1
-    fi
-# Otherwise leave the regular build dir.
-    cd ..
-  fi
-
-# Then build bibliography, if requested.
-  if [[ "$bibliography_was_actually_built" == "true" ]] ; then
-    cd "${build_dir_unabridged}" && pwd
-    ${bibcmd} "${name_unabridged}.aux"
-# If bibliography builds properly, then do more three runs.
-    if [[ $? -eq 0 ]]; then
-      cd ..
-      compile "${name_unabridged}" "$build_dir_unabridged" && \
-        compile "${name_unabridged}" "$build_dir_unabridged" && \
-        compile "${name_unabridged}" "$build_dir_unabridged"
-# If the compile after bib update failed, notify the user and quit.
-      if [[ $? -ne 0 ]]; then
-        echo "Compile of ${name_unabridged}.tex file was not successful!"
-        return 1
-      fi
-# Bibliography did NOT build property; notify user and quit.
-    else
-      echo "Building bibliography (unabridged copy) file was not successful!"
-      return 1
-    fi
-# If we are skipping bibliography, just do two compile() runs.
-  else
-    compile "${name_unabridged}" "$build_dir_unabridged" && \
-      compile "${name_unabridged}" "$build_dir_unabridged"
-# If one of the compile runs failed, notify the user and quit.
-    if [[ $? -ne 0 ]]; then
-      echo "(2nd or 3rd) compile run of ${name_unabridged}.tex file was not successful!"
-      return 1
-    fi
-  fi # If bibliography was actually built.
-  # Script execution should never reach this point.
-}
-
 # A big LaTeX compile: compile once (and build index, if it is set), then compile
-# bib (if it is set), then compile three more times (usually two are enough, but in
-# some thorny cases three are required, so...). If using bib is not set, just
-# compile three times.
-function big_build() {
+# bib (if it is set), then compile two more times. After that, check the .log
+# file to the see if there are undefined references. If this is so, that means
+# there are \cite commands in the bibliographic references themselves. And so,
+# we re-build the bibliography, and compile two more times. If everything is
+# ok, compile once more, to ensure proper backrefs.
+#
+# If using bib is not set, or if it is set, but no \cite or \nocite commands
+# are found, just compile three times.
+function big_build_inner() {
+
+  local fname="$1"
+  local build_dir="$2"
 
   local bibliography_was_actually_built="false"
+  local undef_refs=""
 
 # First, run compile(). If the main file has an \includeonly line, then we
 # first create a temp copy of the whole dir, so as to remove that command (we
@@ -124,24 +70,24 @@ function big_build() {
 # The reason for this is that in order to build properly the bibliography and
 # other things, when using \includeonly, the first compile run must be on the
 # **whole document**.
-  if [[ "$(do_we_have_includeonly)" == "true" ]]; then
-    compile_on_tmp_folder_comment_include_only "$name" "$build_dir_regular"
+  if [[ "$fname" == "$name" && "$(do_we_have_includeonly)" == "true" ]]; then
+    compile_on_tmp_folder_comment_include_only "$fname" "$build_dir"
   else
-    compile "$name" "$build_dir_regular"
+    compile "$fname" "$build_dir"
   fi
 # If the compile failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
-    echo "Compilation (ignoring \includeonly, if present) of ${name}.tex file was not successful!"
+    echo "Compilation (ignoring \includeonly, if present) of ${fname}.tex file was not successful!"
     return 1
   fi
 
 # If the compile succeeded, then build the index (inside the regular build dir).
   if [[ "$do_idx" == "true" ]] ; then
-    cd "${build_dir_regular}" && pwd
-    ${indexcmd} ${name}
+    cd "${build_dir}" && pwd
+    ${indexcmd} ${fname}
 # If the building the index failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
-      echo "Building of the index (regular copy) was not successful!"
+      echo "Building of the index for ${fname}.tex was not successful!"
       return 1
     fi
 # Otherwise leave the regular build dir.
@@ -153,10 +99,10 @@ function big_build() {
   if [[ "$do_bib" == "false" ]] ; then
     echo "$0: The \$do_bib var is set to false, so I am skipping the bibliography part."
     echo "$0: I will just run compile() twice more."
-    compile "$name" "$build_dir_regular" && compile "$name" "$build_dir_regular"
+    compile "$fname" "$build_dir" && compile "$fname" "$build_dir"
 # If one of the compile runs failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
-      echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
+      echo "(2nd or 3rd) compile run of ${fname}.tex file was not successful!"
       return 1
     fi
 
@@ -170,36 +116,83 @@ function big_build() {
     if [[ -z "$have_cite_entries" ]]; then
       echo "$0: The $do_bib var is set to true, but no \\cite entries found.
       So I will just do two more compile runs..."
-      compile "$name" "$build_dir_regular" && compile "$name" "$build_dir_regular"
+      compile "$fname" "$build_dir" && compile "$fname" "$build_dir"
 # If one of the compile runs failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
-        echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
+        echo "(2nd or 3rd) compile run of ${fname}.tex file was not successful!"
         return 1
       fi
-# Some \cite or \nocite entries have been found -- hence more three compiles.
+# Some \cite or \nocite entries have been found -- hence build bibliography and
+# do two more compiles. And then check if there are undef references.
     else
-      cd "${build_dir_regular}" && pwd
-      ${bibcmd} "${name}.aux"
+      cd "${build_dir}" && pwd
+      ${bibcmd} "${fname}.aux"
       if [[ $? -eq 0 ]]; then
         bibliography_was_actually_built="true"
         cd ..
-        compile "$name" "$build_dir_regular" && \
-          compile "$name" "$build_dir_regular" && \
-          compile "$name" "$build_dir_regular"
-# If the compile compile after bib update failed, notify the user and quit.
+        compile "$fname" "$build_dir" && \
+        compile "$fname" "$build_dir"
+
+# Now check for undefined references.
+        undef_refs=$(sed -En "s/^.+ Citation \`(.+)' on page .+ undefined.*$/\1/p" "${build_dir}/${fname}.log")
+
+        if [[ -n "$undef_refs" ]]; then
+# If undefined citations are found after the first two compiles after having
+# built the bibliography, then we need to re-build the bibliography, and do two
+# more compiles after that. But first warn the user.
+          echo "Found undefined citations: $undef_refs"
+          echo "Re-building bibliography, and doing TWO more further compilations."
+          cd "${build_dir}" && pwd
+          ${bibcmd} "${fname}.aux"
+          if [[ $? -eq 0 ]]; then
+            cd ..
+            compile "$fname" "$build_dir" && \
+            compile "$fname" "$build_dir"
+            if [[ $? -ne 0 ]]; then
+              echo "Compile of ${fname}.tex, after building bibliography (SECOND TIME), was not successful!"
+              return 1
+            fi
+          else
+            echo "Building bibliography (regular copy, SECOND TIME) file was not successful!"
+            return 1
+          fi
+        fi
+# Whether or not there were undefined references, compile one final time. In
+# either case, this will be the third compile run after the latest bibliography
+# build.
+        compile "$fname" "$build_dir"
+# If this last compile failed, notify the user and quit.
         if [[ $? -ne 0 ]]; then
-          echo "Compile of ${name}.tex, after building bibliography, was not successful!"
+          echo "Last compile of ${fname}.tex was not successful!"
           return 1
         fi
+
+# If the compiles were successful, but we still have undefined references, then
+# just warn the user, and let him deal with it.
+        undef_refs=$(sed -En "s/^.+ Citation \`(.+)' on page .+ undefined.*$/\1/p" "${build_dir}/${fname}.log")
+
+        if [[ -n "$undef_refs" ]]; then
+# If undefined citations are found after the first compile after having built
+# the bibliography, then we need to re-build the bibliography, and do two more
+# compiles after that. But first warn the user.
+          echo "There are still undefined citations: $undef_refs!!"
+        fi
       else
-        echo "Building bibliography (regular copy) file was not successful!"
+        echo "Building bibliography (first run, regular copy) file was not successful!"
         return 1
       fi
     fi
   fi
+}
 
-  # Now that we're finished with regular copy, build the unabridged one.
-  big_build_unabridged_copy
+function big_build () {
+  big_build_inner "$name" "$build_dir_regular"
+
+  # If regular copy built correctly, then build the unabridged one.
+  if [[ $? -eq 0 ]]; then
+    update_unabridged_tex_files
+    big_build_inner "$name_unabridged" "$build_dir_unabridged"
+  fi
 }
 
 function clean() {
