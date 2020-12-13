@@ -38,11 +38,13 @@
 % For Portuguese, replace "UKenglish" with "portuges".
 \usepackage[UKenglish]{babel}
 \usepackage[comma, numbers]{natbib}
-\renewcommand{\bibsection}{\chapter*{References}}  % name the bib chapter References.
-\usepackage{url}
-% Make bib listing with bold <number><dot>.
+\renewcommand*{\bibsection}{\chapter*{References}}  % Name the bib chapter References.
+\renewcommand*{\bibfont}{\footnotesize} % Use the same font as in footnotes.
+\setlength{\bibsep}{0pt plus 0.5ex} % Smaller vertical separation between bibtems.
+
+% Make bib listing with <number><dot>.
 \makeatletter
-\renewcommand\@biblabel[1]{\textbf{#1.}}
+\renewcommand\@biblabel[1]{\textrm{#1.}}
 \makeatother
 % \renewcommand{\UrlFont}{\small\tt}
 
