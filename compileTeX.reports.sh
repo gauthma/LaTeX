@@ -293,7 +293,7 @@ function do_we_have_includeonly() {
 }
 
 function final_document() {
-  big_build_unabridged_copy
+  big_build_inner "$name_unabridged" "$build_dir_unabridged"
   cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
 }
 
