@@ -61,7 +61,6 @@ function big_build_inner() {
   local fname="$1"
   local build_dir="$2"
 
-  local bibliography_was_actually_built="false"
   local undef_refs=""
 
   compile "$fname" "$build_dir"
@@ -118,7 +117,6 @@ function big_build_inner() {
       cd "${build_dir}" && pwd
       ${bibcmd} "${fname}.aux"
       if [[ $? -eq 0 ]]; then
-        bibliography_was_actually_built="true"
         cd ..
         compile "$fname" "$build_dir" && \
         compile "$fname" "$build_dir"
