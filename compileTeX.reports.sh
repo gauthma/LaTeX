@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# See the end of file for explanatory comments.
+# See the end of file for an overall explanation of this file.
 
 # $name is one of: cv, bare, essay, llncs, presentation, report, or standalone.
 name="report"
@@ -54,6 +54,8 @@ build_dir_unabridged="build_UNABRIDGED"
 #
 # If using bib is not set, or if it is set, but no \cite or \nocite commands
 # are found, just compile three times.
+#
+# See also big_build().
 function big_build_inner() {
 
   local fname="$1"
@@ -62,19 +64,7 @@ function big_build_inner() {
   local bibliography_was_actually_built="false"
   local undef_refs=""
 
-# First, run compile(). If the main file has an \includeonly line, then we
-# first create a temp copy of the whole dir, so as to remove that command (we
-# can't do this on the main file itself, because it will likely be open for
-# editing by the user). If the main file has no \includeonly line, then just do
-# a simple compile run.
-# The reason for this is that in order to build properly the bibliography and
-# other things, when using \includeonly, the first compile run must be on the
-# **whole document**.
-  if [[ "$fname" == "$name" && "$(do_we_have_includeonly)" == "true" ]]; then
-    compile_on_tmp_folder_comment_include_only "$fname" "$build_dir"
-  else
-    compile "$fname" "$build_dir"
-  fi
+  compile "$fname" "$build_dir"
 # If the compile failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
     echo "Compilation (ignoring \includeonly, if present) of ${fname}.tex file was not successful!"
@@ -185,10 +175,26 @@ function big_build_inner() {
   fi
 }
 
+# Do a big build on the regular copy; and if it succeeds, do the same for the
+# unabridged copy.
 function big_build () {
-  big_build_inner "$name" "$build_dir_regular"
+# Big build for regular copy: if the main file has an \includeonly line, then we
+# first create a temp copy of the whole dir, so as to remove that command (we
+# can't do this on the main file itself, because it will likely be open for
+# editing by the user). If the main file has no \includeonly line, then just do
+# a simple compile run.
+  if [[ "$(do_we_have_includeonly)" == "true" ]]; then
+    big_compile_on_tmp_folder_comment_include_only
+  else
+    big_build_inner "$name" "$build_dir_regular"
+  fi
 
-  # If regular copy built correctly, then build the unabridged one.
+# If big build of regular copy built correctly, then do big build for the
+# unabridged one.
+  echo -e "\n*************************************************************************"
+  echo -e "* Now continuing with unabridged (full) build..."
+  echo -e "*************************************************************************\n"
+
   if [[ $? -eq 0 ]]; then
     update_unabridged_tex_files
     big_build_inner "$name_unabridged" "$build_dir_unabridged"
@@ -237,37 +243,37 @@ function clean() {
 function compile() {
   ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
   local ret=$?
-  echo "" # Print a newline (SyncTeX doesn't).
+# Print a newline (SyncTeX, which runs at the end of the compilation process,
+# doesn't).
+  echo ""
   return $ret
 }
 
 # This function creates a copy of the main dir (excluding unabridged stuff),
-# deletes the \includeonly line in $name.tex, patches and then does a regular
-# compile run. The goal of this function is to rebuild the same auxiliary files
-# that would be produced by building the entire document. This is required when
-# running big_build() after clean(): if using \includeonly, then the first
-# compile run must be of the whole document. For precaution, I do that first
-# compile run the whole document always, irrespective of whether clean() was
-# called before.
+# deletes the \includeonly line in $name.tex, patches and then does a big
+# compile run. The reason is that there is little point in doing a big build
+# with \includeonly, because things like citations or backrefs may come out
+# wrong.
 #
-# It then waits for the big compile to finish, replaces the main folder's (../)
-# build dirs with these ones, and deletes the copy folder.
-function compile_on_tmp_folder_comment_include_only() {
+# After the big build, it replaces the main folder's build dir with this one,
+# and deletes the copy folder.
+function big_compile_on_tmp_folder_comment_include_only() {
   local curr_dir=$(pwd)
 
   rm -rf "$tmp_build_dir" && mkdir "$tmp_build_dir"
 
-  cp -r $(ls | grep -v "docs\|$build_dir_unabridged") "$tmp_build_dir"
+  cp -r $(ls | grep -v "docs\|$build_dir_unabridged\|$name_unabridged") "$tmp_build_dir"
   cd "$tmp_build_dir"
 
 # Comment \includeonly line in $name.tex, if any.
   sed -e 's/^\s*\\includeonly.*$//' -i "${name}.tex"
 
-  ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
+# We have to use our copy of build_dir_regular, because the compiler will not
+# use a build dir that is outside of the current dir.
+  big_build_inner "$name" "./$build_dir_regular"
   local ret=$?
 
   cd "$curr_dir"
-
   rm -rf "${build_dir_regular}"
   mv "$tmp_build_dir"/"${build_dir_regular}" .
 
@@ -308,10 +314,8 @@ function killall_tex() {
   killall ${texcmd}
 }
 
-# Do a normal compile. If we are dealing with a report, also do a single
-# compile build on the unabridged copy.
-#
-# First do a simple compile. Then, if it was successful, build unabridged copy.
+# Do a single compile run---and if it is successful, do the same for the
+# unabridged copy.
 function small_build() {
   compile "$name" "$build_dir_regular" # compile() returns the $? of the LaTeX command. See Note (1).
   if [[ $? -ne 0 ]]; then
@@ -325,7 +329,7 @@ function small_build() {
     update_unabridged_tex_files
 
     echo -e "\n*************************************************************************"
-    echo -e "* Now continuing with (background) unabridged (normal, non-full) build..."
+    echo -e "* Now continuing with unabridged (normal, non-full) build..."
     echo -e "*************************************************************************\n"
 
     compile "${name_unabridged}" "$build_dir_unabridged"
@@ -438,29 +442,30 @@ function main() {
 
 main "$@"
 
-###############################################################################
+################################################################################
 #
 # Much like targets in a Makefile, this scripts provides functions to do a
 # simple build, a full build, etc, for a LaTeX project.
 #
 # Three main functions, compile(), small_build(), and big_build():
 #
-# - compile() just runs the LaTeX compiler on whatever file it is given;
+# - compile() just runs the LaTeX compiler on whatever file it is given.
 #
 # - small_build() runs compile() on the regular copy, and then (if using
 # \includeonly) on the unabridged copy. If \includeonly is not used, after
-# compiling the regular copy, it just copies the pdf file --- because in this
+# compiling the regular copy, it just copies the pdf file---because in this
 # case, both regular and unabridged versions match.
 #
-# - big_build() runs compile() once, then build bibliography etc. (if
-# required), and then runs compile() three more times. And does the same to the
-# unabridged copy, if there exists one.
+# - big_build() is the function supposed to be run when updating bibliographic
+# references, indexes, etc. It is tricky to run when also using \includeonly;
+# so it actually builds the entire document. See the comments therein for
+# further information.
 #
 # Most of the remaining functions revolve around these three, to compile both
 # the report and its unabridged version, and to check for errors and give
 # feedback properly, and so on.
 #
-###############################################################################
+################################################################################
 
 ###
 
