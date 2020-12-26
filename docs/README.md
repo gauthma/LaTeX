@@ -6,9 +6,9 @@ Short intro
 
 In my interactions with LaTeX, I use a set of templates (some of which have an accompanying preamble in the `inputs/` folder), together with a couple of scripts for compilation. Here's the list of which script compiles which templates (the latter are described below, on section "The templates"):
 
-- `compileTeX.minimum.sh` for the minimalist templates, `bare.tex`, `standalone.tex`, and also for `cv.tex`, which compilation requirements are similarly straightforward.
+- `compileTeX.minimum.sh` for the minimalist templates, `bare.tex`, `presentation.tex`, `standalone.tex`, and also for `cv.tex`, which compilation requirements are similarly straightforward.
 
-- `compileTeX.medium.sh` for `essay.tex`, `llncs.tex` and `presentation.tex`. Essentially, it adds to the previous compiling script the capability of building a bibliography.
+- `compileTeX.medium.sh` for `essay.tex` and `llncs.tex`. Essentially, it adds to the previous compiling script the capability of building a bibliography.
 
 - `compileTeX.reports.sh` for `report.sh`. This adds to the previous compiling script the capability of producing an **unabridged copy**. This introduces a bunch of complications, and so both the script and template are dealt with in a specific section below, viz. "Reports: template and compilation".
 
@@ -24,7 +24,7 @@ where `your_document_dir` should be the name of the (new) folder which will cont
 
 Well, it gets even better. In the last command (`sh setup.sh ...`), if the argument ends in `.tex`, or just a dot `.`---which can happen with `<Tab>` completion if there are files with the same name but different extensions---the script will still work correctly. So just type the first characters of the name of the template you want, hit `<Tab>`, and the `setup.sh` script will take care of the rest!
 
-Speaking of which, the `setup.sh` script will also **remove the .git folder** (plus `.gitignore`), in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc. It is up to decide if, and how, any version control should be used.
+Speaking of which, the `setup.sh` script will also **remove the .git folder** (plus `.gitignore`), in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc. It is up to decide if, and how, any version control should be used. It will leave the `inputs/` folder with the files needed for the chosen template. E.g. if you choose `essay`, it will delete `inputs/report_preamble.tex`, `inputs/llncs_preamble.tex`, etc.
 
 So all that is left is to do your writing with LaTeX templates provided, compile using `CompileTeX.sh`, and enjoy profit!! If you're interested, read on!
 
@@ -37,7 +37,7 @@ Except for `llncs`, which uses its own font, I use a custom font, `Charis SIL`, 
 
 If you do decide to try out `Charis SIL`, then download the font from <http://software.sil.org/charis/download/>. It will consist of a bunch of `*.ttf` files. Put them in a location of your choice; here I will assume `$HOME/.fonts/truetype/` (yes, the `$HOME` variable can be used!). If you use another location, then just change that location in `inputs/fonts.tex`, and you are ready to go---except for `cv`.
 
-For `cv`, you need to 1) modify `inputs/fonts_cv.tex` instead of `inputs/fonts.tex`. And 2), you also need the `fontawesome` font. It should come with TeXLive, but I'm afraid XeLaTeX, for some reason, requires a path... So find the path for the `fontawesome.otf` file, and modify the path (line after the one starting with `\newfontfamily{\FA}`) to point to the *directory* where the `fontawesome.otf` file is located (see the example configuration in `inputs/fonts_cv.tex`).
+For `cv`, you need to you also need the `fontawesome` font. It should come with TeXLive, but I'm afraid XeLaTeX, for some reason, requires a path... So find the path for the `fontawesome.otf` file, and modify the path (line after the one starting with `\newfontfamily{\FA}`) to point to the *directory* where the `fontawesome.otf` file is located. see the example configuration in `inputs/fonts.tex` (note that before running the `setup.sh` script, this file is named `inputs/cv_fonts.tex`).
 
 That's it: now you can experiment with the templates; and come back to read the rest of this README when/if you need to. Have fun!
 
@@ -81,7 +81,7 @@ This script accepts the following options:
 
 - `debug`: run `small_build()`, but *with* debug output.
 
-- `final`: compiles document and renames it to the value of `finalname` variable---by default, it is `${name}.FINAL.pdf`, where `${name}` is the original name of the PDF file.
+- `final`: compiles document twice and renames it to the value of `finalname` variable---by default, it is `${name}.FINAL.pdf`, where `${name}` is the original name of the PDF file.
 
 - `get_compiler_pid`: in my `vim` setup, I have a map that builds the `LaTeX` command on writing the `.tex` file (see [myvim](https://github.com/gauthma/myvim)); it requires the pid of the compiler process to see if there is already a LaTeX compilation process going on. If you don't use `vim`, just ignore this.
 
@@ -120,7 +120,7 @@ This yields an `Unabridged.pdf` that will be the full, complete, document. Incid
 
 So when and if, to speed up the compilation process, the user decides to use `\includeonly`, then the `report.pdf` will be that smaller (abridged) document, whilst `Unabridged.pdf` will still be the full document. When running the compile script, the smaller version will compiled first---and when it is done, a large notice will be displayed, allowing you to get back to work ASAP.
 
-**Caveat: structure of the build directory.** If your splitted input is placed inside specific folders---say, placing all chapters inside a `chapters/` folder---then `\include` requires that those folders exist inside the build directories. More generally, the same hierarchy of files that are `include`'d needs to be replicated inside the build directories. To accomplish this, list those folders in the `folders_to_be_rsyncd` array. E.g. if you have two folders with `.tex` files in them, say `chapters` and `images`, that line should look something like:
+**Caveat: structure of the build directory.** If your split input is placed inside specific folders---say, placing all chapters inside a `chapters/` folder---then `\include` requires that those folders exist inside the build directories. More generally, the same hierarchy of files that are `include`'d needs to be replicated inside the build directories. To accomplish this, list those folders in the `folders_to_be_rsyncd` array. E.g. if you have two folders with `.tex` files in them, say `chapters` and `images`, that line should look something like:
 
 ~~~ {.shell .numberLines}
 folders_to_be_rsyncd=( "chapters" "images" )

@@ -27,7 +27,7 @@ folders_to_be_rsyncd=()
 # IMPORTANT: set the temporary build dir here. Use a RAM-based temporary
 # filesystem if you have one. See README.
 tmp_build_dir="/run/user/$UID/xyz-temp-compile"
-###########################################
+##### END VARIABLES THAT THE USER CAN SET #####
 
 # Name of the .bib file (sans extension).
 sourcesname="sources"

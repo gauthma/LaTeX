@@ -2,14 +2,11 @@
 % \documentclass[handout]{beamer}
 \input{inputs/preamble}
 
-\title
-{A Presentation Template}
+\title{A Presentation Template}
 
-\subtitle
-{With a Subtitle, if Needed}
+\subtitle{With a Subtitle, if Needed}
 
-\date
-{March 2020}
+\date{\today}
 
 \begin{document}
 
@@ -20,13 +17,13 @@
 \begin{frame}{On Science}
   \vfill
   \begin{itemize}
-    \item<1-> Science is \emph{cool!} \citep{Sagan}
+    \item<1-> Science is \alert{cool}!
       \vfill
-    \item<2-> Unfortunately \emph{a big great many lot} of people do not seem to get it\dots \citep{Feynman74}
+    \item<2-> Unfortunately a big great many lot of people \alert{do not seem to get it}\dots 
       \vfill
     \item<3-> And now some \emph{math:}
       \vfill
-      \begin{theorem}[Euler's identity] % Note the ( and ) in the optional name
+      \begin{theorem}[Euler's identity]
         \begin{equation}
           e^{i\pi}+1=0
         \end{equation}
@@ -43,28 +40,6 @@
 Lorem ipsum dolor sit amet, blah blah...
       \end{verbatim}
   \end{itemize}
-\end{frame}
-
-\begin{frame}{Summary}
-  \begin{itemize}
-  \item
-    The \alert{first main message} of your talk in one or two lines.
-  \item
-    The \alert{second main message} of your talk in one or two lines.
-  \item
-    Perhaps a \alert{third message}, but not more than that.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{References \& Notes}
-  \vfill
-  \bibliography{sources}
-  \bibliographystyle{plainnat}
-  \vfill
-  \vfill
-  \textbf{But beware:} \texttt{beamer} does not always play nice with references!\footnote{In particular, with overly fancy bibliographic styles\dots}\\[1em]
-  Besides, in a presentation the number of references should be minimised anyway\dots
-  \vfill
 \end{frame}
 
 \begin{frame}[plain]{Thank you for listening!}

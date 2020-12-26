@@ -84,7 +84,14 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
   rm -f "${doctype}.pdf" # If this exists, it's a symlink (actual pdf is in build dir).
 
+
 # Deal with inputs/ folder.
+  if [[ "${doctype}" == "standalone"  ]] ; then
+    rm -rf inputs/
+  elif [[ "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
+    rm -f inputs/fonts.tex
+  fi
+
   if [[ -f  "inputs/${doctype}_fonts.tex" ]] ; then
     mv "inputs/${doctype}_fonts.tex" "inputs/fonts.tex"
   fi
@@ -95,17 +102,18 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     mv "inputs/${doctype}_style.tex" "inputs/style.tex"
   fi
 
-# remove unneeded files from inputs/ folder.
+# Remove unneeded files from inputs/ folder.
   rm -f inputs/*_fonts.tex inputs/*_preamble.tex inputs/*_style.tex
 
-# Do the same for the build/ dir.
+# Done dealing with inputs/ folder. Now remove unneeded files from the build/
+# dir.
   rm -rf $(ls  build/* | grep -v "${doctype}.pdf")
 
-# Choose proper compiler.
+# Choose proper compilation script.
   if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || \
-    "${doctype}" == "standalone" ]] ; then
+     "${doctype}" == "presentation" || "${doctype}" == "standalone" ]] ; then
     mv compileTeX.minimum.sh CompileTeX.sh
-  elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
+  elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" ]] ; then
     mv compileTeX.medium.sh CompileTeX.sh
   else # Reports.
     mv compileTeX.reports.sh CompileTeX.sh
@@ -126,31 +134,30 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
 
 # Miscellaneous actions required for specific types.
   if [[ "${doctype}" == "cv" || "${doctype}" == "bare" || \
-    "${doctype}" == "standalone" ]] ; then
-    rm -rf sources.bib docs
-# standalone has no specific inputs, so delete the inputs/ folder.
-    if [[ "${doctype}" == "standalone"  ]] ; then
-      rm -rf inputs/
-    fi
-  elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || "${doctype}" == "presentation" ]] ; then
+    "${doctype}" == "presentation" || "${doctype}" == "standalone" ]] ; then
+    rm -rf sources.bib
+  elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || \
+    "${doctype}" == "reports" ]] ; then
 # The compiler needs to find the sources file in the build dir, so symlink.
-    ln -sr sources.bib "${build_dir_regular}"/
-    ln -sr "${build_dir_regular}/${doctype}.synctex.gz" .
-  elif [[ "${doctype}" == "report" ]] ; then
-
-# For reports, then set up the directory for unabridged copy.
-    mkdir "${build_dir_unabridged}"
-
-    cp "${build_dir_regular}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
-    ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" "Unabridged.pdf"
-
-    ln -sr "${build_dir_unabridged}/${name_unabridged}.synctex.gz" .
-
-# The compiler again needs the sources file in both build dirs, so symlink.
+# And the PDF viewer needs to find the .synctex file in the top dir, so also symlink.
     ln -sr "sources.bib" "${build_dir_regular}"/
+    ln -sr "${build_dir_regular}/${doctype}.synctex.gz" .
+  fi
+
+# For reports, additional actions are required, namely set up the directory for
+# unabridged copy.
+  if [[ "${doctype}" == "report" ]] ; then
+
+    mkdir "${build_dir_unabridged}"
+    cp "${build_dir_regular}/${doctype}.pdf" "${build_dir_unabridged}/${name_unabridged}.pdf"
+
+    ln -sr "${build_dir_unabridged}/${name_unabridged}.pdf" "Unabridged.pdf"
+    ln -sr "${build_dir_unabridged}/${name_unabridged}.synctex.gz" .
     ln -sr "sources.bib" "${build_dir_unabridged}"/
   fi
 
-# Finally delete this script (no use for it after everything is set up).
+# Finally delete the docs/ folder, and this script (no use for either of them
+# after everything is set up).
+  rm -rf docs
   rm -- "$0"
 fi

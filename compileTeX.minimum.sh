@@ -8,7 +8,7 @@ name="bare"
 # name with ".FINAL" appended. In my setup, works "out of the box" with spaces,
 # foreign chars, ...
 finalname="${name}.FINAL"
-###########################################
+##### END VARIABLES THAT THE USER CAN SET #####
 
 # Build dir.
 build_dir="build"
@@ -47,7 +47,8 @@ function debugbuild() {
 }
 
 function final_document() {
-  compile "$name"
+# Just to be sure, compile twice, because things like page numbers require it.
+  compile "$name" && compile "$name"
 
   cp "${build_dir}"/"${name}.pdf" "${finalname}.pdf"
 }
