@@ -137,7 +137,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
     "${doctype}" == "presentation" || "${doctype}" == "standalone" ]] ; then
     rm -rf sources.bib
   elif [[ "${doctype}" == "essay" || "${doctype}" == "llncs" || \
-    "${doctype}" == "reports" ]] ; then
+    "${doctype}" == "report" ]] ; then
 # The compiler needs to find the sources file in the build dir, so symlink.
 # And the PDF viewer needs to find the .synctex file in the top dir, so also symlink.
     ln -sr "sources.bib" "${build_dir_regular}"/
