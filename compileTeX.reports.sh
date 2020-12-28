@@ -38,7 +38,7 @@ build_dir_regular="build"
 texcmd="xelatex"
 texcmdopts="-halt-on-error --interaction=batchmode --shell-escape --synctex=1"
 debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir_regular}"
-bibcmd="bibtex"
+bibcmd="bibulous"
 indexcmd="makeindex"
 
 # Data for unabridged copy.

@@ -25,7 +25,7 @@ build_dir="build"
 texcmd="xelatex"
 texcmdopts="-halt-on-error --interaction=batchmode --shell-escape --synctex=1"
 debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir}"
-bibcmd="bibtex"
+bibcmd="bibulous"
 indexcmd="makeindex"
 
 # A big LaTeX compile: compile once (and build index, if it is set), then compile

@@ -24,22 +24,35 @@ where `your_document_dir` should be the name of the (new) folder which will cont
 
 Well, it gets even better. In the last command (`sh setup.sh ...`), if the argument ends in `.tex`, or just a dot `.`---which can happen with `<Tab>` completion if there are files with the same name but different extensions---the script will still work correctly. So just type the first characters of the name of the template you want, hit `<Tab>`, and the `setup.sh` script will take care of the rest!
 
-Speaking of which, the `setup.sh` script will also **remove the .git folder** (plus `.gitignore`), in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if argument is `cv`, then it will remove `report.*`, `essay.*`, etc. It is up to decide if, and how, any version control should be used. It will leave the `inputs/` folder with the files needed for the chosen template. E.g. if you choose `essay`, it will delete `inputs/report_preamble.tex`, `inputs/llncs_preamble.tex`, etc.
+Speaking of which, the `setup.sh` script will also **remove the .git folder** (plus `.gitignore`), in addition to any unneeded files, depending on the value of its argument (i.e. the chosen template). E.g. if the argument is `cv`, then it will remove `report.*`, `essay.*`, etc. It is up to decide if, and how, any version control should be used. It will leave the `inputs/` folder with the files needed for the chosen template. E.g. if you choose `essay`, it will delete `inputs/report_preamble.tex`, `inputs/llncs_preamble.tex`, etc.
 
 So all that is left is to do your writing with LaTeX templates provided, compile using `CompileTeX.sh`, and enjoy profit!! If you're interested, read on!
 
-(Well, technically, that's a lie. You still have to deal with the font configuration---but don't let that stop you! It's simple---instructions below.)
+(Well, technically, that's a lie. You still have to deal with the font configuration and the compiler for bibliography entries---but don't let that stop you! It's simple---instructions below.)
 
 Fonts
 ---
 
-Except for `llncs`, which uses its own font, I use a custom font, `Charis SIL`, because I don't really like *Computer Modern* and its cousins (condemn me if you will). If you don't feel like dealing with font issues, just comment the relevant lines (they will be in the preamble if there is one); look for the comments about font setup.
+Except for `llncs`, which uses its own font, I use a custom font, `Charis SIL`, because I don't really like *Computer Modern* and its cousins (condemn me if you will). If you don't feel like dealing with font issues, just comment the line `\input{inputs/fonts}` in the preamble file.
 
 If you do decide to try out `Charis SIL`, then download the font from <http://software.sil.org/charis/download/>. It will consist of a bunch of `*.ttf` files. Put them in a location of your choice; here I will assume `$HOME/.fonts/truetype/` (yes, the `$HOME` variable can be used!). If you use another location, then just change that location in `inputs/fonts.tex`, and you are ready to go---except for `cv`.
 
-For `cv`, you need to you also need the `fontawesome` font. It should come with TeXLive, but I'm afraid XeLaTeX, for some reason, requires a path... So find the path for the `fontawesome.otf` file, and modify the path (line after the one starting with `\newfontfamily{\FA}`) to point to the *directory* where the `fontawesome.otf` file is located. see the example configuration in `inputs/fonts.tex` (note that before running the `setup.sh` script, this file is named `inputs/cv_fonts.tex`).
+For `cv`, you need to you also need the `fontawesome` font (it is for icons). It should come with TeXLive, but I'm afraid XeLaTeX, for some reason, requires a path... So find the path for the `fontawesome.otf` file, and modify the path (line after the one starting with `\newfontfamily{\FA}`) to point to the *directory* where the `fontawesome.otf` file is located. see the example configuration in `inputs/fonts.tex` (note that before running the `setup.sh` script, this file is named `inputs/cv_fonts.tex`).
 
 That's it: now you can experiment with the templates; and come back to read the rest of this README when/if you need to. Have fun!
+
+Bibliography building
+---
+
+For `report` and `essay` templates, I build the bibliography using the `bibulous` tool (`llncs` uses `bibtex`, and the other templates do not have bibliographies). It allows you to build your own templates, which a much simpler syntax than that used by `bibtex` templates. I use a template of my own doing, named `sane.bst`. `bibulous` is a python script that can be downloaded from <https://nzhagen.github.io/bibulous/>. To use it, I do as follows: save the script in some location of your choice, and then symlink it to some location in your `$PATH`; I use `$HOME/.local/bin`:
+
+~~~ {.bash .numberLines}
+$ ln -s /path/to/bibulous.py $HOME/.local/bin/bibulous
+~~~
+
+Thus in the compilation script, I can set `bibcmd="bibulous"`. As for the `sane.bst` template, it can be downloaded from <https://randomwalk.eu/public/sane.bst>, and it must be placed in a location where the `LaTeX` compiler will search for bibliographic templates (this is dependent on how you set up your TeX tree; see <https://randomwalk.eu/notes/TeX-Trickery.pdf> for a sugestion.)
+
+To revert back to `bibtex`, just change the `bibcmd` line in the compile script to use `bibtex`, and the `\bibliographystyle` line in the `.tex` file to use one of the standard bibliographic styles, like `plainnat`, for example.
 
 The templates
 ---
