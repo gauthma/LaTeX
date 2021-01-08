@@ -180,7 +180,7 @@ function big_build () {
 # first create a temp copy of the whole dir, so as to remove that command (we
 # can't do this on the main file itself, because it will likely be open for
 # editing by the user). If the main file has no \includeonly line, then just do
-# a simple compile run.
+# a big build (done in function big_build_inner()).
   if [[ "$(do_we_have_includeonly)" == "true" ]]; then
     big_compile_on_tmp_folder_comment_include_only
   else
@@ -266,8 +266,8 @@ function big_compile_on_tmp_folder_comment_include_only() {
 # Comment \includeonly line in $name.tex, if any.
   sed -e 's/^\s*\\includeonly.*$//' -i "${name}.tex"
 
-# We have to use our copy of build_dir_regular, because the compiler will not
-# use a build dir that is outside of the current dir.
+# We have to use our (tmp) copy of build_dir_regular, because the compiler will
+# not use a build dir that is outside of the current dir.
   big_build_inner "$name" "./$build_dir_regular"
   local ret=$?
 
