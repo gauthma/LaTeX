@@ -14,14 +14,15 @@ Skeleton for \LaTeX\ articles  % main title
 
 \maketitle
 
-\tableofcontents
-
-\pagestyle{fancy}
+% Needed to, if the TOC has more than one page, avoid having the header shown
+% from page 2 onwards.
+{\pagestyle{plain}\tableofcontents\cleardoublepage}
 
 \chapter{Introduction}
 Science is cool!~\cite{Sagan}. But lots of people don't get it\ldots~\cite{Feynman74}.
 
-\phantomsection
+% The \newpage is needed for the References entry in TOC to indicate the proper page number.
+\newpage\phantomsection
 \addcontentsline{toc}{chapter}{References}
 \bibliographystyle{sane}
 \bibliography{sources}
