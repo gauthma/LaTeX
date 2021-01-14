@@ -297,6 +297,7 @@ function do_we_have_includeonly() {
 }
 
 function final_document() {
+  update_unabridged_tex_files
   big_build_inner "$name_unabridged" "$build_dir_unabridged"
   cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
 }
