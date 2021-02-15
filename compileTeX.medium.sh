@@ -36,43 +36,43 @@ function big_build() {
 
   local bibliography_was_actually_built="false"
 
-# First, run compile(). 
+  # First, run compile(). 
   compile "$name" "$build_dir"
-# If the compile failed, notify the user and quit.
+  # If the compile failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
     echo "Compilation of ${name}.tex file was not successful!"
     return 1
   fi
 
-# If the previous compile succeeded, and we are not building bibliography, then
-# just compile twice more and exit.
+  # If the previous compile succeeded, and we are not building bibliography,
+  # then just compile twice more and exit.
   if [[ "$do_bib" == "false" ]] ; then
     echo "$0: The \$do_bib var is set to false, so I am skipping the bibliography part."
     echo "$0: I will just run compile() twice more."
     compile "$name" "$build_dir" && compile "$name" "$build_dir"
-# If one of the compile runs failed, notify the user and quit.
+    # If one of the compile runs failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
       echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
       return 1
     fi
 
-# Else, if $do_bib is true, and there are uncommented \cite or \nocite
-# commands, then build the bibliography. The reason for *three* compiles,
-# instead of the usual two, is that an extra compile is required for
-# backreferences in bib entries to be constructed (e.g. "Cited in page ...").
+  # Else, if $do_bib is true, and there are uncommented \cite or \nocite
+  # commands, then build the bibliography. The reason for *three* compiles,
+  # instead of the usual two, is that an extra compile is required for
+  # backreferences in bib entries to be constructed (e.g. "Cited in page ...").
   else
     local have_cite_entries=$(grep --extended-regexp --recursive '^[^%]*\\(no)?cite' --include=*.tex)
-# No \cite or \nocite entries have been found.
+    # No \cite or \nocite entries have been found.
     if [[ -z "$have_cite_entries" ]]; then
       echo "$0: The $do_bib var is set to true, but no \\cite entries found.
       So I will just do two more compile runs..."
       compile "$name" "$build_dir" && compile "$name" "$build_dir"
-# If one of the compile runs failed, notify the user and quit.
+      # If one of the compile runs failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
         echo "(2nd or 3rd) compile run of ${name}.tex file was not successful!"
         return 1
       fi
-# Some \cite or \nocite entries have been found -- hence more three compiles.
+      # Some \cite or \nocite entries have been found -- hence more three compiles.
     else
       cd "${build_dir}" && pwd
       ${bibcmd} "${name}.aux"
@@ -82,7 +82,9 @@ function big_build() {
         compile "$name" "$build_dir" && \
           compile "$name" "$build_dir" && \
           compile "$name" "$build_dir"
-# If the compile compile after bib update failed, notify the user and quit.
+
+        # If the compile compile after bib update failed, notify the user and
+        # quit.
         if [[ $? -ne 0 ]]; then
           echo "Compile of ${name}.tex, after building bibliography, was not successful!"
           return 1
@@ -104,7 +106,7 @@ function clean() {
     mkdir $build_dir
   fi
 
-# Rebuilding structure of build_dirs. Begin with symlinks.
+  # Rebuilding structure of build_dirs. Begin with symlinks.
   dir_and_symlinks_rebuild
 }
 
@@ -173,10 +175,10 @@ function main() {
     exit 1
   fi
 
-# If no arguments given, do a normal build;
-# - argument is debug: do debug build;
-# - argument is get_compiler_pid: compile that function;
-# - argument is killall_tex: compile that function.
+  # If no arguments given, do a normal build;
+  # - argument is debug: do debug build;
+  # - argument is get_compiler_pid: compile that function;
+  # - argument is killall_tex: compile that function.
   if [[ $# -eq 0 ]] ; then
     small_build
   elif [[ $# -eq 1 && "$1" == "big" ]] ; then

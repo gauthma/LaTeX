@@ -27,7 +27,7 @@ function clean() {
     mkdir $build_dir
   fi
 
-# Rebuilding structure of build_dir. Begin with symlinks.
+  # Rebuilding structure of build_dir. Begin with symlinks.
   symlinks_rebuild
 }
 
@@ -47,7 +47,8 @@ function debugbuild() {
 }
 
 function final_document() {
-# Just to be sure, compile twice, because things like page numbers require it.
+  # Just to be sure, compile twice, because things like page numbers require
+  # it.
   compile "$name" && compile "$name"
 
   cp "${build_dir}"/"${name}.pdf" "${finalname}.pdf"
@@ -84,10 +85,10 @@ function main() {
     exit 1
   fi
 
-# If no arguments given, do a normal build;
-# - argument is debug: do debug build;
-# - argument is get_compiler_pid: compile that function;
-# - argument is killall_tex: compile that function.
+  # If no arguments given, do a normal build;
+  # - argument is debug: do debug build;
+  # - argument is get_compiler_pid: compile that function;
+  # - argument is killall_tex: compile that function.
   if [[ $# -eq 0 ]] ; then
     compile "$name"
   elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
