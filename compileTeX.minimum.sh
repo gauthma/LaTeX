@@ -14,7 +14,7 @@ finalname="${name}.FINAL"
 build_dir="build"
 
 texcmd="xelatex"
-texcmdopts="-halt-on-error --interaction=batchmode --shell-escape"
+texcmdopts="-halt-on-error --interaction=batchmode --shell-escape --synctex=1"
 debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir}"
 
 function clean() {
@@ -38,6 +38,7 @@ function compile() {
     echo "Compile of ${name}.tex file was not successful!"
     exit 1
   fi
+  echo "" # Print a newline (SyncTeX doesn't).
 }
 
 # A normal (single) LaTeX compile.
@@ -72,7 +73,10 @@ function symlinks_rebuild() {
   fi
 
   rm -f "${name}.pdf"
+  rm -f "${name}.synctex.gz"
+
   ln -sr "${build_dir}/${name}.pdf" .
+  ln -sr "${build_dir}/${name}.synctex.gz" .
 }
 
 #
