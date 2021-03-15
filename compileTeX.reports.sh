@@ -302,17 +302,6 @@ function final_document() {
   cp "${build_dir_unabridged}"/"${name_unabridged}.pdf" "${finalname}.pdf"
 }
 
-# Get the pid of the running $texcmd process (if any). This is needed to avoid
-# starting (from within vim) a new compilation, if one is already running.
-function get_compiler_pid() {
-  pidof ${texcmd}
-}
-
-# Kill a running $texcmd process (useful when an error occurs, for example).
-function killall_tex() {
-  killall ${texcmd}
-}
-
 # Do a single compile run---and if it is successful, do the same for the
 # unabridged copy.
 function small_build() {
@@ -413,8 +402,6 @@ function main() {
 
 # If no arguments given, do a normal build;
 # - argument is debug: do debug build;
-# - argument is get_compiler_pid: compile that function;
-# - argument is killall_tex: compile that function.
   if [[ $# -eq 0 ]] ; then
     small_build
   elif [[ $# -eq 1 && "$1" == "big" ]] ; then
@@ -425,10 +412,6 @@ function main() {
     debugbuild
   elif [[ $# -eq 1 && "$1" == "final" ]] ; then
     final_document
-  elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
-    get_compiler_pid
-  elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
-    killall_tex
   elif [[ $# -eq 1 && "$1" == "symlinks" ]] ; then
     unabridged_dir_and_symlinks_rebuild
   elif [[ $# -eq 1 && "$1" == "u2r" ]] ; then

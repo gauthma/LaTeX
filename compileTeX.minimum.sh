@@ -55,17 +55,6 @@ function final_document() {
   cp "${build_dir}"/"${name}.pdf" "${finalname}.pdf"
 }
 
-# Get the pid of the running $texcmd process (if any). This is needed to avoid
-# starting (from within vim) a new compilation, if one is already running.
-function get_compiler_pid() {
-  pidof ${texcmd}
-}
-
-# Kill a running $texcmd process (useful when an error occurs, for example).
-function killall_tex() {
-  killall ${texcmd}
-}
-
 function symlinks_rebuild() {
   if [[ ! -d "$build_dir" ]]; then
     echo "Build dir does not exist! Run clean() to fix it."
@@ -91,8 +80,6 @@ function main() {
 
   # If no arguments given, do a normal build;
   # - argument is debug: do debug build;
-  # - argument is get_compiler_pid: compile that function;
-  # - argument is killall_tex: compile that function.
   if [[ $# -eq 0 ]] ; then
     compile "$name"
   elif [[ $# -eq 1 && "$1" == "clean" ]] ; then
@@ -101,10 +88,6 @@ function main() {
     debugbuild
   elif [[ $# -eq 1 && "$1" == "final" ]] ; then
     final_document
-  elif [[ $# -eq 1 && "$1" == "get_compiler_pid" ]] ; then
-    get_compiler_pid
-  elif [[ $# -eq 1 && "$1" == "killall_tex" ]] ; then
-    killall_tex
   elif [[ $# -eq 1 && "$1" == "symlinks" ]] ; then
     symlinks_rebuild
   else
