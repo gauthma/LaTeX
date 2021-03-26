@@ -14,9 +14,18 @@ Skeleton for \LaTeX\ articles  % main title
 
 \maketitle
 
-% Needed to, if the TOC has more than one page, avoid having the fancy header
-% shown from page 2 onwards.
+% The setting in this \begin group change hyperref settings to make all of the
+% TOC (entries + page numbers) clickable, but in black (instead of in the color
+% of links).
+%
+% Also, if a fancy page header is set, the stuff on the line that contains the
+% \tableofcontents command is needed to, if the TOC occupies more than one
+% page, avoid having that fancy header show up from page 2 (of the TOC)
+% onwards.
+\begingroup
+\hypersetup{linkcolor=black}
 {\pagestyle{plain}\tableofcontents\cleardoublepage}
+\endgroup
 
 \chapter{Introduction}
 Science is cool!~\cite{Sagan}. But lots of people don't get it\ldots~\cite{Feynman74}.
