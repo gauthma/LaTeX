@@ -74,6 +74,8 @@
 \renewcommand*{\backref}[1]{}
 \renewcommand*{\backrefalt}[4]{%
   \ifcase #1 Not cited.%
-    \or Cited on page~#2.%
-    \else Cited on pages~#2.%
+    \or Cited on p.~#2.%
+    \else%
+      \ifnum #1<10 Cited on pp.~#2.%
+      \else Cited #3 times.\fi%
   \fi}
