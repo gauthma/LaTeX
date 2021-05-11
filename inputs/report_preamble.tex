@@ -1,13 +1,41 @@
-\input{inputs/fonts}
-
-\input{inputs/style}
-
 %
-% Custom Packages.
+% ALL Packages. Package loading order matters A LOT, and so it is very
+% dangerous to separate package loading into several different (\input'd)
+% files. It will likely make troubleshooting of errors far more difficult. So
+% just load all packages here.
+%
+% See XXX for information on what a package does, and information on
+% inter-package problems (e.g. dependencies).
 %
 
-% For graphics inclusion.
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+
+\usepackage{fancyhdr, titlesec, blindtext, color}
+
+\usepackage[font=small,
+            labelfont=bf]{caption} % Proper formatting for caption text.
+
 \usepackage{graphicx}
+
+\usepackage{xurl}
+
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage{fontspec}
+
+\usepackage{amsmath}
+
+\usepackage{bm}
+
+\usepackage{amsthm}
+\usepackage{braket}
+
+\usepackage{enumitem}
+
+\usepackage{etoolbox}
+
+\usepackage{mathtools}
+\usepackage{multicol}
+\usepackage{subcaption}
 
 % -------------------------------------------------------
 % -------------------------------------------------------
@@ -18,6 +46,10 @@
 % Use this space for custom things, other than \usepackage's. If the
 % customisations are lengthy, consider putting them into their own file, to be
 % \input'd. Such files should go in the inputs/ folder.
+
+\input{inputs/fonts}
+
+\input{inputs/style}
 
 \newcommand*{\emd}{\textemdash}
 \newcommand{\fn}[1]{\footnote{#1}}

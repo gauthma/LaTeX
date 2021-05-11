@@ -1,9 +1,12 @@
 % Set up FONTS to use.
 
-\usepackage[bitstream-charter]{mathdesign}
-\usepackage{fontspec}
+% Customise \mathcal.
 \DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
 \DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
+
+% Customise \mathbb.
+\DeclareSymbolFont{mpazo}{U}{fplmbb}{m}{n}
+\DeclareSymbolFontAlphabet{\mathbb}{mpazo}
 
 \setmainfont[%
   Path=$HOME/.fonts/truetype/ ,

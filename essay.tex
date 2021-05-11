@@ -28,7 +28,9 @@ Write, or wrong?
 % onwards.
 \begingroup
 \hypersetup{linkcolor=black}
-{\pagestyle{plain}\tableofcontents\cleardoublepage}
+{\pagestyle{plain}\tableofcontents}
+% {\pagestyle{plain}\tableofcontents\cleardoublepage}
+% NB: about the two lines above (one commented), the \cleardoublepage causes the contents of the document to be placed in a new page. This is what I want for report, but not for essay. It remains to be seen if removing that \cleardoublepage is enough, even when the TOC has more then one page (cf. remarks above, before \begingroup).
 \endgroup
 
 \section{Introduction}
