@@ -95,6 +95,9 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   if [[ -f  "inputs/${doctype}_fonts.tex" ]] ; then
     mv "inputs/${doctype}_fonts.tex" "inputs/fonts.tex"
   fi
+  if [[ -f  "inputs/${doctype}_packages.tex" ]] ; then
+    mv "inputs/${doctype}_packages.tex" "inputs/packages.tex"
+  fi
   if [[ -f  "inputs/${doctype}_preamble.tex" ]] ; then
     mv "inputs/${doctype}_preamble.tex" "inputs/preamble.tex"
   fi
@@ -103,7 +106,7 @@ if [[ $REPLY =~ ^[Y]$ ]]; then
   fi
 
 # Remove unneeded files from inputs/ folder.
-  rm -f inputs/*_fonts.tex inputs/*_preamble.tex inputs/*_style.tex
+  rm -f inputs/*_fonts.tex inputs/*_preamble.tex inputs/*_style.tex  inputs/*_packages.tex
 
 # Done dealing with inputs/ folder. Now remove unneeded files from the build/
 # dir.

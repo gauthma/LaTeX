@@ -1,43 +1,10 @@
 %
-% ALL Packages. Package loading order matters A LOT, and so it is very
+% Load ALL Packages. Package loading order matters A LOT, and so it is very
 % dangerous to separate package loading into several different (\input'd)
 % files. It will likely make troubleshooting of errors far more difficult. So
-% just load all packages here.
+% just load all packages in the inputs/packages.tex file.
 %
-% See XXX for information on what a package does, and information on
-% inter-package problems (e.g. dependencies).
-%
-
-\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
-
-\usepackage{sectsty}
-
-\usepackage{tocloft}
-
-\usepackage[font=small,
-            labelfont=bf]{caption} % Proper formatting for caption text.
-
-\usepackage{graphicx}
-
-\usepackage{xurl}
-
-\usepackage[bitstream-charter]{mathdesign}
-\usepackage{fontspec}
-
-\usepackage{amsmath}
-
-\usepackage{bm}
-
-\usepackage{amsthm}
-\usepackage{braket}
-
-\usepackage{enumitem}
-
-\usepackage{etoolbox}
-
-\usepackage{mathtools}
-\usepackage{multicol}
-\usepackage{subcaption}
+\input{inputs/packages}
 
 % -------------------------------------------------------
 % -------------------------------------------------------
