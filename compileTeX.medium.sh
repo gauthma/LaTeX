@@ -24,7 +24,7 @@ build_dir="build"
 
 texcmd="xelatex"
 texcmdopts="-halt-on-error --interaction=batchmode --shell-escape --synctex=1"
-debug_texcmdopts="--interaction=errorstopmode --shell-escape --output-directory=${build_dir}"
+debug_texcmdopts="--interaction=errorstopmode --shell-escape --synctex=1 --output-directory=${build_dir}"
 bibcmd="bibulous"
 indexcmd="makeindex"
 
