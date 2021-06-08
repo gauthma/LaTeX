@@ -199,6 +199,37 @@ function big_build () {
   fi
 }
 
+# This function creates a copy of the main dir (excluding unabridged stuff),
+# deletes the \includeonly line in $name.tex, and then does a big compile run.
+# The reason is that there is little point in doing a big build with
+# \includeonly, because things like citations or backrefs may come out wrong.
+#
+# After the big build, it replaces the main folder's build dir with this one,
+# and deletes the copy folder.
+function big_compile_on_tmp_folder_comment_include_only() {
+  local curr_dir=$(pwd)
+
+  rm -rf "$tmp_build_dir" && mkdir "$tmp_build_dir"
+
+  cp -r $(ls | grep -v "docs\|$build_dir_unabridged\|$name_unabridged") "$tmp_build_dir"
+  cd "$tmp_build_dir"
+
+# Find ^\includeonly line in $name.tex, if any, and make it empty.
+  sed -e 's/^\s*\\includeonly.*$//' -i "${name}.tex"
+
+# We have to use our (tmp) copy of build_dir_regular, because the compiler will
+# not use a build dir that is outside of the current dir.
+  big_build_inner "$name" "./$build_dir_regular"
+  local ret=$?
+
+  cd "$curr_dir"
+  rm -rf "${build_dir_regular}"
+  mv "$tmp_build_dir"/"${build_dir_regular}" .
+
+  rm -rf "$tmp_build_dir"
+  return $ret
+}
+
 function clean() {
   if [[ -d "$build_dir_regular" ]]; then
     echo "Wiping contents of ${build_dir_regular} (except PDF files)"
@@ -244,38 +275,6 @@ function compile() {
 # Print a newline (SyncTeX, which runs at the end of the compilation process,
 # doesn't).
   echo ""
-  return $ret
-}
-
-# This function creates a copy of the main dir (excluding unabridged stuff),
-# deletes the \includeonly line in $name.tex, patches and then does a big
-# compile run. The reason is that there is little point in doing a big build
-# with \includeonly, because things like citations or backrefs may come out
-# wrong.
-#
-# After the big build, it replaces the main folder's build dir with this one,
-# and deletes the copy folder.
-function big_compile_on_tmp_folder_comment_include_only() {
-  local curr_dir=$(pwd)
-
-  rm -rf "$tmp_build_dir" && mkdir "$tmp_build_dir"
-
-  cp -r $(ls | grep -v "docs\|$build_dir_unabridged\|$name_unabridged") "$tmp_build_dir"
-  cd "$tmp_build_dir"
-
-# Comment \includeonly line in $name.tex, if any.
-  sed -e 's/^\s*\\includeonly.*$//' -i "${name}.tex"
-
-# We have to use our (tmp) copy of build_dir_regular, because the compiler will
-# not use a build dir that is outside of the current dir.
-  big_build_inner "$name" "./$build_dir_regular"
-  local ret=$?
-
-  cd "$curr_dir"
-  rm -rf "${build_dir_regular}"
-  mv "$tmp_build_dir"/"${build_dir_regular}" .
-
-  rm -rf "$tmp_build_dir"
   return $ret
 }
 
