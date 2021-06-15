@@ -24,6 +24,11 @@ finalname="${name}.FINAL"
 # folders_to_be_rsyncd=( "chapters" "frontmatter" )
 folders_to_be_rsyncd=()
 
+# If set to "false", suppresses the output of bibliography and index building
+# commands. Set to any other value -- e.g. "true" -- to show said commands'
+# output.
+verbose="false"
+
 # IMPORTANT: set the temporary build dir here. Use a RAM-based temporary
 # filesystem if you have one. See README.
 tmp_build_dir="/run/user/$UID/xyz-temp-compile"
@@ -63,6 +68,7 @@ function big_build_inner() {
 
   local undef_refs=""
 
+  echo "$0: Compile #1..."
   compile "$fname" "$build_dir"
 # If the compile failed, notify the user and quit.
   if [[ $? -ne 0 ]]; then
@@ -72,8 +78,14 @@ function big_build_inner() {
 
 # If the compile succeeded, then build the index (inside the regular build dir).
   if [[ "$do_idx" == "true" ]] ; then
-    cd "${build_dir}" && pwd
-    ${indexcmd} ${fname}
+    if [[ "$verbose" == "false" ]]; then
+      cd "${build_dir}"
+      echo "$0: Index build..."
+      ${indexcmd} ${fname} > /dev/null
+    else
+      cd "${build_dir}" && pwd
+      ${indexcmd} ${fname}
+    fi
 # If the building the index failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
       echo "Building of the index for ${fname}.tex was not successful!"
@@ -88,6 +100,7 @@ function big_build_inner() {
   if [[ "$do_bib" == "false" ]] ; then
     echo "$0: The \$do_bib var is set to false, so I am skipping the bibliography part."
     echo "$0: I will just run compile() twice more."
+    echo "$0: Compile #2 and #3..."
     compile "$fname" "$build_dir" && compile "$fname" "$build_dir"
 # If one of the compile runs failed, notify the user and quit.
     if [[ $? -ne 0 ]]; then
@@ -105,6 +118,7 @@ function big_build_inner() {
     if [[ -z "$have_cite_entries" ]]; then
       echo "$0: The $do_bib var is set to true, but no \\cite entries found.
       So I will just do two more compile runs..."
+      echo "$0: Compile #2 and #3..."
       compile "$fname" "$build_dir" && compile "$fname" "$build_dir"
 # If one of the compile runs failed, notify the user and quit.
       if [[ $? -ne 0 ]]; then
@@ -114,10 +128,18 @@ function big_build_inner() {
 # Some \cite or \nocite entries have been found -- hence build bibliography and
 # do two more compiles. And then check if there are undef references.
     else
-      cd "${build_dir}" && pwd
-      ${bibcmd} "${fname}.aux"
+      if [[ "$verbose" == "false" ]]; then
+        cd "${build_dir}"
+        echo "$0: Bibliography build #1..."
+        ${bibcmd} "${fname}.aux" > /dev/null
+      else
+        cd "${build_dir}" && pwd
+        ${bibcmd} "${fname}.aux"
+      fi
+
       if [[ $? -eq 0 ]]; then
         cd ..
+        echo "$0: Compile #2 and #3..."
         compile "$fname" "$build_dir" && \
         compile "$fname" "$build_dir"
 
@@ -130,10 +152,18 @@ function big_build_inner() {
 # more compiles after that. But first warn the user.
           echo "Found undefined citations: $undef_refs"
           echo "Re-building bibliography, and doing TWO more further compilations."
-          cd "${build_dir}" && pwd
-          ${bibcmd} "${fname}.aux"
+
+          if [[ "$verbose" == "false" ]]; then
+            cd "${build_dir}"
+            echo "$0: Bibliography build #2..."
+            ${bibcmd} "${fname}.aux" > /dev/null
+          else
+            cd "${build_dir}" && pwd
+            ${bibcmd} "${fname}.aux"
+          fi
           if [[ $? -eq 0 ]]; then
             cd ..
+            echo "$0: Compile #4 and #5..."
             compile "$fname" "$build_dir" && \
             compile "$fname" "$build_dir"
             if [[ $? -ne 0 ]]; then
@@ -148,12 +178,14 @@ function big_build_inner() {
 # Whether or not there were undefined references, compile one final time. In
 # either case, this will be the third compile run after the latest bibliography
 # build.
+        echo -n "$0: Compile (final run)... "
         compile "$fname" "$build_dir"
 # If this last compile failed, notify the user and quit.
         if [[ $? -ne 0 ]]; then
           echo "Last compile of ${fname}.tex was not successful!"
           return 1
         fi
+        echo "Success."
 
 # If the compiles were successful, but we still have undefined references, then
 # just warn the user, and let him deal with it.
@@ -272,11 +304,11 @@ function clean() {
 
 # A normal (single) LaTeX compile.
 function compile() {
-  ${texcmd} ${texcmdopts} --output-directory="$2" "$1"
+  ${texcmd} ${texcmdopts} --output-directory="$2" "$1" > /dev/null
   local ret=$?
 # Print a newline (SyncTeX, which runs at the end of the compilation process,
 # doesn't).
-  echo ""
+  # echo ""
   return $ret
 }
 
@@ -306,10 +338,13 @@ function final_document() {
 # Do a single compile run---and if it is successful, do the same for the
 # unabridged copy.
 function small_build() {
+  echo -n "$0: Compiling... "
   compile "$name" "$build_dir_regular" # compile() returns the $? of the LaTeX command. See Note (1).
   if [[ $? -ne 0 ]]; then
     echo "Compile of ${name}.tex file was not successful!"
     return 1
+  else
+    echo "Success."
   fi
 
 # If compile was successful, and we are using \includeonly, then update
@@ -321,10 +356,13 @@ function small_build() {
     echo -e "* Now continuing with unabridged (normal, non-full) build..."
     echo -e "*************************************************************************\n"
 
+    echo -n "$0: Compiling... "
     compile "${name_unabridged}" "$build_dir_unabridged"
     if [[ $? -ne 0 ]]; then
       echo "Compile of ${name_unabridged}.tex file was not successful!"
       exit 1
+    else
+      echo "Success."
     fi
   else
 # If \includeonly is not used, then unabridged version is just the normal
