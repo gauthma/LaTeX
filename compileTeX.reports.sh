@@ -160,9 +160,6 @@ function big_build_inner() {
         undef_refs=$(sed -En "s/^.+ Citation \`(.+)' on page .+ undefined.*$/\1/p" "${build_dir}/${fname}.log")
 
         if [[ -n "$undef_refs" ]]; then
-# If undefined citations are found after the first compile after having built
-# the bibliography, then we need to re-build the bibliography, and do two more
-# compiles after that. But first warn the user.
           echo "There are still undefined citations: $undef_refs!!"
         fi
       else
