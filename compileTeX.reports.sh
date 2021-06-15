@@ -183,6 +183,11 @@ function big_build () {
 # a big build (done in function big_build_inner()).
   if [[ "$(do_we_have_includeonly)" == "true" ]]; then
     big_compile_on_tmp_folder_comment_include_only
+
+# We are using \includeonly, so after doing a big compile and getting the full
+# (non-abridged) document, do an extra compile run to obtain the abridged
+# version the user had before the big compile.
+    compile "$name" "$build_dir_regular"
   else
     big_build_inner "$name" "$build_dir_regular"
   fi
